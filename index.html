@@ -51,78 +51,63 @@
                     <!-- Akkurate Universitas (Tjokkies) Skoolwapen SVG -->
                     <div class="w-12 h-14 flex items-center justify-center filter drop-shadow-md">
                         <svg viewBox="0 0 200 240" class="w-full h-full">
-                            <defs>
-                                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#fbbf24" />
-                                    <stop offset="100%" stop-color="#d97706" />
-                                </linearGradient>
-                                <clipPath id="shield-clip">
-                                    <path d="M 40,45 L 160,45 L 160,115 C 160,150 135,180 100,195 C 65,180 40,150 40,115 Z" />
-                                </clipPath>
-                            </defs>
-                            
-                            <!-- Top Banner (Behind) Red Folds -->
-                            <path d="M 45,25 L 35,32 L 35,42 L 47,38 Z" fill="#DA291C" stroke="#000000" stroke-width="1.5" stroke-linejoin="round" />
-                            <path d="M 155,25 L 165,32 L 165,42 L 153,38 Z" fill="#DA291C" stroke="#000000" stroke-width="1.5" stroke-linejoin="round" />
-                            
+                            <!-- Top Banner Red Folds -->
+                            <path d="M 35,42 L 25,35 L 40,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                            <path d="M 165,42 L 175,35 L 160,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+
                             <!-- Top Gold Banner -->
-                            <path d="M 43,26 Q 100,14 157,26 L 153,39 Q 100,27 47,39 Z" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.5" stroke-linejoin="round" />
-                            
-                            <!-- Top Banner Text -->
-                            <path id="top-text-path" d="M 45,34 Q 100,22 155,34" fill="none" />
-                            <text font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="9" letter-spacing="1">
+                            <path d="M 25,28 Q 100,10 175,28 L 170,45 Q 100,27 30,45 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                            <path id="top-text-path" d="M 28,39 Q 100,21 172,39" fill="none" />
+                            <text font-family="'Arial', sans-serif" font-weight="900" font-size="14" letter-spacing="1">
                                 <textPath href="#top-text-path" startOffset="50%" text-anchor="middle">UNIVERSITAS</textPath>
                             </text>
 
-                            <!-- Shield with Clip Path -->
+                            <!-- Shield Base -->
+                            <path id="shield-base" d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="#E31837" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
+                            
+                            <!-- Shield Clip Path -->
+                            <clipPath id="shield-clip">
+                                <path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" />
+                            </clipPath>
+
                             <g clip-path="url(#shield-clip)">
-                                <!-- Top Half Gold Background -->
-                                <rect x="30" y="30" width="140" height="60" fill="#FCD116" />
-                                <!-- Bottom Half Red Background -->
-                                <rect x="30" y="88" width="140" height="120" fill="#DA291C" />
+                                <!-- Top Gold Fill -->
+                                <rect x="0" y="0" width="200" height="100" fill="#FFD100" />
                                 
-                                <!-- Wavy Blue Fess Splitter -->
-                                <path d="M 30,76 C 55,64 75,98 100,76 C 125,64 145,98 170,76 L 170,98 C 145,120 125,86 100,108 C 75,120 55,86 30,108 Z" fill="#002F6C" stroke="#000000" stroke-width="1.5" />
-
-                                <!-- Open Book in top half -->
-                                <path d="M 72,53 C 85,47 115,47 128,53 L 128,69 C 115,63 85,63 72,69 Z" fill="#DA291C" stroke="#000000" stroke-width="1.2" stroke-linejoin="round" />
-                                <!-- Left white page -->
-                                <path d="M 75,55 C 85,50 97,50 98,54 L 98,67 C 97,63 85,63 75,67 Z" fill="#ffffff" stroke="#000000" stroke-width="1" />
-                                <!-- Right white page -->
-                                <path d="M 102,54 C 103,50 115,50 125,55 L 125,67 C 115,63 103,63 102,67 Z" fill="#ffffff" stroke="#000000" stroke-width="1" />
-                                <!-- Middle spine divider -->
-                                <line x1="100" y1="54" x2="100" y2="67" stroke="#DA291C" stroke-width="1.5" />
-                                <!-- Red hanging bookmark -->
-                                <path d="M 98,67 L 100,73 L 102,67 Z" fill="#DA291C" />
-
-                                <!-- Fleur-de-lis in bottom half -->
-                                <g transform="translate(0, 5)">
-                                    <!-- Left petal -->
-                                    <path d="M 100,132 C 85,125 78,138 88,145 C 95,150 98,140 100,135" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
-                                    <!-- Right petal -->
-                                    <path d="M 100,132 C 115,125 122,138 112,145 C 105,150 102,140 100,135" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
-                                    <!-- Center petal -->
-                                    <path d="M 100,105 C 105,115 107,130 100,148 C 93,130 95,115 100,105" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
-                                    <!-- Cross bar -->
-                                    <path d="M 86,138 C 92,137 108,137 114,138 C 114,141 108,141 100,141 C 92,141 86,141 86,138 Z" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
-                                    <!-- Bottom petals -->
-                                    <path d="M 100,141 C 105,148 111,156 113,160 C 107,161 102,152 100,149 C 98,152 93,161 87,160 C 89,156 95,148 100,141 Z" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
-                                </g>
+                                <!-- Wavy Blue Fess -->
+                                <path d="M 33,95 Q 67.5,115 100,95 Q 132.5,115 167,95 L 167,125 Q 132.5,145 100,125 Q 67.5,145 33,125 Z" fill="#003366" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
                             </g>
 
-                            <!-- Shield Outer Border -->
-                            <path d="M 40,45 L 160,45 L 160,115 C 160,150 135,180 100,195 C 65,180 40,150 40,115 Z" fill="none" stroke="#000000" stroke-width="2.5" stroke-linejoin="round" />
+                            <!-- Redraw Shield Border -->
+                            <path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
 
-                            <!-- Bottom Banner Red Folds (Behind) -->
-                            <path d="M 45,195 L 36,203 L 42,211 L 49,203 Z" fill="#DA291C" stroke="#000000" stroke-width="1.2" stroke-linejoin="round" />
-                            <path d="M 155,195 L 164,203 L 158,211 L 151,203 Z" fill="#DA291C" stroke="#000000" stroke-width="1.2" stroke-linejoin="round" />
+                            <!-- Book (Centered in top half) -->
+                            <g transform="translate(100, 72)">
+                                <path d="M -28,-14 L 28,-14 L 25,12 L 0,18 L -25,12 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M -24,-11 L -3,-11 L -3,12 L -21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
+                                <path d="M 24,-11 L 3,-11 L 3,12 L 21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
+                                <path d="M -4,13 L 4,13 L 0,17 Z" fill="#E31837" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
+                            </g>
+
+                            <!-- Fleur-de-lis (Centered in bottom half) -->
+                            <g transform="translate(100, 160)">
+                                <path d="M 0,-30 C 12,-10 12,10 4,15 L -4,15 C -12,10 -12,-10 0,-30 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M -2,5 C -25,-5 -35,20 -15,30 C -5,35 -5,15 -2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M 2,5 C 25,-5 35,20 15,30 C 5,35 5,15 2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M -5,15 C -20,25 -20,35 -10,35 C -5,35 -2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M 5,15 C 20,25 20,35 10,35 C 5,35 2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M -5,25 L 5,25 L 0,40 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                                <rect x="-14" y="15" width="28" height="6" rx="3" fill="#FFD100" stroke="#000000" stroke-width="3" />
+                            </g>
+
+                            <!-- Bottom Banner Red Folds -->
+                            <path d="M 38,206 L 28,198 L 33,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                            <path d="M 162,206 L 172,198 L 167,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
 
                             <!-- Bottom Gold Banner -->
-                            <path d="M 40,195 Q 100,225 160,195 L 155,183 Q 100,213 45,183 Z" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.5" stroke-linejoin="round" />
-                            
-                            <!-- Bottom Banner Text -->
-                            <path id="bottom-text-path" d="M 42,194 Q 100,224 158,194" fill="none" />
-                            <text font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="8">
+                            <path d="M 25,200 Q 100,225 175,200 L 170,218 Q 100,243 30,218 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
+                            <path id="bottom-text-path" d="M 28,212 Q 100,237 172,212" fill="none" />
+                            <text font-family="'Arial', sans-serif" font-weight="900" font-size="13.5" letter-spacing="1">
                                 <textPath href="#bottom-text-path" startOffset="50%" text-anchor="middle">NET MY BESTE</textPath>
                             </text>
                         </svg>
@@ -234,8 +219,66 @@
                 <div class="bg-gradient-to-r from-tjokkieBlue-900 to-blue-900 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden shadow-lg border border-tjokkieBlue-800">
                     <!-- Big floating crest icon inside the banner background -->
                     <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
-                        <svg viewBox="0 0 100 120" class="w-[200px] h-[240px]">
-                            <path d="M10,10 L90,10 C90,10 90,70 50,110 C10,70 10,10 10,10 Z" fill="none" stroke="#ffffff" stroke-width="4" />
+                        <svg viewBox="0 0 200 240" class="w-[200px] h-[240px]">
+                            <!-- Top Banner Red Folds -->
+                            <path d="M 35,42 L 25,35 L 40,30 Z" fill="#E31837" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                            <path d="M 165,42 L 175,35 L 160,30 Z" fill="#E31837" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+
+                            <!-- Top Gold Banner -->
+                            <path d="M 25,28 Q 100,10 175,28 L 170,45 Q 100,27 30,45 Z" fill="#FFD100" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                            <path id="bg-top-text-path" d="M 28,39 Q 100,21 172,39" fill="none" />
+                            <text fill="#ffffff" font-family="'Arial', sans-serif" font-weight="900" font-size="14" letter-spacing="1">
+                                <textPath href="#bg-top-text-path" startOffset="50%" text-anchor="middle">UNIVERSITAS</textPath>
+                            </text>
+
+                            <!-- Shield Base -->
+                            <path id="bg-shield-base" d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="#E31837" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" />
+                            
+                            <!-- Shield Clip Path -->
+                            <clipPath id="bg-shield-clip">
+                                <path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" />
+                            </clipPath>
+
+                            <g clip-path="url(#bg-shield-clip)">
+                                <!-- Top Gold Fill -->
+                                <rect x="0" y="0" width="200" height="100" fill="#FFD100" />
+                                
+                                <!-- Wavy Blue Fess -->
+                                <path d="M 33,95 Q 67.5,115 100,95 Q 132.5,115 167,95 L 167,125 Q 132.5,145 100,125 Q 67.5,145 33,125 Z" fill="#003366" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" />
+                            </g>
+
+                            <!-- Redraw Shield Border -->
+                            <path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="none" stroke="#ffffff" stroke-width="4" stroke-linejoin="round" />
+
+                            <!-- Book (Centered in top half) -->
+                            <g transform="translate(100, 72)">
+                                <path d="M -28,-14 L 28,-14 L 25,12 L 0,18 L -25,12 Z" fill="#E31837" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M -24,-11 L -3,-11 L -3,12 L -21,7 Z" fill="#FFFFFF" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" />
+                                <path d="M 24,-11 L 3,-11 L 3,12 L 21,7 Z" fill="#FFFFFF" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" />
+                                <path d="M -4,13 L 4,13 L 0,17 Z" fill="#E31837" stroke="#ffffff" stroke-width="2" stroke-linejoin="round" />
+                            </g>
+
+                            <!-- Fleur-de-lis (Centered in bottom half) -->
+                            <g transform="translate(100, 160)">
+                                <path d="M 0,-30 C 12,-10 12,10 4,15 L -4,15 C -12,10 -12,-10 0,-30 Z" fill="#FFD100" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M -2,5 C -25,-5 -35,20 -15,30 C -5,35 -5,15 -2,10 Z" fill="#FFD100" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M 2,5 C 25,-5 35,20 15,30 C 5,35 5,15 2,10 Z" fill="#FFD100" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M -5,15 C -20,25 -20,35 -10,35 C -5,35 -2,25 0,20 Z" fill="#FFD100" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M 5,15 C 20,25 20,35 10,35 C 5,35 2,25 0,20 Z" fill="#FFD100" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                                <path d="M -5,25 L 5,25 L 0,40 Z" fill="#FFD100" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                                <rect x="-14" y="15" width="28" height="6" rx="3" fill="#FFD100" stroke="#ffffff" stroke-width="3" />
+                            </g>
+
+                            <!-- Bottom Banner Red Folds -->
+                            <path d="M 38,206 L 28,198 L 33,190 Z" fill="#E31837" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                            <path d="M 162,206 L 172,198 L 167,190 Z" fill="#E31837" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+
+                            <!-- Bottom Gold Banner -->
+                            <path d="M 25,200 Q 100,225 175,200 L 170,218 Q 100,243 30,218 Z" fill="#FFD100" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                            <path id="bg-bottom-text-path" d="M 28,212 Q 100,237 172,212" fill="none" />
+                            <text fill="#ffffff" font-family="'Arial', sans-serif" font-weight="900" font-size="13.5" letter-spacing="1">
+                                <textPath href="#bg-bottom-text-path" startOffset="50%" text-anchor="middle">NET MY BESTE</textPath>
+                            </text>
                         </svg>
                     </div>
                     <div class="relative z-10 max-w-xl">
@@ -379,13 +422,13 @@
                             <h3 class="text-base font-bold text-slate-900 mb-4">Onlangse Log-Aktiwiteite</h3>
                             <div class="space-y-4" id="recent-logs-list">
                                 <!-- Dynamic logs load here -->
-                                <div class="text-slate-400 text-xs text-center py-4">Wag vir stelselaktiwiteit...</div>
+                                <div class="text-slate-400 text-xs text-center py-4">Awaiting system activities...</div>
                             </div>
                         </div>
 
                         <div class="mt-6">
-                            <button onclick="clearLogs()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-lg text-xs transition">
-                                Maak Geskiedenis Skoon
+                            <button onclick="openPasswordModal()" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-lg text-xs transition">
+                                Clear Log History
                             </button>
                         </div>
                     </div>
@@ -394,7 +437,7 @@
             </section>
 
             <!-- ============================================== -->
-            <!-- TAB 2: TERREINBESTUURDER                      -->
+            <!-- TAB 2: GROUNDS MANAGER                         -->
             <!-- ============================================== -->
             <section id="tab-terrein" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                 <!-- Header -->
@@ -408,41 +451,26 @@
                     </div>
                     <button onclick="toggleModal('modal-terrein-taak')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
                         <i class="fa-solid fa-plus text-tjokkieGold-400"></i>
-                        <span>Rapporteer Nuwe Probleem</span>
+                        <span>Skeduleer Instandhouding / Taak</span>
                     </button>
                 </div>
 
                 <!-- Live Velde Inligtingsblokke -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-lg bg-blue-50 text-tjokkieBlue-800 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-football"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">A-Rugbyveld</h4>
-                            <p class="text-xs text-slate-500">Kondisie: <span class="text-blue-600 font-bold">Uitstekend</span></p>
-                            <p class="text-[10px] text-slate-400 mt-1">Sny en lyne geskeduleer vir Vrydag</p>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="facilities-container">
+                    <!-- Dynamic Facilities load here via JavaScript -->
+                </div>
+
+                <!-- Instandhoudingskalender -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 overflow-hidden">
+                    <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-900 text-sm"><i class="fa-regular fa-calendar-days text-tjokkieBlue-500 mr-2"></i>Instandhoudingskalender</h3>
+                        <div class="text-xs font-bold text-tjokkieBlue-900 bg-tjokkieGold-400 px-3 py-1 rounded-full shadow-sm" id="calendar-month">Mei 2026</div>
                     </div>
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-droplet"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Skool Swembad</h4>
-                            <p class="text-xs text-slate-500">pH Vlak: <span class="text-sky-600 font-bold">7.2 (Optimaal)</span></p>
-                            <p class="text-[10px] text-slate-400 mt-1 font-semibold">Chloorvlakke is perfek vandag</p>
-                        </div>
+                    <div class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">
+                        <div>So</div><div>Ma</div><div>Di</div><div>Wo</div><div>Do</div><div>Vr</div><div>Sa</div>
                     </div>
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-lg bg-yellow-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-building"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Klaskamerblokke A-D</h4>
-                            <p class="text-xs text-slate-500">Status: <span class="text-blue-600 font-bold">Aanlyn Monitor</span></p>
-                            <p class="text-[10px] text-slate-400 mt-1">Grootskaalse vensterinspeksie aan die gang</p>
-                        </div>
+                    <div id="calendar-grid" class="grid grid-cols-7 gap-2">
+                        <!-- Calendar Days dynamically injected here -->
                     </div>
                 </div>
 
@@ -718,34 +746,38 @@
     <div id="modal-terrein-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                <h3 class="font-extrabold text-slate-900 text-sm">Rapporteer Terreinprobleem</h3>
+                <h3 class="font-extrabold text-slate-900 text-sm">Skeduleer Nuwe Instandhouding</h3>
                 <button onclick="toggleModal('modal-terrein-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
             </div>
             <form id="form-terrein" onsubmit="addTerreinTask(event)" class="space-y-4 text-xs">
                 <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Area of Klaskamer</label>
-                    <input type="text" id="terrein-area" placeholder="bv. Klaskamer 12 / Netbalvelde" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Fasiliteit / Area</label>
+                    <input type="text" id="terrein-area" placeholder="bv. B-Rugbyveld / Tennisbane" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Beskrywing van Herstelwerk</label>
-                    <textarea id="terrein-desc" rows="3" placeholder="Tik die besonderhede hier..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Datum Geskeduleer</label>
+                    <input type="date" id="terrein-date" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Beskrywing van Taak</label>
+                    <textarea id="terrein-desc" rows="3" placeholder="Beskryf die instandhouding of herstelwerk..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-slate-500 font-bold uppercase mb-1">Prioriteit</label>
                         <select id="terrein-priority" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                             <option value="Normal">Normaal</option>
-                            <option value="Dringend">Dringend</option>
+                            <option value="Urgent">Dringend</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-slate-500 font-bold uppercase mb-1">Aangemeld deur</label>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Aangemeld Deur</label>
                         <input type="text" id="terrein-reported" placeholder="Jou Naam" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                     </div>
                 </div>
                 <div class="flex space-x-2 pt-2">
                     <button type="button" onclick="toggleModal('modal-terrein-taak')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Voeg Taak By</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Stoor op Kalender</button>
                 </div>
             </form>
         </div>
@@ -753,103 +785,75 @@
 
     <!-- ============================================== -->
     <!-- MODAL 2: SKAKEL - NUWE SOSIALE PLASING        -->
+    </div>
+
     <!-- ============================================== -->
-    <div id="modal-skakel-nuus" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+    <!-- MODAL 5: PASSWORD AUTHENTICATION               -->
+    <!-- ============================================== -->
+    <div id="modal-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                <h3 class="font-extrabold text-slate-900 text-sm">Beplan Sosiale Plasing</h3>
-                <button onclick="toggleModal('modal-skakel-nuus')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+                <h3 class="font-extrabold text-slate-900 text-sm">Admin Authentication</h3>
+                <button onclick="toggleModal('modal-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
             </div>
-            <form id="form-skakel" onsubmit="addSocialPost(event)" class="space-y-4 text-xs">
+            <form id="form-password" onsubmit="verifyAndClearLogs(event)" class="space-y-4 text-xs">
                 <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Sosiale Platform</label>
-                    <select id="skakel-platform" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                        <option value="Facebook">Facebook</option>
-                        <option value="Instagram">Instagram</option>
-                        <option value="d6 Skakelapp">d6 Skakelapp</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Skeduleer Tyd & Datum</label>
-                    <input type="text" id="skakel-time" placeholder="bv. Maandag 10:00" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Inhoud / Kopie van Plasing</label>
-                    <textarea id="skakel-content" rows="3" placeholder="Skryf die plasing se teks hier..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Enter Password</label>
+                    <input type="password" id="admin-password-input" placeholder="••••••••" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="toggleModal('modal-skakel-nuus')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Skeduleer Plasing</button>
+                    <button type="button" onclick="toggleModal('modal-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Cancel</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition">Clear Logs</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- ============================================== -->
-    <!-- MODAL 3: BUS - NUWE RIT                        -->
+    <!-- MODAL 6: FACILITY PASSWORD AUTHENTICATION      -->
     <!-- ============================================== -->
-    <div id="modal-bus-rit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+    <div id="modal-facility-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h3 class="font-extrabold text-slate-900 text-sm">Admin Wagwoord Vereis</h3>
+                <button onclick="toggleModal('modal-facility-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="form-facility-password" onsubmit="verifyFacilityAuth(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="auth-facility-id">
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label>
+                    <input type="password" id="facility-password-input" placeholder="••••" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleModal('modal-facility-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-600 hover:bg-tjokkieBlue-700 text-white font-bold rounded-xl transition">Ontsluit Wysiging</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL 7: EDIT FACILITY                         -->
+    <!-- ============================================== -->
+    <div id="modal-facility-edit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                <h3 class="font-extrabold text-slate-900 text-sm">Skeduleer Nuwe Busrit</h3>
-                <button onclick="toggleModal('modal-bus-rit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+                <h3 class="font-extrabold text-slate-900 text-sm" id="edit-facility-title">Wysig Fasiliteit</h3>
+                <button onclick="toggleModal('modal-facility-edit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
             </div>
-            <form id="form-bus" onsubmit="addBusTrip(event)" class="space-y-4 text-xs">
+            <form id="form-facility-edit" onsubmit="saveFacilityEdit(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="edit-facility-id">
                 <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Bestemming / Doel</label>
-                    <input type="text" id="bus-destination" placeholder="bv. Welkom Hokkietoer / Suid-Roete" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-slate-500 font-bold uppercase mb-1">Vertrek Tyd & Dag</label>
-                        <input type="text" id="bus-time" placeholder="bv. Maandag, 14:00" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-slate-500 font-bold uppercase mb-1">Bus Toegewys</label>
-                        <select id="bus-vehicle" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                            <option value="Bus A (60-sitplek)">Bus A (60-sitplek)</option>
-                            <option value="Bus B (35-sitplek)">Bus B (35-sitplek)</option>
-                            <option value="Bus C (15-sitplek)">Bus C (15-sitplek)</option>
-                        </select>
-                    </div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Status / Kondisie</label>
+                    <input type="text" id="edit-facility-status" placeholder="bv. Uitstekend / Instandhouding" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Bestuurder se Naam</label>
-                    <input type="text" id="bus-driver" placeholder="bv. Oom Piet / Oom Johan" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Ekstra Inligting (Nota)</label>
+                    <input type="text" id="edit-facility-subtext" placeholder="bv. Geskeduleer vir Vrydag" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="toggleModal('modal-bus-rit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Beplan Rit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ============================================== -->
-    <!-- MODAL 4: IT - NUWE KAARTJIE                    -->
-    <!-- ============================================== -->
-    <div id="modal-it-ticket" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                <h3 class="font-extrabold text-slate-900 text-sm">Skep Nuwe IT Kaartjie</h3>
-                <button onclick="toggleModal('modal-it-ticket')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
-            </div>
-            <form id="form-it" onsubmit="addITTicket(event)" class="space-y-4 text-xs">
-                <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Foutiewe Toestel / Diens</label>
-                    <input type="text" id="it-device" placeholder="bv. Smartboard Klas 2, Personeel WiFi" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Foutbeskrywing</label>
-                    <textarea id="it-desc" rows="3" placeholder="Wat is fout?" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Jou Naam (Skool Personeel)</label>
-                    <input type="text" id="it-staff" placeholder="bv. Mev. Coetzee" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                </div>
-                <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="toggleModal('modal-it-ticket')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Stuur Kaartjie</button>
+                    <button type="button" onclick="toggleModal('modal-facility-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl transition">Stoor Wysigings</button>
                 </div>
             </form>
         </div>
@@ -859,7 +863,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, addDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, addDoc, deleteDoc, collection, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // ======================================================================
         // STEP 3: PASTE YOUR COPIED FIREBASE CONFIGURATION OBJECT BELOW:
@@ -881,10 +885,20 @@
         let appId = "default-app-id";
         let user = null;
 
+        // Local Facility State
+        let localFacilities = {
+            "rugby_a": { name: "A-Rugbyveld", status: "Uitstekend", subtext: "Sny en lyne geskeduleer vir Vrydag", icon: "fa-football", color: "blue" },
+            "rugby_b": { name: "B-Rugbyveld", status: "Goeie Kondisie", subtext: "Gereed vir oefening", icon: "fa-football", color: "blue" },
+            "netbal": { name: "Netbalbane", status: "Uitstekend", subtext: "Bane onlangs oorgeverf", icon: "fa-basketball", color: "sky" },
+            "tennis": { name: "Tennisbane", status: "Kort aandag", subtext: "Nette moet vervang word", icon: "fa-table-tennis-paddle-ball", color: "amber" },
+            "pool": { name: "Skool Swembad", status: "7.2 (Optimaal)", subtext: "Chloorvlakke is perfek vandag", icon: "fa-droplet", color: "sky" },
+            "classrooms": { name: "Klaskamerblokke A-D", status: "Aanlyn Monitor", subtext: "Grootskaalse vensterinspeksie aan die gang", icon: "fa-building", color: "amber" }
+        };
+
         // Offline Fallback Data Store (Browser RAM simulation)
         let localTerreinTasks = [
-            { id: "1", area: "Classroom 4", desc: "Light switch broken, sparking when flipped", priority: "Urgent", reported: "Mr. Smith" },
-            { id: "2", area: "Tuckshop back door", desc: "Door handle jammed, won't lock properly", priority: "Normal", reported: "Mrs. Jones" }
+            { id: "1", area: "Classroom 4", date: "2026-05-15", desc: "Light switch broken, sparking when flipped", priority: "Urgent", reported: "Mr. Smith" },
+            { id: "2", area: "Tuckshop back door", date: "2026-05-22", desc: "Door handle jammed, won't lock properly", priority: "Normal", reported: "Mrs. Jones" }
         ];
         let localSocialPosts = [
             { id: "1", platform: "Facebook", time: "Friday 14:00", content: "Action photos from today's Autumn Netball Tournament!" },
@@ -965,6 +979,7 @@
 
         function runLocalFallback() {
             document.getElementById('db-status-text').innerText = "Connected to local memory.";
+            renderFacilities(localFacilities);
             renderTerreinTasks(localTerreinTasks);
             renderSocialPosts(localSocialPosts);
             renderBusTrips(localBusTrips);
@@ -975,6 +990,16 @@
         // Setup real-time cloud sync routines
         function setupRealtimeListeners() {
             if (!db || !user) return;
+
+            // Facilities Sync
+            const facRef = collection(db, 'artifacts', appId, 'public', 'data', 'facilities');
+            onSnapshot(facRef, (snapshot) => {
+                let facilities = { ...localFacilities }; 
+                snapshot.forEach((doc) => {
+                    facilities[doc.id] = { ...facilities[doc.id], ...doc.data() };
+                });
+                renderFacilities(facilities);
+            }, (error) => console.error("Facilities exception:", error));
 
             // Terrein Tasks
             const terreinRef = collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks');
@@ -1031,6 +1056,72 @@
         // ==============================================
         // DOM RENDERING ENGINE
         // ==============================================
+        function renderFacilities(facilities) {
+            const container = document.getElementById('facilities-container');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            for (const [id, fac] of Object.entries(facilities)) {
+                let iconColor = fac.color === 'blue' ? 'bg-blue-50 text-tjokkieBlue-800' :
+                                fac.color === 'sky' ? 'bg-sky-50 text-sky-700' :
+                                'bg-yellow-100 text-amber-700';
+                                
+                let statusColor = fac.color === 'blue' ? 'text-blue-600' :
+                                  fac.color === 'sky' ? 'text-sky-600' :
+                                  'text-blue-600';
+
+                container.innerHTML += `
+                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-lg ${iconColor} flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid ${fac.icon}"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">${fac.name}</h4>
+                                <p class="text-xs text-slate-500">Kondisie/Status: <span class="${statusColor} font-bold">${fac.status}</span></p>
+                                <p class="text-[10px] text-slate-400 mt-1">${fac.subtext}</p>
+                            </div>
+                        </div>
+                        <button onclick="promptFacilityEdit('${id}', '${fac.name}', '${fac.status}', '${fac.subtext}')" title="Wysig Fasiliteit" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderCalendar(tasks) {
+            const grid = document.getElementById('calendar-grid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            
+            // Simulation for May 2026 (Starts on a Friday)
+            const daysInMonth = 31;
+            const startDayOfWeek = 5; 
+            
+            // Empty slots for alignment
+            for(let i=0; i<startDayOfWeek; i++) {
+                grid.innerHTML += `<div class="p-2 border border-transparent bg-transparent rounded-lg min-h-[70px]"></div>`;
+            }
+            
+            // Render actual days
+            for(let day=1; day<=daysInMonth; day++) {
+                const dateStr = `2026-05-${day.toString().padStart(2, '0')}`;
+                const dayTasks = tasks.filter(t => t.date === dateStr);
+                
+                let taskHtml = dayTasks.map(t => `<div class="bg-tjokkieBlue-100 text-tjokkieBlue-900 border border-tjokkieBlue-200 text-[9px] font-bold px-1.5 py-1 rounded shadow-sm mt-1 truncate" title="${t.area}">${t.area}</div>`).join('');
+                
+                let highlightClass = dayTasks.length > 0 ? 'border-tjokkieBlue-200 bg-sky-50' : 'border-slate-100 bg-slate-50/50 hover:bg-slate-50';
+
+                grid.innerHTML += `
+                    <div class="p-2 border ${highlightClass} rounded-lg min-h-[70px] flex flex-col transition-colors">
+                        <span class="text-[10px] font-extrabold text-slate-400">${day}</span>
+                        ${taskHtml}
+                    </div>
+                `;
+            }
+        }
+
         function renderTerreinTasks(tasks) {
             const tbody = document.getElementById('terrein-task-rows');
             tbody.innerHTML = '';
@@ -1039,7 +1130,10 @@
                 row.className = 'hover:bg-slate-50 transition duration-150';
                 const badgeColor = task.priority === 'Urgent' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
                 row.innerHTML = `
-                    <td class="px-6 py-4 font-bold text-slate-900">${task.area}</td>
+                    <td class="px-6 py-4 font-bold text-slate-900 flex flex-col">
+                        <span>${task.area}</span>
+                        <span class="text-[9px] text-tjokkieBlue-600 font-bold uppercase mt-1"><i class="fa-regular fa-calendar mr-1"></i>${task.date || 'Nie Geskeduleer nie'}</span>
+                    </td>
                     <td class="px-6 py-4">${task.desc}</td>
                     <td class="px-6 py-4"><span class="px-2 py-1 rounded-full ${badgeColor} font-bold uppercase text-[9px]">${task.priority}</span></td>
                     <td class="px-6 py-4 text-slate-500">${task.reported}</td>
@@ -1052,6 +1146,7 @@
                 tbody.appendChild(row);
             });
             updateDashboardCounters();
+            renderCalendar(tasks);
         }
 
         function renderSocialPosts(posts) {
@@ -1158,6 +1253,56 @@
         // ==============================================
         // LOGIC ACTIONS (WITH FIREBASE LINKING)
         // ==============================================
+
+        // Facility Editing Functions
+        function promptFacilityEdit(id, name, currentStatus, currentSubtext) {
+            document.getElementById('auth-facility-id').value = id;
+            document.getElementById('facility-password-input').value = '';
+            
+            // Set values for the next modal
+            document.getElementById('edit-facility-id').value = id;
+            document.getElementById('edit-facility-title').innerText = `Wysig: ${name}`;
+            document.getElementById('edit-facility-status').value = currentStatus;
+            document.getElementById('edit-facility-subtext').value = currentSubtext;
+
+            toggleModal('modal-facility-password');
+        }
+        window.promptFacilityEdit = promptFacilityEdit;
+
+        function verifyFacilityAuth(event) {
+            event.preventDefault();
+            const pwd = document.getElementById('facility-password-input').value;
+            if (pwd === "1603") {
+                toggleModal('modal-facility-password');
+                toggleModal('modal-facility-edit');
+            } else {
+                showToast("Toegang Geweier", "Verkeerde wagwoord. Probeer weer.");
+            }
+        }
+        window.verifyFacilityAuth = verifyFacilityAuth;
+
+        async function saveFacilityEdit(event) {
+            event.preventDefault();
+            const id = document.getElementById('edit-facility-id').value;
+            const status = document.getElementById('edit-facility-status').value;
+            const subtext = document.getElementById('edit-facility-subtext').value;
+
+            const facData = { status, subtext };
+
+            if (db && user) {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'facilities', id), facData, { merge: true });
+            } else {
+                localFacilities[id] = { ...localFacilities[id], ...facData };
+                renderFacilities(localFacilities);
+            }
+
+            await logEvent(`Status opgedateer vir fasiliteit`, 'Grounds');
+            showToast("Sukses!", "Die fasiliteit se nuwe inligting is gestoor.");
+            toggleModal('modal-facility-edit');
+        }
+        window.saveFacilityEdit = saveFacilityEdit;
+
+
         async function logEvent(desc, dept) {
             const logData = { desc, dept, timestamp: Date.now() };
             if (db && user) {
@@ -1175,11 +1320,12 @@
         async function addTerreinTask(event) {
             event.preventDefault();
             const area = document.getElementById('terrein-area').value;
+            const date = document.getElementById('terrein-date').value;
             const desc = document.getElementById('terrein-desc').value;
             const priority = document.getElementById('terrein-priority').value;
             const reported = document.getElementById('terrein-reported').value;
             
-            const taskData = { area, desc, priority, reported };
+            const taskData = { area, date, desc, priority, reported };
 
             if (db && user) {
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData);
@@ -1188,8 +1334,8 @@
                 renderTerreinTasks(localTerreinTasks);
             }
 
-            await logEvent(`New maintenance reported at ${area}`, 'Grounds');
-            showToast("Task Added", `Maintenance team notified about issue at ${area}.`);
+            await logEvent(`New maintenance scheduled at ${area}`, 'Grounds');
+            showToast("Task Added", `Maintenance task saved to the calendar.`);
             
             document.getElementById('form-terrein').reset();
             toggleModal('modal-terrein-taak');
@@ -1315,16 +1461,44 @@
         }
         window.resolveTicket = resolveTicket;
 
-        async function clearLogs() {
+        function openPasswordModal() {
+            document.getElementById('admin-password-input').value = '';
+            toggleModal('modal-password');
+        }
+        window.openPasswordModal = openPasswordModal;
+
+        async function verifyAndClearLogs(event) {
+            event.preventDefault();
+            const pwdInput = document.getElementById('admin-password-input').value;
+            
+            if (pwdInput !== "Elrico1603!!") {
+                showToast("Action Denied", "Incorrect admin password.");
+                return;
+            }
+
+            toggleModal('modal-password');
+
             if (db && user) {
-                showToast("Action Denied", "Logs can only be cleared by a database administrator.");
+                try {
+                    const logsRef = collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs');
+                    const snapshot = await getDocs(logsRef);
+                    const deletePromises = [];
+                    snapshot.forEach((document) => {
+                        deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'activity_logs', document.id)));
+                    });
+                    await Promise.all(deletePromises);
+                    showToast("Success", "Activity log history cleared from the cloud.");
+                } catch (error) {
+                    console.error("Error clearing logs:", error);
+                    showToast("Error", "Failed to clear logs from the database.");
+                }
             } else {
                 localLogs = [];
                 renderActivityLogs(localLogs);
                 showToast("Success", "Activity log history cleared.");
             }
         }
-        window.clearLogs = clearLogs;
+        window.verifyAndClearLogs = verifyAndClearLogs;
 
         // UI Globals
         window.switchTab = switchTab;
