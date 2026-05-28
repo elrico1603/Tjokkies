@@ -155,9 +155,9 @@
     <div class="flex flex-1 overflow-hidden">
         
         <!-- Sybalk (Sidenav) -->
-        <aside class="w-20 md:w-64 bg-tjokkieBlue-900 text-slate-300 flex flex-col shrink-0 shadow-lg border-r border-tjokkieBlue-800">
+        <aside class="w-20 md:w-64 bg-tjokkieBlue-900 text-slate-300 flex flex-col shrink-0 shadow-lg border-r border-tjokkieBlue-800 z-10 relative">
             <!-- Navigasie Skakels -->
-            <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto custom-scrollbar">
                 <button onclick="switchTab('dashboard')" id="btn-dashboard" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group bg-tjokkieBlue-800 text-white font-semibold">
                     <i class="fa-solid fa-chart-line text-lg w-6 text-center group-hover:scale-110 transition"></i>
                     <span class="hidden md:inline text-sm">Dashboard Tuis</span>
@@ -179,6 +179,12 @@
                     <span class="hidden md:inline text-sm font-medium">Skakelbeampte</span>
                 </button>
 
+                <!-- Bemarking Knoppie (NUUT) -->
+                <button onclick="switchTab('bemarking')" id="btn-bemarking" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-lightbulb text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Bemarking</span>
+                </button>
+
                 <!-- Busvervoer Knoppie -->
                 <button onclick="switchTab('bus')" id="btn-bus" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                     <i class="fa-solid fa-bus text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
@@ -189,6 +195,52 @@
                 <button onclick="switchTab('it')" id="btn-it" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                     <i class="fa-solid fa-laptop-code text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
                     <span class="hidden md:inline text-sm font-medium">IT-Ondersteuning</span>
+                </button>
+
+                <div class="pt-4 pb-2">
+                    <span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Sport & Kultuur</span>
+                </div>
+
+                <!-- Rugbyhoof Knoppie -->
+                <button onclick="switchTab('rugby')" id="btn-rugby" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-football text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Rugbyhoof</span>
+                </button>
+
+                <!-- Netbalhoof Knoppie -->
+                <button onclick="switchTab('netbal')" id="btn-netbal" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-basketball text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Netbalhoof</span>
+                </button>
+
+                <!-- Tennishoof Knoppie -->
+                <button onclick="switchTab('tennis')" id="btn-tennis" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-table-tennis-paddle-ball text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Tennishoof</span>
+                </button>
+
+                <!-- Swemhoof Knoppie -->
+                <button onclick="switchTab('swem')" id="btn-swem" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-person-swimming text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Swemhoof</span>
+                </button>
+
+                <!-- Hokkiehoof Knoppie -->
+                <button onclick="switchTab('hokkie')" id="btn-hokkie" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-hockey-puck text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Hokkiehoof</span>
+                </button>
+
+                <!-- Skaakhoof Knoppie -->
+                <button onclick="switchTab('skaak')" id="btn-skaak" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-chess-knight text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Skaakhoof</span>
+                </button>
+
+                <!-- Voortrekkershoof Knoppie -->
+                <button onclick="switchTab('voortrekkers')" id="btn-voortrekkers" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-campground text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Voortrekkers</span>
                 </button>
             </nav>
 
@@ -208,7 +260,7 @@
         </aside>
 
         <!-- Hoof Inhouds-area -->
-        <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 relative">
+        <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 relative custom-scrollbar">
             
             <!-- Custom Dynamic Toast Alert Box -->
             <div id="toast-notification" class="fixed top-4 right-4 bg-tjokkieBlue-900 border-l-4 border-tjokkieGold-500 text-white px-4 py-3 rounded-lg shadow-2xl z-50 transform translate-x-80 transition duration-300 opacity-0 pointer-events-none">
@@ -295,7 +347,7 @@
                         <span class="bg-tjokkieGold-500 text-tjokkieBlue-900 text-xs font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Portaal Dashboard</span>
                         <h2 class="text-2xl sm:text-4xl font-extrabold mt-3">Welkom by die Tjokkies-Bestuursportaal</h2>
                         <p class="text-slate-300 mt-2 text-sm sm:text-base leading-relaxed">
-                            Kies een van die departemente hieronder om spesifieke take, kommunikasie, ritte en tegniese bates te bestuur.
+                            Kies een van die departemente hieronder om spesifieke take, kommunikasie, bemarking, ritte en tegniese bates te bestuur.
                         </p>
                     </div>
                 </div>
@@ -303,77 +355,174 @@
                 <!-- Departementele Seleksie Grid (Kardinaalknoppies) -->
                 <div>
                     <h3 class="text-base font-bold text-slate-500 uppercase tracking-widest mb-4">Administratiewe Hubs</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- 4 Column Grid setup on XL screens vir beter balansering -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         
                         <!-- Terreinbestuurder Card -->
-                        <div onclick="switchTab('terrein')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                        <div onclick="switchTab('terrein')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                             <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieGold-500"></div>
                             <div>
-                                <div class="w-12 h-12 rounded-xl bg-amber-50 text-tjokkieGold-500 flex items-center justify-center text-xl mb-4 group-hover:bg-tjokkieGold-500 group-hover:text-white transition duration-300">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-tjokkieGold-500 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieGold-500 group-hover:text-white transition duration-300">
                                     <i class="fa-solid fa-hard-hat"></i>
                                 </div>
-                                <h4 class="text-base font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Terreinbestuurder</h4>
-                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                                    Fokus op instandhouding van sportvelde, skoolgeboue, klaskamerherstelwerk, en die skonning van bates.
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Terreinbestuur</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Fokus op instandhouding van sportvelde en skoolgeboue.
                                 </p>
-                            </div>
-                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieBlue-900">
-                                <span>Gaan na Terrein</span>
-                                <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition"></i>
                             </div>
                         </div>
 
                         <!-- Skakelbeampte Card -->
-                        <div onclick="switchTab('skakel')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                        <div onclick="switchTab('skakel')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                             <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieBlue-800"></div>
                             <div>
-                                <div class="w-12 h-12 rounded-xl bg-sky-50 text-tjokkieBlue-800 flex items-center justify-center text-xl mb-4 group-hover:bg-tjokkieBlue-800 group-hover:text-white transition duration-300">
+                                <div class="w-10 h-10 rounded-xl bg-sky-50 text-tjokkieBlue-800 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieBlue-800 group-hover:text-white transition duration-300">
                                     <i class="fa-solid fa-bullhorn"></i>
                                 </div>
-                                <h4 class="text-base font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skakelbeampte</h4>
-                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                                    Hanteer bemarking, skoolnuus, sosiale media, skakelwerk met ouers, asook nuusbriewe.
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skakelbeampte</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Hanteer daaglikse skool-afkondigings en d6-nuusbriewe.
                                 </p>
                             </div>
-                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieBlue-900">
-                                <span>Gaan na Skakelbeampte</span>
-                                <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition"></i>
+                        </div>
+
+                        <!-- Bemarking Card (NUUT) -->
+                        <div onclick="switchTab('bemarking')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-rose-500"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg mb-3 group-hover:bg-rose-500 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-lightbulb"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Bemarking</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Beplan bemarkingsveldtogte, opedae en toekomsbeplanning.
+                                </p>
                             </div>
                         </div>
 
                         <!-- Busvervoer Card -->
-                        <div onclick="switchTab('bus')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                        <div onclick="switchTab('bus')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                             <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
                             <div>
-                                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-4 group-hover:bg-amber-600 group-hover:text-white transition duration-300">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-3 group-hover:bg-amber-600 group-hover:text-white transition duration-300">
                                     <i class="fa-solid fa-bus"></i>
                                 </div>
-                                <h4 class="text-base font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Busvervoer</h4>
-                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                                    Koördineer daaglikse skoolbusse, sportritte, uitstappies, sowel as busbestuurders en skedules.
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Busvervoer</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Koördineer skoolbusse, sportritte en bestuurder roetes.
                                 </p>
-                            </div>
-                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieBlue-900">
-                                <span>Gaan na Busvervoer</span>
-                                <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition"></i>
                             </div>
                         </div>
 
                         <!-- IT Card -->
-                        <div onclick="switchTab('it')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                        <div onclick="switchTab('it')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                             <div class="absolute top-0 left-0 w-2 h-full bg-sky-500"></div>
                             <div>
-                                <div class="w-12 h-12 rounded-xl bg-blue-50 text-sky-500 flex items-center justify-center text-xl mb-4 group-hover:bg-sky-500 group-hover:text-white transition duration-300">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300">
                                     <i class="fa-solid fa-laptop-code"></i>
                                 </div>
-                                <h4 class="text-base font-bold text-slate-900 group-hover:text-tjokkieBlue-900">IT-Ondersteuning</h4>
-                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                                    Moniteer skool-WiFi, bedienerstatus, in klaskamers, en hanteer kaartjies.
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">IT-Ondersteuning</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Moniteer skool-WiFi, bedieners en hanteer IT-kaartjies.
                                 </p>
                             </div>
-                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieBlue-900">
-                                <span>Gaan na IT-Paneel</span>
-                                <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition"></i>
+                        </div>
+
+                        <!-- Rugbyhoof Card -->
+                        <div onclick="switchTab('rugby')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-3 group-hover:bg-blue-600 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-football"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Rugbyhoof</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Bestuur rugby-oefeninge, wedstryde, spanlyste en toerusting.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Netbalhoof Card -->
+                        <div onclick="switchTab('netbal')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-sky-400"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-basketball"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Netbalhoof</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Bestuur netbal-oefeninge, toernooie, spanlyste en reëlings.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Tennishoof Card -->
+                        <div onclick="switchTab('tennis')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-green-500"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-green-50 text-green-500 flex items-center justify-center text-lg mb-3 group-hover:bg-green-500 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Tennishoof</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Beplan tennis-oefeninge, toernooie, spanne en bane.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Swemhoof Card -->
+                        <div onclick="switchTab('swem')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-teal-500"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-500 flex items-center justify-center text-lg mb-3 group-hover:bg-teal-500 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-person-swimming"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Swemhoof</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Bestuur swemgalas, oefentye, en swemspanne.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Hokkiehoof Card -->
+                        <div onclick="switchTab('hokkie')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-orange-500"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center text-lg mb-3 group-hover:bg-orange-500 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-hockey-puck"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Hokkiehoof</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Bestuur hokkie-oefeninge, toernooie, en toerusting.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Skaakhoof Card -->
+                        <div onclick="switchTab('skaak')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-slate-700"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-lg mb-3 group-hover:bg-slate-700 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-chess-knight"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skaakhoof</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Bestuur skaak-toernooie, oefensessies en speler-graderings.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Voortrekkershoof Card -->
+                        <div onclick="switchTab('voortrekkers')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-amber-800"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg mb-3 group-hover:bg-amber-800 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-campground"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Voortrekkers</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+                                    Bestuur kampe, spanbyeenkomste, en kentekens vir die jeug.
+                                </p>
                             </div>
                         </div>
 
@@ -389,26 +538,30 @@
                             <h3 class="text-base font-bold text-slate-900">Vinnige Stelsel Statisteek</h3>
                             <span class="text-xs bg-tjokkieBlue-50 text-tjokkieBlue-800 px-2 py-1 rounded font-bold" id="live-storage-badge">In-Geheue Klad</span>
                         </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
-                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100 flex flex-col justify-center">
                                 <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-terrein-active">0</span>
-                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Aktiewe Herstelwerke</p>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1 leading-tight">Oop Herstelwerk</p>
                             </div>
-                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
-                                <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-pr-scheduled">0</span>
-                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Bemarking Geskeduleer</p>
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100 flex flex-col justify-center">
+                                <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-afkondigings">0</span>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1 leading-tight">Afkondigings Vandag</p>
                             </div>
-                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100 flex flex-col justify-center">
+                                <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-bemarking-take">0</span>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1 leading-tight">Bemarking Beplan</p>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100 flex flex-col justify-center">
                                 <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-bus-trips">0</span>
-                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Oop Bus Ritte</p>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1 leading-tight">Bus Ritte</p>
                             </div>
-                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100 flex flex-col justify-center">
                                 <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-it-tickets">0</span>
-                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Oop IT Kaartjies</p>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1 leading-tight">IT Kaartjies</p>
                             </div>
-                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100 flex flex-col justify-center">
                                 <span class="text-xl sm:text-2xl font-black text-green-600">100%</span>
-                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">WiFi Status</p>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1 leading-tight">WiFi Status</p>
                             </div>
                         </div>
 
@@ -417,9 +570,9 @@
                             <div class="flex space-x-3">
                                 <i class="fa-solid fa-circle-info text-tjokkieBlue-800 text-lg mt-0.5"></i>
                                 <div>
-                                    <h4 class="text-sm font-bold text-blue-900">Firebase Databasis Koppelvlak Gereed!</h4>
+                                    <h4 class="text-sm font-bold text-blue-900">Stelsel Opgedateer: Bemarking & Afkondigings</h4>
                                     <p class="text-xs text-blue-800 mt-1 leading-relaxed">
-                                        Die stelsel is nou toegerus met intydse Firebase-integrasie. Dit sal outomaties Firestore-sinchronisasie aktiveer wanneer die stelsel met jou Firebase-tokens en sleutels gelaai word!
+                                        Die Skakelbeampte hanteer nou pouse-afkondigings direk, en 'n aparte Bemarking-oortjie is bygevoeg vir langtermyn beplanning.
                                     </p>
                                 </div>
                             </div>
@@ -528,7 +681,7 @@
             </section>
 
             <!-- ============================================== -->
-            <!-- TAB 3: SKAKELBEAMPTE                          -->
+            <!-- TAB 3: SKAKELBEAMPTE (AFKONDIGINGS)           -->
             <!-- ============================================== -->
             <section id="tab-skakel" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                 <!-- Header -->
@@ -536,63 +689,112 @@
                     <div>
                         <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
                             <i class="fa-solid fa-bullhorn"></i>
-                            <span>Bemarking, Nuusbriewe & Skakelwerk</span>
+                            <span>Kommunikasie & Inligting</span>
                         </div>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skakelbeampte (PRO)</h2>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skakelbeampte</h2>
                     </div>
-                    <button onclick="toggleModal('modal-skakel-nuus')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                    <button onclick="toggleModal('modal-afkondiging')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
                         <i class="fa-solid fa-plus text-tjokkieGold-400"></i>
-                        <span>Beplan Sosiale Plasing</span>
+                        <span>Plaas Afkondiging</span>
                     </button>
                 </div>
 
-                <!-- Media Kanban & Kampanjes -->
+                <!-- Skakelbeampte Layout -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     
-                    <!-- Nuusbrief Preview Generator -->
-                    <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                            <h3 class="font-bold text-slate-900 text-sm">Kwik-Nuusbrief Kladbladsy</h3>
-                            <span class="text-[10px] text-slate-400">Genereer nuus vir die d6 Skakelapp</span>
-                        </div>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nuusbrief Hoofopskrif</label>
-                                <input type="text" id="newsletter-title" placeholder="bv. Tjokkie-Atletiek Blink Uit by Interprimêr!" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    <!-- Nuusbrief Preview Generator (d6) -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <!-- Upload Nuusbrief -->
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <h3 class="font-bold text-slate-900 text-sm">Laai Nuusbrief Op</h3>
+                                <span class="text-[10px] text-slate-400">Publiseer nuusbriewe aanlyn</span>
                             </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nuus Brief Inhoud (Kort Opsomming)</label>
-                                <textarea id="newsletter-body" rows="3" placeholder="Tik die hoofnuus of sportuitslae hier in vir ouers om dadelik te sien..." class="w-full text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
-                            </div>
-                            <button onclick="generateNewsletterPreview()" class="w-full py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-extrabold text-xs rounded-lg transition">
-                                <i class="fa-solid fa-envelope-open-text mr-1"></i> Publiseer & Voorskou Nuusbrief
-                            </button>
-                        </div>
-
-                        <!-- Generated Preview Display -->
-                        <div id="newsletter-preview-container" class="hidden mt-4 p-4 bg-sky-50 rounded-xl border border-sky-100 space-y-2">
-                            <h4 class="text-xs font-bold text-tjokkieBlue-900 uppercase tracking-wider">Regstreekse Voorskou:</h4>
-                            <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-100">
-                                <h5 class="font-extrabold text-sm text-tjokkieBlue-900" id="preview-title">Titel</h5>
-                                <p class="text-[11px] text-slate-600 mt-2 leading-relaxed" id="preview-body">Inhoud van die nuusbrief...</p>
-                                <div class="mt-4 flex items-center justify-between text-[9px] text-slate-400 border-t border-slate-100 pt-2">
-                                    <span>Gepubliseer deur: Skakelbeampte</span>
-                                    <span>Vandag</span>
+                            <form id="form-nuusbrief" onsubmit="uploadNuusbrief(event)" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nuusbrief Naam (Bv. Kwartaal 2 - Week 4)</label>
+                                    <input type="text" id="upload-nuusbrief-titel" required class="w-full text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                                 </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kies PDF / Word Lêer</label>
+                                    <input type="file" id="upload-nuusbrief-file" accept=".pdf,.doc,.docx" required class="w-full text-xs border border-slate-200 rounded-lg p-2 focus:outline-none file:mr-4 file:py-1.5 file:px-4 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-tjokkieBlue-50 file:text-tjokkieBlue-800 hover:file:bg-tjokkieBlue-100 transition cursor-pointer">
+                                </div>
+                                <button type="submit" class="w-full py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-extrabold text-xs rounded-lg transition flex items-center justify-center">
+                                    <i class="fa-solid fa-cloud-arrow-up mr-2"></i> Publiseer Nuusbrief Aanlyn
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Aanlyn Nuusbriewe List -->
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <h3 class="font-bold text-slate-900 text-sm">Aanlyn Nuusbriewe Argief</h3>
+                            </div>
+                            <div class="space-y-2 custom-scrollbar overflow-y-auto max-h-[200px] pr-1" id="nuusbriewe-list">
+                                <!-- Dynamic items load here -->
                             </div>
                         </div>
                     </div>
 
-                    <!-- Sosiale Media Skeduleerder Status -->
+                    <!-- Afkondigings Feed -->
                     <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-                        <h3 class="font-bold text-slate-900 text-sm">Sosiale Media Beplanning</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed">Geskeduleerde plasings vir Facebook & Instagram hierdie week:</p>
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Afkondigings vir die Dag</h3>
+                        </div>
+                        <p class="text-[10px] text-slate-500 leading-relaxed">Pouse-afkondigings of belangrike daaglikse inligting wat aan die leerders uitgesaai moet word.</p>
                         
-                        <div class="space-y-3" id="social-posts-list">
-                            <!-- Dynamic posts load here -->
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[300px] pr-1" id="afkondigings-list">
+                            <!-- Dynamic Afkondigings load here -->
                         </div>
                     </div>
 
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 3.5: BEMARKING (NUUT)                      -->
+            <!-- ============================================== -->
+            <section id="tab-bemarking" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-lightbulb"></i>
+                            <span>Bemarkingstrategie & Geleenthede</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Bemarking Veldtogte</h2>
+                    </div>
+                    <button onclick="toggleModal('modal-bemarking-taak')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus text-tjokkieGold-400"></i>
+                        <span>Beplan Nuwe Veldtog / Taak</span>
+                    </button>
+                </div>
+
+                <!-- Bemarking Take Tabel -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-sm">Skeduleer Bemarking Aksies</h3>
+                            <p class="text-[10px] text-slate-400">Beplan wat, wanneer en deur wie gedoen moet word vir bemarking.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-500 uppercase font-semibold">
+                                    <th class="px-6 py-3">Veldtog / Wat moet gedoen word</th>
+                                    <th class="px-6 py-3">Wanneer (Sperdatum)</th>
+                                    <th class="px-6 py-3">Verantwoordelike</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3">Aksie</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bemarking-task-rows" class="divide-y divide-slate-100">
+                                <!-- Dynamic rows load here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
 
@@ -616,37 +818,8 @@
                 </div>
 
                 <!-- Skool Busstatus Vloot Monitor -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-bus-simple"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Bus A (Groot 60-Sitplek)</h4>
-                            <p class="text-xs text-slate-500">Status: <span class="text-blue-600 font-bold">In Depot</span></p>
-                            <p class="text-[10px] text-slate-400 mt-1">Lisensie gekontroleer</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-van-shuttle"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Bus B (Midi 35-Sitplek)</h4>
-                            <p class="text-xs text-slate-500">Status: <span class="text-blue-500 font-bold">Aktief</span></p>
-                            <p class="text-[10px] text-slate-400 mt-1">Daaglikse roetes gemonitor</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-lg bg-red-100 text-red-700 flex items-center justify-center text-xl shrink-0">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-slate-900">Bus C (Klein 15-Sitplek)</h4>
-                            <p class="text-xs text-slate-500">Status: <span class="text-red-600 font-bold">Instandhouding</span></p>
-                            <p class="text-[10px] text-slate-400 mt-1">Remme word herstel deur Terreinspan</p>
-                        </div>
-                    </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="bus-status-container">
+                    <!-- Dynamic Bus status blocks load here -->
                 </div>
 
                 <!-- Busritte Tabel -->
@@ -695,7 +868,7 @@
                 </div>
 
                 <!-- WiFi & Server Health checks -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="it-status-container">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="it-status-container">
                     <!-- Dynamic IT status blocks load here -->
                 </div>
 
@@ -725,11 +898,284 @@
                 </div>
             </section>
 
+            <!-- ============================================== -->
+            <!-- TAB 6: RUGBYHOOF                               -->
+            <!-- ============================================== -->
+            <section id="tab-rugby" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-football"></i>
+                            <span>Sportbestuur</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Rugbyhoof</h2>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="openSportEventModal('rugby', 'Rugby')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i>
+                            <span class="hidden sm:inline">Skeduleer Geleentheid</span>
+                        </button>
+                        <button onclick="openSportResultModal('rugby', 'Rugby')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-trophy text-tjokkieGold-400"></i>
+                            <span>Laai Uitslag Op</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Komende Geleenthede & Skedule</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-events-list"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Uitslae & Prestasies</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-results-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 7: NETBALHOOF                              -->
+            <!-- ============================================== -->
+            <section id="tab-netbal" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-basketball"></i>
+                            <span>Sportbestuur</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Netbalhoof</h2>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="openSportEventModal('netbal', 'Netbal')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i>
+                            <span class="hidden sm:inline">Skeduleer Geleentheid</span>
+                        </button>
+                        <button onclick="openSportResultModal('netbal', 'Netbal')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-trophy text-tjokkieGold-400"></i>
+                            <span>Laai Uitslag Op</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Komende Geleenthede & Skedule</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-events-list"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Uitslae & Prestasies</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-results-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 8: TENNISHOOF                              -->
+            <!-- ============================================== -->
+            <section id="tab-tennis" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-table-tennis-paddle-ball"></i>
+                            <span>Sportbestuur</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Tennishoof</h2>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="openSportEventModal('tennis', 'Tennis')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i>
+                            <span class="hidden sm:inline">Skeduleer Geleentheid</span>
+                        </button>
+                        <button onclick="openSportResultModal('tennis', 'Tennis')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-trophy text-tjokkieGold-400"></i>
+                            <span>Laai Uitslag Op</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Komende Geleenthede & Skedule</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-events-list"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Uitslae & Prestasies</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-results-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 9: SWEMHOOF                                -->
+            <!-- ============================================== -->
+            <section id="tab-swem" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-person-swimming"></i>
+                            <span>Sportbestuur</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Swemhoof</h2>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="openSportEventModal('swem', 'Swem')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i>
+                            <span class="hidden sm:inline">Skeduleer Geleentheid</span>
+                        </button>
+                        <button onclick="openSportResultModal('swem', 'Swem')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-trophy text-tjokkieGold-400"></i>
+                            <span>Laai Uitslag Op</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Komende Geleenthede & Skedule</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="swem-events-list"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Uitslae & Prestasies</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="swem-results-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 10: HOKKIEHOOF                             -->
+            <!-- ============================================== -->
+            <section id="tab-hokkie" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-hockey-puck"></i>
+                            <span>Sportbestuur</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Hokkiehoof</h2>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="openSportEventModal('hokkie', 'Hokkie')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i>
+                            <span class="hidden sm:inline">Skeduleer Geleentheid</span>
+                        </button>
+                        <button onclick="openSportResultModal('hokkie', 'Hokkie')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-trophy text-tjokkieGold-400"></i>
+                            <span>Laai Uitslag Op</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Komende Geleenthede & Skedule</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-events-list"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Uitslae & Prestasies</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-results-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 11: SKAAKHOOF                              -->
+            <!-- ============================================== -->
+            <section id="tab-skaak" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-chess-knight"></i>
+                            <span>Sportbestuur</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skaakhoof</h2>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="openSportEventModal('skaak', 'Skaak')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i>
+                            <span class="hidden sm:inline">Skeduleer Geleentheid</span>
+                        </button>
+                        <button onclick="openSportResultModal('skaak', 'Skaak')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-trophy text-tjokkieGold-400"></i>
+                            <span>Laai Uitslag Op</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Komende Geleenthede & Skedule</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-events-list"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Uitslae & Prestasies</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-results-list"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 12: VOORTREKKERSHOOF                       -->
+            <!-- ============================================== -->
+            <section id="tab-voortrekkers" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-campground"></i>
+                            <span>Kultuur & Jeug</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Voortrekkershoof</h2>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="openSportEventModal('voortrekkers', 'Voortrekkers')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i>
+                            <span class="hidden sm:inline">Skeduleer Geleentheid</span>
+                        </button>
+                        <button onclick="openSportResultModal('voortrekkers', 'Voortrekkers')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                            <i class="fa-solid fa-trophy text-tjokkieGold-400"></i>
+                            <span>Laai Prestasie Op</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Komende Byeenkomste & Kampe</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-events-list"></div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-bold text-slate-900 text-sm">Prestasies & Toekennings</h3>
+                        </div>
+                        <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-results-list"></div>
+                    </div>
+                </div>
+            </section>
+
         </main>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 text-slate-500 text-[11px] text-center py-2.5 border-t border-slate-800 shrink-0">
+    <footer class="bg-slate-950 text-slate-500 text-[11px] text-center py-2.5 border-t border-slate-800 shrink-0 relative z-20">
         &copy; 2026 Tjokkies Bestuurstelsel. Ontwikkel vir administratiewe doeltreffendheid.
     </footer>
 
@@ -777,34 +1223,78 @@
     </div>
 
     <!-- ============================================== -->
-    <!-- MODAL 2: SKAKEL - NUWE SOSIALE PLASING        -->
+    <!-- MODAL 2: AFKONDIGING (SKAKELBEAMPTE)          -->
     <!-- ============================================== -->
-    <div id="modal-skakel-nuus" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+    <div id="modal-afkondiging" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                <h3 class="font-extrabold text-slate-900 text-sm">Beplan Sosiale Plasing</h3>
-                <button onclick="toggleModal('modal-skakel-nuus')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+                <h3 class="font-extrabold text-slate-900 text-sm">Plaas Afkondiging</h3>
+                <button onclick="toggleModal('modal-afkondiging')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
             </div>
-            <form id="form-skakel" onsubmit="addSocialPost(event)" class="space-y-4 text-xs">
+            <form id="form-afkondiging" onsubmit="addAfkondiging(event)" class="space-y-4 text-xs">
                 <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Sosiale Platform</label>
-                    <select id="skakel-platform" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                        <option value="Facebook">Facebook</option>
-                        <option value="Instagram">Instagram</option>
-                        <option value="d6 Skakelapp">d6 Skakelapp</option>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Vir watter geleentheid/doel?</label>
+                    <input type="text" id="afkondiging-doel" placeholder="bv. Koor Oefening / Snoepie Besonderhede" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Kies die Tyd/Pouse</label>
+                    <select id="afkondiging-pouse" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                        <option value="Eerste Pouse">Eerste Pouse</option>
+                        <option value="Tweede Pouse">Tweede Pouse</option>
+                        <option value="Aan die einde van die dag">Aan die einde van die dag</option>
+                        <option value="Algemeen / Heeldag">Algemeen / Heeldag</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Skeduleer Tyd & Datum</label>
-                    <input type="text" id="skakel-time" placeholder="bv. Maandag 10:00" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Wat is die afkondiging? (Inhoud)</label>
+                    <textarea id="afkondiging-inhoud" rows="4" placeholder="Volledige boodskap wat uitgesaai moet word..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
                 </div>
                 <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Inhoud / Kopie van Plasing</label>
-                    <textarea id="skakel-content" rows="3" placeholder="Skryf die plasing se teks hier..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Wie plaas die afkondiging?</label>
+                    <input type="text" id="afkondiging-persoon" placeholder="bv. Mnr. Nel" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="toggleModal('modal-skakel-nuus')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Skeduleer Plasing</button>
+                    <button type="button" onclick="toggleModal('modal-afkondiging')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Voeg Afkondiging By</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL: BEMARKING BEPLANNING                   -->
+    <!-- ============================================== -->
+    <div id="modal-bemarking-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h3 class="font-extrabold text-slate-900 text-sm">Beplan Nuwe Bemarkingstaak</h3>
+                <button onclick="toggleModal('modal-bemarking-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="form-bemarking" onsubmit="addBemarkingTaak(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Veldtog / Wat moet gedoen word?</label>
+                    <input type="text" id="bem-taak" placeholder="bv. Ontwerp Opedag Pamflette" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-rose-500 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Wanneer (Sperdatum)</label>
+                        <input type="date" id="bem-datum" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-rose-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Status</label>
+                        <select id="bem-status" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-rose-500 focus:outline-none">
+                            <option value="Beplan">Beplan</option>
+                            <option value="Besig">Besig</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Verantwoordelike Persoon</label>
+                    <input type="text" id="bem-verant" placeholder="Wie moet dit doen?" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-rose-500 focus:outline-none">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleModal('modal-bemarking-taak')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition">Stoor Skedule</button>
                 </div>
             </form>
         </div>
@@ -832,9 +1322,10 @@
                     <div>
                         <label class="block text-slate-500 font-bold uppercase mb-1">Bus Toegewys</label>
                         <select id="bus-vehicle" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                            <option value="Bus A (60-sitplek)">Bus A (60-sitplek)</option>
-                            <option value="Bus B (35-sitplek)">Bus B (35-sitplek)</option>
-                            <option value="Bus C (15-sitplek)">Bus C (15-sitplek)</option>
+                            <option value="Bus A (Crafter 23 Sitplek)">Bus A (Crafter 23 Sitplek)</option>
+                            <option value="Bus B (Nissan 16 Sitplek)">Bus B (Nissan 16 Sitplek)</option>
+                            <option value="Bus C (Quantum 14 Sitplek)">Bus C (Quantum 14 Sitplek)</option>
+                            <option value="Bus D (Old Lady 14 Sitplek)">Bus D (Old Lady 14 Sitplek)</option>
                         </select>
                     </div>
                 </div>
@@ -1069,6 +1560,136 @@
         </div>
     </div>
 
+    <!-- ============================================== -->
+    <!-- MODAL 12: BUS STATUS PASSWORD AUTHENTICATION   -->
+    <!-- ============================================== -->
+    <div id="modal-bus-status-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h3 class="font-extrabold text-slate-900 text-sm">Bus Admin Wagwoord Vereis</h3>
+                <button onclick="toggleModal('modal-bus-status-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="form-bus-password" onsubmit="verifyBusAuth(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="auth-bus-id">
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label>
+                    <input type="password" id="bus-password-input" placeholder="••••" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleModal('modal-bus-status-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-600 hover:bg-tjokkieBlue-700 text-white font-bold rounded-xl transition">Ontsluit Wysiging</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL 13: EDIT BUS STATUS                      -->
+    <!-- ============================================== -->
+    <div id="modal-bus-status-edit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h3 class="font-extrabold text-slate-900 text-sm" id="edit-bus-title">Wysig Bus Status</h3>
+                <button onclick="toggleModal('modal-bus-status-edit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="form-bus-status-edit" onsubmit="saveBusStatusEdit(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="edit-bus-id">
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Nuwe Bus Status</label>
+                    <input type="text" id="edit-bus-status-val" placeholder="bv. In Depot / Aktief / Instandhouding" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleModal('modal-bus-status-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl transition">Opdateer Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL 14: SPORT GELEENTHEID                    -->
+    <!-- ============================================== -->
+    <div id="modal-sport-event" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h3 class="font-extrabold text-slate-900 text-sm" id="sport-event-title-display">Skeduleer Geleentheid</h3>
+                <button onclick="toggleModal('modal-sport-event')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="form-sport-event" onsubmit="saveSportEvent(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="sport-event-dept">
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Titel / Geleentheid Naam</label>
+                    <input type="text" id="sport-event-title" placeholder="bv. Liga Wedstryd vs Grey" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Datum</label>
+                        <input type="date" id="sport-event-date" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Plek / Fasiliteit</label>
+                        <input type="text" id="sport-event-location" placeholder="bv. A-Veld / Weg" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Algemene Inligting</label>
+                    <textarea id="sport-event-desc" rows="3" placeholder="Tyd van wedstryd, reëlings of spesifieke inligting..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleModal('modal-sport-event')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Voeg By Skedule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL 15: SPORT UITSLAG                        -->
+    <!-- ============================================== -->
+    <div id="modal-sport-result" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h3 class="font-extrabold text-slate-900 text-sm" id="sport-result-title-display">Laai Uitslag Op</h3>
+                <button onclick="toggleModal('modal-sport-result')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="form-sport-result" onsubmit="saveSportResult(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="sport-result-dept">
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Tipe Wedstryd / Toernooi</label>
+                    <input type="text" id="sport-result-match" placeholder="bv. Vriendskaplike Wedstryd" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Tjokkies Span</label>
+                        <input type="text" id="sport-result-team" placeholder="bv. O/13A" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Teenstander</label>
+                        <input type="text" id="sport-result-opponent" placeholder="bv. Fichardtpark" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Telling / Punte</label>
+                        <input type="text" id="sport-result-score" placeholder="bv. 15 - 10" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Uitslag</label>
+                        <select id="sport-result-outcome" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                            <option value="Wen">Wen</option>
+                            <option value="Verloor">Verloor</option>
+                            <option value="Gelykop">Gelykop</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleModal('modal-sport-result')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl transition">Stoor Uitslag</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- Firebase SDK Modules -->
     <script type="module">
@@ -1109,7 +1730,16 @@
         // Local IT Status State
         let localItStatus = {
             "wifi": { name: "Skool WiFi Netwerk", status: "Aanlyn", icon: "fa-wifi" },
-            "server": { name: "Hoofbediener (Server)", status: "Stabiel", icon: "fa-server" }
+            "server": { name: "Hoofbediener (Server)", status: "Stabiel", icon: "fa-server" },
+            "fibre": { name: "Fibre Netwerk", status: "Aanlyn", icon: "fa-network-wired" }
+        };
+
+        // Local Bus Status State
+        let localBusStatus = {
+            "bus_a": { name: "Bus A", desc: "Crafter 23 Sitplek", status: "In Depot", icon: "fa-bus-simple", iconBg: "bg-amber-100 text-amber-700" },
+            "bus_b": { name: "Bus B", desc: "Nissan 16 Sitplek", status: "Aktief", icon: "fa-van-shuttle", iconBg: "bg-blue-100 text-blue-700" },
+            "bus_c": { name: "Bus C", desc: "Quantum 14 Sitplek", status: "Gereed", icon: "fa-van-shuttle", iconBg: "bg-sky-100 text-sky-700" },
+            "bus_d": { name: "Bus D", desc: "Old Lady 14 Sitplek", status: "Instandhouding", icon: "fa-triangle-exclamation", iconBg: "bg-red-100 text-red-700" }
         };
 
         // Offline Fallback Data Store (Browser RAM simulation)
@@ -1120,13 +1750,23 @@
         let currentTerreinTasks = [];
         let calDate = new Date(2026, 4, 1);
 
-        let localSocialPosts = [
-            { id: "1", platform: "Facebook", time: "Vrydag 14:00", content: "Aksiefotos van vandag se toernooi!" },
-            { id: "2", platform: "Instagram", time: "Saterdag 09:00", content: "Geluk met die hoof se verjaarsdag! 🎉" }
+        let localAfkondigings = [
+            { id: "1", doel: "Koor Oefening", pouse: "Eerste Pouse", inhoud: "Alle koorlede moet asseblief na die saal kom.", persoon: "Mev. Swart" },
+            { id: "2", doel: "Verlore Baadjie", pouse: "Algemeen / Heeldag", inhoud: "Oupa se baadjie is by ontvangs gelos.", persoon: "Mnr. Nel" }
         ];
+
+        let localBemarkingTake = [
+            { id: "1", taak: "Opedag Pamflette Druk", datum: "2026-06-15", status: "Beplan", verant: "Juff. Botha" },
+            { id: "2", taak: "Facebook Banner Dateer", datum: "2026-06-01", status: "Besig", verant: "Bemarkingspan" }
+        ];
+
+        let localNewsletters = [
+            { id: "1", title: "Kwartaal 2 - Week 3", filename: "nuusbrief_k2_w3.pdf", timestamp: Date.now() - 86400000 }
+        ];
+
         let localBusTrips = [
-            { id: "1", dest: "Pretoria Atletiek", time: "Vrydag, 06:00", vehicle: "Bus A (60-sitplek)", driver: "Oom Johan" },
-            { id: "2", dest: "Noord-Roete", time: "Vandag, 13:45", vehicle: "Bus B (35-sitplek)", driver: "Oom Piet" }
+            { id: "1", dest: "Pretoria Atletiek", time: "Vrydag, 06:00", vehicle: "Bus A (Crafter 23 Sitplek)", driver: "Oom Johan" },
+            { id: "2", dest: "Noord-Roete", time: "Vandag, 13:45", vehicle: "Bus B (Nissan 16 Sitplek)", driver: "Oom Piet" }
         ];
         let localITTickets = [
             { id: "1", device: "Kamer 18 Chromebook", desc: "Koppel nie aan netwerk nie", staff: "Mev. Labuschagne" },
@@ -1134,8 +1774,11 @@
         ];
         let localLogs = [
             { id: "1", desc: "Grassnyers gediens", dept: "Terrein", timestamp: Date.now() - 3600000 },
-            { id: "2", desc: "Facebook plasing geskeduleer", dept: "Skakel", timestamp: Date.now() - 1800000 }
+            { id: "2", desc: "Afkondiging gemaak vir Koor", dept: "Skakel", timestamp: Date.now() - 1800000 }
         ];
+
+        let localSportEvents = [];
+        let localSportResults = [];
 
         // Bootstrapping
         window.addEventListener('DOMContentLoaded', () => {
@@ -1195,11 +1838,16 @@
             currentTerreinTasks = localTerreinTasks;
             renderFacilities(localFacilities);
             renderItStatus(localItStatus);
+            renderBusStatus(localBusStatus);
             renderTerreinTasks(localTerreinTasks);
-            renderSocialPosts(localSocialPosts);
+            renderAfkondigings(localAfkondigings);
+            renderBemarkingTake(localBemarkingTake);
+            renderNewsletters(localNewsletters);
             renderBusTrips(localBusTrips);
             renderITTickets(localITTickets);
             renderActivityLogs(localLogs);
+            renderSportEvents(localSportEvents);
+            renderSportResults(localSportResults);
         }
 
         function setupRealtimeListeners() {
@@ -1223,6 +1871,15 @@
                 renderItStatus(statusData);
             }, (error) => console.error("IT Status exception:", error));
 
+            const busStatRef = collection(db, 'artifacts', appId, 'public', 'data', 'bus_status');
+            onSnapshot(busStatRef, (snapshot) => {
+                let statusData = { ...localBusStatus }; 
+                snapshot.forEach((doc) => {
+                    statusData[doc.id] = { ...statusData[doc.id], ...doc.data() };
+                });
+                renderBusStatus(statusData);
+            }, (error) => console.error("Bus Status exception:", error));
+
             const terreinRef = collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks');
             onSnapshot(terreinRef, (snapshot) => {
                 const tasks = [];
@@ -1233,14 +1890,33 @@
                 renderTerreinTasks(tasks);
             }, (error) => console.error("Grounds monitoring exception:", error));
 
-            const socialRef = collection(db, 'artifacts', appId, 'public', 'data', 'social_posts');
-            onSnapshot(socialRef, (snapshot) => {
-                const posts = [];
+            const afkRef = collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings');
+            onSnapshot(afkRef, (snapshot) => {
+                const items = [];
                 snapshot.forEach((doc) => {
-                    posts.push({ id: doc.id, ...doc.data() });
+                    items.push({ id: doc.id, ...doc.data() });
                 });
-                renderSocialPosts(posts);
-            }, (error) => console.error("PR monitoring exception:", error));
+                renderAfkondigings(items);
+            }, (error) => console.error("Afkondiging exception:", error));
+
+            const bemRef = collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take');
+            onSnapshot(bemRef, (snapshot) => {
+                const items = [];
+                snapshot.forEach((doc) => {
+                    items.push({ id: doc.id, ...doc.data() });
+                });
+                renderBemarkingTake(items);
+            }, (error) => console.error("Bemarking exception:", error));
+
+            const newsRef = collection(db, 'artifacts', appId, 'public', 'data', 'newsletters');
+            onSnapshot(newsRef, (snapshot) => {
+                const items = [];
+                snapshot.forEach((doc) => {
+                    items.push({ id: doc.id, ...doc.data() });
+                });
+                items.sort((a, b) => b.timestamp - a.timestamp);
+                renderNewsletters(items);
+            }, (error) => console.error("Newsletter exception:", error));
 
             const busRef = collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips');
             onSnapshot(busRef, (snapshot) => {
@@ -1269,6 +1945,24 @@
                 logs.sort((a, b) => b.timestamp - a.timestamp);
                 renderActivityLogs(logs);
             }, (error) => console.error("Audit log monitoring exception:", error));
+
+            const sportEventsRef = collection(db, 'artifacts', appId, 'public', 'data', 'sport_events');
+            onSnapshot(sportEventsRef, (snapshot) => {
+                const events = [];
+                snapshot.forEach((doc) => {
+                    events.push({ id: doc.id, ...doc.data() });
+                });
+                renderSportEvents(events);
+            }, (error) => console.error("Sport Events exception:", error));
+
+            const sportResRef = collection(db, 'artifacts', appId, 'public', 'data', 'sport_results');
+            onSnapshot(sportResRef, (snapshot) => {
+                const results = [];
+                snapshot.forEach((doc) => {
+                    results.push({ id: doc.id, ...doc.data() });
+                });
+                renderSportResults(results);
+            }, (error) => console.error("Sport Results exception:", error));
         }
 
         // ==============================================
@@ -1329,6 +2023,36 @@
                             </div>
                         </div>
                         <button onclick="promptItStatusAuth('${id}', '${item.name}', '${item.status}')" title="Wysig Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderBusStatus(statusData) {
+            const container = document.getElementById('bus-status-container');
+            if(!container) return;
+            container.innerHTML = '';
+
+            for (const [id, item] of Object.entries(statusData)) {
+                let statusText = item.status.toLowerCase();
+                let statusColor = (statusText.includes('aktief') || statusText.includes('gereed') || statusText.includes('aanlyn')) ? 'text-emerald-600' :
+                                  (statusText.includes('instandhouding') || statusText.includes('stukkend')) ? 'text-red-600' : 'text-blue-600';
+
+                container.innerHTML += `
+                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-lg ${item.iconBg} flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">${item.name}</h4>
+                                <p class="text-[10px] text-slate-500 font-bold uppercase">${item.desc}</p>
+                                <p class="text-xs text-slate-500 mt-1">Status: <span class="${statusColor} font-bold">${item.status}</span></p>
+                            </div>
+                        </div>
+                        <button onclick="promptBusStatusAuth('${id}', '${item.name}', '${item.status}')" title="Wysig Bus Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
                     </div>
@@ -1409,30 +2133,61 @@
             renderCalendar(tasks);
         }
 
-        function renderSocialPosts(posts) {
-            const list = document.getElementById('social-posts-list');
+        function renderAfkondigings(items) {
+            const list = document.getElementById('afkondigings-list');
             if(!list) return;
             list.innerHTML = '';
-            posts.forEach(post => {
+            items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs flex flex-col justify-between';
-                let platformStyle = 'text-blue-600';
-                let platformIcon = 'fa-facebook';
-                if(post.platform === 'Instagram') { platformStyle = 'text-pink-600'; platformIcon = 'fa-instagram'; }
-                if(post.platform === 'd6 Skakelapp') { platformStyle = 'text-sky-700'; platformIcon = 'fa-envelope'; }
+                card.className = 'p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs flex flex-col justify-between';
+                
+                let pouseColor = item.pouse === 'Eerste Pouse' ? 'text-tjokkieBlue-600' :
+                                 item.pouse === 'Tweede Pouse' ? 'text-amber-600' : 'text-slate-500';
 
                 card.innerHTML = `
                     <div class="flex items-center justify-between mb-2">
-                        <span class="${platformStyle} font-bold flex items-center gap-1">
-                            <i class="fa-brands ${platformIcon}"></i> ${post.platform}
-                        </span>
-                        <span class="text-[10px] text-slate-400 font-bold">${post.time}</span>
+                        <span class="font-bold text-slate-900">${item.doel}</span>
+                        <span class="text-[9px] ${pouseColor} font-bold bg-white px-2 py-1 rounded shadow-sm">${item.pouse}</span>
                     </div>
-                    <p class="text-slate-700 font-medium">${post.content}</p>
+                    <p class="text-slate-700 font-medium mb-3">${item.inhoud}</p>
+                    <div class="flex justify-between items-center border-t border-slate-200 pt-2 text-[10px]">
+                        <span class="text-slate-400">Ingevoer deur: <b>${item.persoon}</b></span>
+                        <button onclick="deleteAfkondiging('${item.id}', '${item.doel}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i> Uitvee</button>
+                    </div>
                 `;
                 list.appendChild(card);
             });
             updateDashboardCounters();
+        }
+
+        function renderNewsletters(items) {
+            const list = document.getElementById('nuusbriewe-list');
+            if(!list) return;
+            list.innerHTML = '';
+            if (items.length === 0) {
+                list.innerHTML = `<div class="text-slate-400 text-[11px] text-center py-4">Geen nuusbriewe tans aanlyn nie.</div>`;
+                return;
+            }
+            items.forEach(item => {
+                const dateStr = new Date(item.timestamp).toLocaleDateString('af-ZA');
+                const card = document.createElement('div');
+                card.className = 'flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 hover:border-tjokkieBlue-300 transition group';
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center shrink-0 shadow-sm">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-slate-900">${item.title}</p>
+                            <p class="text-[9px] text-slate-500">${item.filename} • Opgelaai: ${dateStr}</p>
+                        </div>
+                    </div>
+                    <button onclick="deleteNuusbrief('${item.id}', '${item.title}')" class="text-slate-300 hover:text-red-500 transition px-2" title="Vee Nuusbrief Uit">
+                        <i class="fa-solid fa-trash-can text-sm"></i>
+                    </button>
+                `;
+                list.appendChild(card);
+            });
         }
 
         function renderBusTrips(trips) {
@@ -1496,6 +2251,8 @@
                 if(log.dept === 'PR' || log.dept === 'Skakel') { color = 'bg-sky-100 text-tjokkieBlue-800'; icon = 'fa-share-nodes'; }
                 if(log.dept === 'Transport' || log.dept === 'Busvervoer') { color = 'bg-amber-100 text-amber-600'; icon = 'fa-bus'; }
                 if(log.dept === 'IT') { color = 'bg-blue-100 text-blue-600'; icon = 'fa-wifi'; }
+                if(log.dept === 'Bemarking') { color = 'bg-rose-100 text-rose-600'; icon = 'fa-lightbulb'; }
+                if(['Rugby', 'Netbal', 'Tennis', 'Swem', 'Hokkie', 'Skaak', 'Voortrekkers'].includes(log.dept)) { color = 'bg-blue-100 text-tjokkieBlue-800'; icon = 'fa-trophy'; }
 
                 const timeNow = new Date(log.timestamp).toLocaleTimeString('af-ZA', {hour: '2-digit', minute:'2-digit'});
 
@@ -1511,6 +2268,83 @@
                     </div>
                 `;
                 list.appendChild(item);
+            });
+        }
+
+        function renderSportEvents(events) {
+            const depts = ['rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
+            depts.forEach(d => {
+                const list = document.getElementById(`${d}-events-list`);
+                if(list) list.innerHTML = '';
+            });
+
+            // Sorteer by datum oplopend
+            events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            events.forEach(ev => {
+                const list = document.getElementById(`${ev.dept}-events-list`);
+                if(list) {
+                    list.innerHTML += `
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex flex-col space-y-2 relative group hover:border-tjokkieBlue-300 transition">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-slate-900">${ev.title}</span>
+                                <span class="text-[10px] text-tjokkieBlue-700 font-bold bg-blue-50 px-2 py-0.5 rounded shadow-sm"><i class="fa-regular fa-calendar mr-1"></i>${ev.date}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-600">${ev.desc}</p>
+                            <div class="flex justify-between items-center mt-1">
+                                <span class="text-[9px] text-slate-400 font-medium">📍 ${ev.location}</span>
+                                <button onclick="deleteSportEvent('${ev.id}', '${ev.dept}')" class="text-red-400 hover:text-red-600 text-[10px] px-2 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            depts.forEach(d => {
+                const list = document.getElementById(`${d}-events-list`);
+                if(list && list.children.length === 0) {
+                    list.innerHTML = `<div class="text-slate-400 text-[11px] text-center py-4">Geen komende geleenthede geskeduleer nie.</div>`;
+                }
+            });
+        }
+
+        function renderSportResults(results) {
+            const depts = ['rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
+            depts.forEach(d => {
+                const list = document.getElementById(`${d}-results-list`);
+                if(list) list.innerHTML = '';
+            });
+
+            // Sorteer nuutste eerste
+            results.sort((a, b) => b.timestamp - a.timestamp);
+
+            results.forEach(res => {
+                const list = document.getElementById(`${res.dept}-results-list`);
+                if(list) {
+                    let badgeColor = res.outcome === 'Wen' ? 'bg-emerald-100 text-emerald-700' :
+                                     res.outcome === 'Gelykop' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
+                                     
+                    list.innerHTML += `
+                        <div class="p-3 bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col space-y-2 relative overflow-hidden group hover:border-tjokkieBlue-300 transition">
+                            <div class="absolute left-0 top-0 bottom-0 w-1 ${badgeColor.split(' ')[0]}"></div>
+                            <div class="pl-2 flex items-center justify-between">
+                                <span class="text-xs font-bold text-slate-900">${res.team} vs ${res.opponent}</span>
+                                <span class="text-[10px] font-extrabold ${badgeColor} px-2 py-0.5 rounded">${res.score}</span>
+                            </div>
+                            <div class="pl-2 flex justify-between items-center mt-1">
+                                <span class="text-[10px] text-slate-500">${res.matchTitle}</span>
+                                <button onclick="deleteSportResult('${res.id}', '${res.dept}')" class="text-red-400 hover:text-red-600 text-[10px] px-2 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            depts.forEach(d => {
+                const list = document.getElementById(`${d}-results-list`);
+                if(list && list.children.length === 0) {
+                    list.innerHTML = `<div class="text-slate-400 text-[11px] text-center py-4">Geen uitslae of prestasies gelaai nie.</div>`;
+                }
             });
         }
 
@@ -1610,6 +2444,51 @@
             toggleModal('modal-it-status-edit');
         }
         window.saveItStatusEdit = saveItStatusEdit;
+
+        // Bus Status Editing Functions
+        function promptBusStatusAuth(id, name, currentStatus) {
+            document.getElementById('auth-bus-id').value = id;
+            document.getElementById('bus-password-input').value = '';
+            
+            document.getElementById('edit-bus-id').value = id;
+            document.getElementById('edit-bus-title').innerText = `Wysig: ${name}`;
+            document.getElementById('edit-bus-status-val').value = currentStatus;
+
+            toggleModal('modal-bus-status-password');
+        }
+        window.promptBusStatusAuth = promptBusStatusAuth;
+
+        function verifyBusAuth(event) {
+            event.preventDefault();
+            const pwd = document.getElementById('bus-password-input').value;
+            if (pwd === "1603") {
+                toggleModal('modal-bus-status-password');
+                toggleModal('modal-bus-status-edit');
+            } else {
+                showToast("Toegang Geweier", "Verkeerde wagwoord. Probeer weer.");
+            }
+        }
+        window.verifyBusAuth = verifyBusAuth;
+
+        async function saveBusStatusEdit(event) {
+            event.preventDefault();
+            const id = document.getElementById('edit-bus-id').value;
+            const status = document.getElementById('edit-bus-status-val').value;
+
+            const statusData = { status };
+
+            if (db && user) {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_status', id), statusData, { merge: true });
+            } else {
+                localBusStatus[id].status = status;
+                renderBusStatus(localBusStatus);
+            }
+
+            await logEvent(`Vloot status opgedateer`, 'Busvervoer');
+            showToast("Sukses!", "Die bus se status is gestoor.");
+            toggleModal('modal-bus-status-edit');
+        }
+        window.saveBusStatusEdit = saveBusStatusEdit;
 
         // Calendar Authorization
         function promptCalendarAuth(dateStr = '') {
@@ -1716,28 +2595,124 @@
         }
         window.completeTerreinTask = completeTerreinTask;
 
-        async function addSocialPost(event) {
+        // Afkondigings Logic
+        async function addAfkondiging(event) {
             event.preventDefault();
-            const platform = document.getElementById('skakel-platform').value;
-            const time = document.getElementById('skakel-time').value;
-            const content = document.getElementById('skakel-content').value;
+            const doel = document.getElementById('afkondiging-doel').value;
+            const pouse = document.getElementById('afkondiging-pouse').value;
+            const inhoud = document.getElementById('afkondiging-inhoud').value;
+            const persoon = document.getElementById('afkondiging-persoon').value;
 
-            const postData = { platform, time, content };
+            const itemData = { doel, pouse, inhoud, persoon };
 
             if (db && user) {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'social_posts'), postData);
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), itemData);
             } else {
-                localSocialPosts.push({ id: Math.random().toString(), ...postData });
-                renderSocialPosts(localSocialPosts);
+                localAfkondigings.push({ id: Math.random().toString(), ...itemData });
+                renderAfkondigings(localAfkondigings);
             }
 
-            await logEvent(`Plasing geskeduleer op ${platform}`, 'Skakel');
-            showToast("Plasing Geskeduleer", `Nuwe plasing bygevoeg vir ${platform}.`);
+            await logEvent(`Afkondiging geplaas vir ${doel}`, 'Skakel');
+            showToast("Afkondiging Gelaai", `Boodskap is gestoor om uitgesaai te word.`);
 
-            document.getElementById('form-skakel').reset();
-            toggleModal('modal-skakel-nuus');
+            document.getElementById('form-afkondiging').reset();
+            toggleModal('modal-afkondiging');
         }
-        window.addSocialPost = addSocialPost;
+        window.addAfkondiging = addAfkondiging;
+
+        async function deleteAfkondiging(id, doel) {
+            if (db && user) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'afkondigings', id));
+            } else {
+                const index = localAfkondigings.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    localAfkondigings.splice(index, 1);
+                }
+                renderAfkondigings(localAfkondigings);
+            }
+            await logEvent(`Afkondiging uitgevee (${doel})`, 'Skakel');
+            showToast("Uitgevee", `Die afkondiging is verwyder.`);
+        }
+        window.deleteAfkondiging = deleteAfkondiging;
+
+        // Bemarking Take Logic
+        async function addBemarkingTaak(event) {
+            event.preventDefault();
+            const taak = document.getElementById('bem-taak').value;
+            const datum = document.getElementById('bem-datum').value;
+            const status = document.getElementById('bem-status').value;
+            const verant = document.getElementById('bem-verant').value;
+
+            const bemData = { taak, datum, status, verant };
+
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), bemData);
+            } else {
+                localBemarkingTake.push({ id: Math.random().toString(), ...bemData });
+                renderBemarkingTake(localBemarkingTake);
+            }
+
+            await logEvent(`Nuwe bemarkingstaak: ${taak}`, 'Bemarking');
+            showToast("Taak Gestoor", `Die nuwe bemarkingstaak is geskeduleer.`);
+
+            document.getElementById('form-bemarking').reset();
+            toggleModal('modal-bemarking-taak');
+        }
+        window.addBemarkingTaak = addBemarkingTaak;
+
+        async function completeBemarkingTaak(id) {
+            let taskName = "Taak";
+            if (db && user) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bemarking_take', id));
+            } else {
+                const index = localBemarkingTake.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    taskName = localBemarkingTake[index].taak;
+                    localBemarkingTake.splice(index, 1);
+                }
+                renderBemarkingTake(localBemarkingTake);
+            }
+            await logEvent(`Bemarkingstaak afgehandel: ${taskName}`, 'Bemarking');
+            showToast("Afgehandel", `Die taak is suksesvol voltooi.`);
+        }
+        window.completeBemarkingTaak = completeBemarkingTaak;
+
+        async function uploadNuusbrief(event) {
+            event.preventDefault();
+            const title = document.getElementById('upload-nuusbrief-titel').value;
+            const fileInput = document.getElementById('upload-nuusbrief-file');
+            const filename = fileInput.files.length > 0 ? fileInput.files[0].name : "Dokument";
+
+            const newsData = { title, filename, timestamp: Date.now() };
+
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), newsData);
+            } else {
+                localNewsletters.unshift({ id: Math.random().toString(), ...newsData });
+                renderNewsletters(localNewsletters);
+            }
+
+            await logEvent(`Nuusbrief opgelaai: ${title}`, 'Skakel');
+            showToast("Sukses", `Nuusbrief is aanlyn gepubliseer.`);
+
+            document.getElementById('form-nuusbrief').reset();
+        }
+        window.uploadNuusbrief = uploadNuusbrief;
+
+        async function deleteNuusbrief(id, title) {
+            if (db && user) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'newsletters', id));
+            } else {
+                const index = localNewsletters.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    localNewsletters.splice(index, 1);
+                }
+                renderNewsletters(localNewsletters);
+            }
+            await logEvent(`Nuusbrief afgehaal: ${title}`, 'Skakel');
+            showToast("Uitgevee", `Die nuusbrief is verwyder.`);
+        }
+        window.deleteNuusbrief = deleteNuusbrief;
 
         async function addBusTrip(event) {
             event.preventDefault();
@@ -1857,6 +2832,97 @@
         }
         window.verifyAndClearLogs = verifyAndClearLogs;
 
+        function openSportEventModal(deptId, deptName) {
+            document.getElementById('form-sport-event').reset();
+            document.getElementById('sport-event-dept').value = deptId;
+            document.getElementById('sport-event-title-display').innerText = `Skeduleer Geleentheid: ${deptName}`;
+            toggleModal('modal-sport-event');
+        }
+        window.openSportEventModal = openSportEventModal;
+
+        async function saveSportEvent(event) {
+            event.preventDefault();
+            const dept = document.getElementById('sport-event-dept').value;
+            const title = document.getElementById('sport-event-title').value;
+            const date = document.getElementById('sport-event-date').value;
+            const location = document.getElementById('sport-event-location').value;
+            const desc = document.getElementById('sport-event-desc').value;
+
+            const data = { dept, title, date, location, desc, timestamp: Date.now() };
+
+            // Bepaal die regte naam vir logboek
+            const deptNaam = dept.charAt(0).toUpperCase() + dept.slice(1);
+
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), data);
+            } else {
+                localSportEvents.push({ id: Math.random().toString(), ...data });
+                renderSportEvents(localSportEvents);
+            }
+
+            await logEvent(`Nuwe geleentheid: ${title}`, deptNaam);
+            showToast("Sukses", `Geleentheid gestoor op skedule.`);
+            toggleModal('modal-sport-event');
+        }
+        window.saveSportEvent = saveSportEvent;
+
+        async function deleteSportEvent(id, dept) {
+            if (db && user) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_events', id));
+            } else {
+                localSportEvents = localSportEvents.filter(t => t.id !== id);
+                renderSportEvents(localSportEvents);
+            }
+            showToast("Geleentheid Verwyder", "Die inskrywing is uitgevee.");
+        }
+        window.deleteSportEvent = deleteSportEvent;
+
+
+        function openSportResultModal(deptId, deptName) {
+            document.getElementById('form-sport-result').reset();
+            document.getElementById('sport-result-dept').value = deptId;
+            document.getElementById('sport-result-title-display').innerText = `Laai Uitslag Op: ${deptName}`;
+            toggleModal('modal-sport-result');
+        }
+        window.openSportResultModal = openSportResultModal;
+
+        async function saveSportResult(event) {
+            event.preventDefault();
+            const dept = document.getElementById('sport-result-dept').value;
+            const matchTitle = document.getElementById('sport-result-match').value;
+            const team = document.getElementById('sport-result-team').value;
+            const opponent = document.getElementById('sport-result-opponent').value;
+            const score = document.getElementById('sport-result-score').value;
+            const outcome = document.getElementById('sport-result-outcome').value;
+
+            const data = { dept, matchTitle, team, opponent, score, outcome, timestamp: Date.now() };
+
+            const deptNaam = dept.charAt(0).toUpperCase() + dept.slice(1);
+
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), data);
+            } else {
+                localSportResults.push({ id: Math.random().toString(), ...data });
+                renderSportResults(localSportResults);
+            }
+
+            await logEvent(`Uitslag gelaai vir span: ${team}`, deptNaam);
+            showToast("Uitslag Gestoor", `Die wedstryd uitslag is bygevoeg.`);
+            toggleModal('modal-sport-result');
+        }
+        window.saveSportResult = saveSportResult;
+
+        async function deleteSportResult(id, dept) {
+            if (db && user) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_results', id));
+            } else {
+                localSportResults = localSportResults.filter(t => t.id !== id);
+                renderSportResults(localSportResults);
+            }
+            showToast("Uitslag Verwyder", "Die uitslag is uitgevee.");
+        }
+        window.deleteSportResult = deleteSportResult;
+
         // UI Globals
         window.switchTab = switchTab;
         window.toggleModal = toggleModal;
@@ -1865,6 +2931,9 @@
         window.filterTerreinTasks = filterTerreinTasks;
         window.generateNewsletterPreview = generateNewsletterPreview;
         window.changeMonth = changeMonth;
+        window.promptBusStatusAuth = promptBusStatusAuth;
+        window.verifyBusAuth = verifyBusAuth;
+        window.saveBusStatusEdit = saveBusStatusEdit;
 
     </script>
 
@@ -1874,8 +2943,16 @@
             document.getElementById('tab-dashboard').classList.add('hidden');
             document.getElementById('tab-terrein').classList.add('hidden');
             document.getElementById('tab-skakel').classList.add('hidden');
+            document.getElementById('tab-bemarking').classList.add('hidden');
             document.getElementById('tab-bus').classList.add('hidden');
             document.getElementById('tab-it').classList.add('hidden');
+            if (document.getElementById('tab-rugby')) document.getElementById('tab-rugby').classList.add('hidden');
+            if (document.getElementById('tab-netbal')) document.getElementById('tab-netbal').classList.add('hidden');
+            if (document.getElementById('tab-tennis')) document.getElementById('tab-tennis').classList.add('hidden');
+            if (document.getElementById('tab-swem')) document.getElementById('tab-swem').classList.add('hidden');
+            if (document.getElementById('tab-hokkie')) document.getElementById('tab-hokkie').classList.add('hidden');
+            if (document.getElementById('tab-skaak')) document.getElementById('tab-skaak').classList.add('hidden');
+            if (document.getElementById('tab-voortrekkers')) document.getElementById('tab-voortrekkers').classList.add('hidden');
 
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
 
@@ -1929,9 +3006,13 @@
                 const terreinRows = document.getElementById('terrein-task-rows').children.length;
                 document.getElementById('stat-terrein-active').innerText = terreinRows;
 
-                // PR
-                const socialRows = document.getElementById('social-posts-list').children.length;
-                document.getElementById('stat-pr-scheduled').innerText = socialRows;
+                // Afkondigings
+                const afkRows = document.getElementById('afkondigings-list').children.length;
+                document.getElementById('stat-afkondigings').innerText = afkRows;
+
+                // Bemarking
+                const bemRows = document.getElementById('bemarking-task-rows').children.length;
+                document.getElementById('stat-bemarking-take').innerText = bemRows;
 
                 // Bus
                 const busRows = document.getElementById('bus-trip-rows').children.length;
@@ -1958,22 +3039,6 @@
                     row.classList.remove('hidden');
                 }
             }
-        }
-
-        function generateNewsletterPreview() {
-            const title = document.getElementById('newsletter-title').value;
-            const body = document.getElementById('newsletter-body').value;
-
-            if(!title || !body) {
-                showToast("Fout", "Vul asseblief beide die hoofopskrif en inhoud in.");
-                return;
-            }
-
-            document.getElementById('preview-title').innerText = title;
-            document.getElementById('preview-body').innerText = body;
-            document.getElementById('newsletter-preview-container').classList.remove('hidden');
-
-            showToast("Voorskou Gereed!", "Kyk na die gegenereerde voorskou hieronder.");
         }
     </script>
 </body>
