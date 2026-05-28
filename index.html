@@ -11,16 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        tjokkieGreen: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#10b981',
-                            800: '#064e3b',
-                            900: '#022c22', // Primary Dark Green
+                        tjokkieBlue: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7', // Bright Accent Blue
+                            800: '#1e40af', // Royal Blue
+                            900: '#172554', // Dark Navy Brand Color
+                            950: '#0f172a', // Deepest Navy
                         },
                         tjokkieGold: {
                             400: '#fbbf24',
-                            500: '#f59e0b', // Primary Warm Gold
+                            500: '#f59e0b', // Primary Tjokkie Gold
                             600: '#d97706',
                         }
                     }
@@ -40,17 +41,96 @@
 <body class="h-full flex flex-col overflow-hidden text-slate-800">
 
     <!-- Header / Navigasie Balk -->
-    <header class="bg-tjokkieGreen-900 text-white shadow-md border-b-4 border-tjokkieGold-500 shrink-0 z-30">
+    <header class="bg-tjokkieBlue-900 text-white shadow-md border-b-4 border-tjokkieGold-500 shrink-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
+                
                 <!-- Tjokkies Logo & Naam -->
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
-                    <div class="w-10 h-10 bg-tjokkieGold-500 rounded-full flex items-center justify-center font-black text-tjokkieGreen-900 text-xl tracking-wider shadow-inner">
-                        TJ
+                <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="switchTab('dashboard')">
+                    
+                    <!-- Akkurate Universitas (Tjokkies) Skoolwapen SVG -->
+                    <div class="w-12 h-14 flex items-center justify-center filter drop-shadow-md">
+                        <svg viewBox="0 0 200 240" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#fbbf24" />
+                                    <stop offset="100%" stop-color="#d97706" />
+                                </linearGradient>
+                                <clipPath id="shield-clip">
+                                    <path d="M 40,45 L 160,45 L 160,115 C 160,150 135,180 100,195 C 65,180 40,150 40,115 Z" />
+                                </clipPath>
+                            </defs>
+                            
+                            <!-- Top Banner (Behind) Red Folds -->
+                            <path d="M 45,25 L 35,32 L 35,42 L 47,38 Z" fill="#DA291C" stroke="#000000" stroke-width="1.5" stroke-linejoin="round" />
+                            <path d="M 155,25 L 165,32 L 165,42 L 153,38 Z" fill="#DA291C" stroke="#000000" stroke-width="1.5" stroke-linejoin="round" />
+                            
+                            <!-- Top Gold Banner -->
+                            <path d="M 43,26 Q 100,14 157,26 L 153,39 Q 100,27 47,39 Z" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.5" stroke-linejoin="round" />
+                            
+                            <!-- Top Banner Text -->
+                            <path id="top-text-path" d="M 45,34 Q 100,22 155,34" fill="none" />
+                            <text font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="9" letter-spacing="1">
+                                <textPath href="#top-text-path" startOffset="50%" text-anchor="middle">UNIVERSITAS</textPath>
+                            </text>
+
+                            <!-- Shield with Clip Path -->
+                            <g clip-path="url(#shield-clip)">
+                                <!-- Top Half Gold Background -->
+                                <rect x="30" y="30" width="140" height="60" fill="#FCD116" />
+                                <!-- Bottom Half Red Background -->
+                                <rect x="30" y="88" width="140" height="120" fill="#DA291C" />
+                                
+                                <!-- Wavy Blue Fess Splitter -->
+                                <path d="M 30,76 C 55,64 75,98 100,76 C 125,64 145,98 170,76 L 170,98 C 145,120 125,86 100,108 C 75,120 55,86 30,108 Z" fill="#002F6C" stroke="#000000" stroke-width="1.5" />
+
+                                <!-- Open Book in top half -->
+                                <path d="M 72,53 C 85,47 115,47 128,53 L 128,69 C 115,63 85,63 72,69 Z" fill="#DA291C" stroke="#000000" stroke-width="1.2" stroke-linejoin="round" />
+                                <!-- Left white page -->
+                                <path d="M 75,55 C 85,50 97,50 98,54 L 98,67 C 97,63 85,63 75,67 Z" fill="#ffffff" stroke="#000000" stroke-width="1" />
+                                <!-- Right white page -->
+                                <path d="M 102,54 C 103,50 115,50 125,55 L 125,67 C 115,63 103,63 102,67 Z" fill="#ffffff" stroke="#000000" stroke-width="1" />
+                                <!-- Middle spine divider -->
+                                <line x1="100" y1="54" x2="100" y2="67" stroke="#DA291C" stroke-width="1.5" />
+                                <!-- Red hanging bookmark -->
+                                <path d="M 98,67 L 100,73 L 102,67 Z" fill="#DA291C" />
+
+                                <!-- Fleur-de-lis in bottom half -->
+                                <g transform="translate(0, 5)">
+                                    <!-- Left petal -->
+                                    <path d="M 100,132 C 85,125 78,138 88,145 C 95,150 98,140 100,135" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
+                                    <!-- Right petal -->
+                                    <path d="M 100,132 C 115,125 122,138 112,145 C 105,150 102,140 100,135" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
+                                    <!-- Center petal -->
+                                    <path d="M 100,105 C 105,115 107,130 100,148 C 93,130 95,115 100,105" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
+                                    <!-- Cross bar -->
+                                    <path d="M 86,138 C 92,137 108,137 114,138 C 114,141 108,141 100,141 C 92,141 86,141 86,138 Z" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
+                                    <!-- Bottom petals -->
+                                    <path d="M 100,141 C 105,148 111,156 113,160 C 107,161 102,152 100,149 C 98,152 93,161 87,160 C 89,156 95,148 100,141 Z" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.2" />
+                                </g>
+                            </g>
+
+                            <!-- Shield Outer Border -->
+                            <path d="M 40,45 L 160,45 L 160,115 C 160,150 135,180 100,195 C 65,180 40,150 40,115 Z" fill="none" stroke="#000000" stroke-width="2.5" stroke-linejoin="round" />
+
+                            <!-- Bottom Banner Red Folds (Behind) -->
+                            <path d="M 45,195 L 36,203 L 42,211 L 49,203 Z" fill="#DA291C" stroke="#000000" stroke-width="1.2" stroke-linejoin="round" />
+                            <path d="M 155,195 L 164,203 L 158,211 L 151,203 Z" fill="#DA291C" stroke="#000000" stroke-width="1.2" stroke-linejoin="round" />
+
+                            <!-- Bottom Gold Banner -->
+                            <path d="M 40,195 Q 100,225 160,195 L 155,183 Q 100,213 45,183 Z" fill="url(#goldGrad)" stroke="#000000" stroke-width="1.5" stroke-linejoin="round" />
+                            
+                            <!-- Bottom Banner Text -->
+                            <path id="bottom-text-path" d="M 42,194 Q 100,224 158,194" fill="none" />
+                            <text font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="8">
+                                <textPath href="#bottom-text-path" startOffset="50%" text-anchor="middle">NET MY BESTE</textPath>
+                            </text>
+                        </svg>
                     </div>
+                    
                     <div>
-                        <h1 class="text-lg font-bold tracking-tight">Laerskool Tjokkies</h1>
-                        <p class="text-[10px] text-tjokkieGold-400 font-semibold tracking-wider uppercase">Administrasie & Bestuur</p>
+                        <h1 class="text-xl font-black tracking-tight text-white leading-none">Tjokkies</h1>
+                        <p class="text-[10px] text-tjokkieGold-400 font-bold tracking-wider uppercase mt-1">Administrasie & Bestuur</p>
                     </div>
                 </div>
 
@@ -60,13 +140,13 @@
                         <span id="live-date" class="text-xs text-slate-300 font-medium">Donderdag, 28 Mei 2026</span>
                         <span class="text-[10px] text-tjokkieGold-400 font-bold uppercase tracking-widest">Bloemfontein</span>
                     </div>
-                    <!-- Mock Notification Indicator -->
+                    <!-- Notification Indicator -->
                     <div class="relative cursor-pointer hover:text-tjokkieGold-400 transition" onclick="showNotificationAlert()">
                         <i class="fa-regular fa-bell text-xl"></i>
                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">3</span>
                     </div>
-                    <div class="flex items-center space-x-2 border-l border-tjokkieGreen-800 pl-4">
-                        <div class="w-8 h-8 rounded-full bg-tjokkieGold-500 text-tjokkieGreen-900 font-bold flex items-center justify-center">
+                    <div class="flex items-center space-x-2 border-l border-tjokkieBlue-800 pl-4">
+                        <div class="w-8 h-8 rounded-full bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold flex items-center justify-center">
                             A
                         </div>
                         <span class="hidden sm:inline-block text-sm font-semibold text-slate-200">Skool Admin</span>
@@ -80,10 +160,10 @@
     <div class="flex flex-1 overflow-hidden">
         
         <!-- Sybalk (Sidenav) -->
-        <aside class="w-20 md:w-64 bg-tjokkieGreen-900 text-slate-300 flex flex-col shrink-0 shadow-lg border-r border-tjokkieGreen-800">
+        <aside class="w-20 md:w-64 bg-tjokkieBlue-900 text-slate-300 flex flex-col shrink-0 shadow-lg border-r border-tjokkieBlue-800">
             <!-- Navigasie Skakels -->
-            <nav class="flex-1 px-2 py-4 space-y-1">
-                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group bg-tjokkieGreen-800 text-white font-semibold">
+            <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group bg-tjokkieBlue-800 text-white font-semibold">
                     <i class="fa-solid fa-chart-line text-lg w-6 text-center group-hover:scale-110 transition"></i>
                     <span class="hidden md:inline text-sm">Dashboard Tuis</span>
                 </button>
@@ -93,35 +173,41 @@
                 </div>
 
                 <!-- Terreinbestuurder Knoppie -->
-                <button onclick="switchTab('terrein')" id="btn-terrein" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieGreen-800 hover:text-white">
+                <button onclick="switchTab('terrein')" id="btn-terrein" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                     <i class="fa-solid fa-hard-hat text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
                     <span class="hidden md:inline text-sm font-medium">Terreinbestuurder</span>
                 </button>
 
                 <!-- Skakelbeampte Knoppie -->
-                <button onclick="switchTab('skakel')" id="btn-skakel" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieGreen-800 hover:text-white">
+                <button onclick="switchTab('skakel')" id="btn-skakel" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                     <i class="fa-solid fa-bullhorn text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
                     <span class="hidden md:inline text-sm font-medium">Skakelbeampte</span>
                 </button>
 
+                <!-- Busvervoer Knoppie -->
+                <button onclick="switchTab('bus')" id="btn-bus" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <i class="fa-solid fa-bus text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
+                    <span class="hidden md:inline text-sm font-medium">Busvervoer</span>
+                </button>
+
                 <!-- IT Knoppie -->
-                <button onclick="switchTab('it')" id="btn-it" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieGreen-800 hover:text-white">
+                <button onclick="switchTab('it')" id="btn-it" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                     <i class="fa-solid fa-laptop-code text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
                     <span class="hidden md:inline text-sm font-medium">IT-Ondersteuning</span>
                 </button>
             </nav>
 
-            <!-- Onderste Inligting/Status Kaart vir die skool -->
-            <div class="p-4 border-t border-tjokkieGreen-800 hidden md:block">
-                <div class="bg-tjokkieGreen-950 rounded-lg p-3 border border-tjokkieGreen-800">
-                    <div class="flex items-center space-x-2 text-emerald-400 mb-1">
+            <!-- Status Kaart -->
+            <div class="p-4 border-t border-tjokkieBlue-800 hidden md:block">
+                <div class="bg-tjokkieBlue-950 rounded-lg p-3 border border-tjokkieBlue-800">
+                    <div class="flex items-center space-x-2 text-sky-400 mb-1">
                         <span class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-sky-500"></span>
                         </span>
                         <span class="text-xs font-bold uppercase tracking-wider">Stelsel Status</span>
                     </div>
-                    <p class="text-[11px] text-slate-400">Al 3 departemente is aktief en gekoppel aan databasis.</p>
+                    <p class="text-[11px]" id="db-status-text" class="text-slate-400">Gekoppel aan webgeheue.</p>
                 </div>
             </div>
         </aside>
@@ -129,8 +215,8 @@
         <!-- Hoof Inhouds-area -->
         <main class="flex-1 flex flex-col overflow-y-auto bg-slate-50 relative">
             
-            <!-- Custom Dynamic Toast Alert Box (Instead of alert()) -->
-            <div id="toast-notification" class="fixed top-4 right-4 bg-tjokkieGreen-900 border-l-4 border-tjokkieGold-500 text-white px-4 py-3 rounded-lg shadow-2xl z-50 transform translate-x-80 transition duration-300 opacity-0 pointer-events-none">
+            <!-- Custom Dynamic Toast Alert Box -->
+            <div id="toast-notification" class="fixed top-4 right-4 bg-tjokkieBlue-900 border-l-4 border-tjokkieGold-500 text-white px-4 py-3 rounded-lg shadow-2xl z-50 transform translate-x-80 transition duration-300 opacity-0 pointer-events-none">
                 <div class="flex items-center space-x-3">
                     <span class="text-tjokkieGold-400"><i class="fa-solid fa-circle-check text-xl"></i></span>
                     <div>
@@ -145,15 +231,18 @@
             <!-- ============================================== -->
             <section id="tab-dashboard" class="p-4 sm:p-6 lg:p-8 space-y-8">
                 <!-- Welkoms Banner -->
-                <div class="bg-gradient-to-r from-tjokkieGreen-900 to-emerald-900 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden shadow-lg border border-tjokkieGreen-800">
-                    <div class="absolute right-0 top-0 opacity-10 transform translate-x-12 -translate-y-8">
-                        <i class="fa-solid fa-school text-[250px]"></i>
+                <div class="bg-gradient-to-r from-tjokkieBlue-900 to-blue-900 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden shadow-lg border border-tjokkieBlue-800">
+                    <!-- Big floating crest icon inside the banner background -->
+                    <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
+                        <svg viewBox="0 0 100 120" class="w-[200px] h-[240px]">
+                            <path d="M10,10 L90,10 C90,10 90,70 50,110 C10,70 10,10 10,10 Z" fill="none" stroke="#ffffff" stroke-width="4" />
+                        </svg>
                     </div>
                     <div class="relative z-10 max-w-xl">
-                        <span class="bg-tjokkieGold-500 text-tjokkieGreen-900 text-xs font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Portaal Dashboard</span>
+                        <span class="bg-tjokkieGold-500 text-tjokkieBlue-900 text-xs font-extrabold uppercase px-3 py-1 rounded-full tracking-wider">Portaal Dashboard</span>
                         <h2 class="text-2xl sm:text-4xl font-extrabold mt-3">Welkom by die Tjokkies-Bestuursportaal</h2>
                         <p class="text-slate-300 mt-2 text-sm sm:text-base leading-relaxed">
-                            Kies een van die departemente hieronder om spesifieke take, kommunikasie en tegniese bates te bestuur. Jou terugvoer sal die uitleg onder elk bepaal!
+                            Kies een van die departemente hieronder om spesifieke take, kommunikasie, ritte en tegniese bates te bestuur.
                         </p>
                     </div>
                 </div>
@@ -161,57 +250,75 @@
                 <!-- Departementele Seleksie Grid (Kardinaalknoppies) -->
                 <div>
                     <h3 class="text-base font-bold text-slate-500 uppercase tracking-widest mb-4">Administratiewe Hubs</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         
                         <!-- Terreinbestuurder Card -->
-                        <div onclick="switchTab('terrein')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieGreen-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                        <div onclick="switchTab('terrein')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                             <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieGold-500"></div>
                             <div>
                                 <div class="w-12 h-12 rounded-xl bg-amber-50 text-tjokkieGold-500 flex items-center justify-center text-xl mb-4 group-hover:bg-tjokkieGold-500 group-hover:text-white transition duration-300">
                                     <i class="fa-solid fa-hard-hat"></i>
                                 </div>
-                                <h4 class="text-lg font-bold text-slate-900 group-hover:text-tjokkieGreen-900">Terreinbestuurder</h4>
+                                <h4 class="text-base font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Terreinbestuurder</h4>
                                 <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                                    Fokus op instandhouding van sportvelde, skoolgeboue, klaskamerherstelwerk, en die skedulering van die skoonmaakspanne.
+                                    Fokus op instandhouding van sportvelde, skoolgeboue, klaskamerherstelwerk, en die skonning van bates.
                                 </p>
                             </div>
-                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieGreen-900">
+                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieBlue-900">
                                 <span>Gaan na Terrein</span>
                                 <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition"></i>
                             </div>
                         </div>
 
                         <!-- Skakelbeampte Card -->
-                        <div onclick="switchTab('skakel')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieGreen-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                            <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieGreen-900"></div>
+                        <div onclick="switchTab('skakel')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieBlue-800"></div>
                             <div>
-                                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-tjokkieGreen-800 flex items-center justify-center text-xl mb-4 group-hover:bg-tjokkieGreen-900 group-hover:text-white transition duration-300">
+                                <div class="w-12 h-12 rounded-xl bg-sky-50 text-tjokkieBlue-800 flex items-center justify-center text-xl mb-4 group-hover:bg-tjokkieBlue-800 group-hover:text-white transition duration-300">
                                     <i class="fa-solid fa-bullhorn"></i>
                                 </div>
-                                <h4 class="text-lg font-bold text-slate-900 group-hover:text-tjokkieGreen-900">Skakelbeampte</h4>
+                                <h4 class="text-base font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skakelbeampte</h4>
                                 <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                                    Hanteer bemarking, skoolnuus, sosiale media, skakelwerk met ouers, asook die koördinering van opkomende skoolgeleenthede.
+                                    Hanteer bemarking, skoolnuus, sosiale media, skakelwerk met ouers, asook nuusbriewe.
                                 </p>
                             </div>
-                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieGreen-900">
+                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieBlue-900">
                                 <span>Gaan na Skakelbeampte</span>
                                 <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition"></i>
                             </div>
                         </div>
 
-                        <!-- IT Card -->
-                        <div onclick="switchTab('it')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieGreen-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                            <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
+                        <!-- Busvervoer Card -->
+                        <div onclick="switchTab('bus')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
                             <div>
-                                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl mb-4 group-hover:bg-blue-600 group-hover:text-white transition duration-300">
-                                    <i class="fa-solid fa-laptop-code"></i>
+                                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-4 group-hover:bg-amber-600 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-bus"></i>
                                 </div>
-                                <h4 class="text-lg font-bold text-slate-900 group-hover:text-tjokkieGreen-900">IT-Ondersteuning</h4>
+                                <h4 class="text-base font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Busvervoer</h4>
                                 <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                                    Moniteer skool-WiFi, Chromebooks/Smartboards in klaskamers, hanteer tegniese hulpkaartjies en sagteware-lisensies.
+                                    Koördineer daaglikse skoolbusse, sportritte, uitstappies, sowel as busbestuurders en skedules.
                                 </p>
                             </div>
-                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieGreen-900">
+                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieBlue-900">
+                                <span>Gaan na Busvervoer</span>
+                                <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition"></i>
+                            </div>
+                        </div>
+
+                        <!-- IT Card -->
+                        <div onclick="switchTab('it')" class="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-sky-500"></div>
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-blue-50 text-sky-500 flex items-center justify-center text-xl mb-4 group-hover:bg-sky-500 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid fa-laptop-code"></i>
+                                </div>
+                                <h4 class="text-base font-bold text-slate-900 group-hover:text-tjokkieBlue-900">IT-Ondersteuning</h4>
+                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                    Moniteer skool-WiFi, Chromebooks/Smartboards in klaskamers, en hanteer kaartjies.
+                                </p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-tjokkieBlue-900">
                                 <span>Gaan na IT-Paneel</span>
                                 <i class="fa-solid fa-arrow-right group-hover:translate-x-2 transition"></i>
                             </div>
@@ -227,35 +334,39 @@
                     <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-6">
                         <div class="flex items-center justify-between">
                             <h3 class="text-base font-bold text-slate-900">Vinnige Stelsel Statisteek</h3>
-                            <span class="text-xs bg-tjokkieGreen-50 text-tjokkieGreen-800 px-2 py-1 rounded font-bold">In-Geheue Live</span>
+                            <span class="text-xs bg-tjokkieBlue-50 text-tjokkieBlue-800 px-2 py-1 rounded font-bold" id="live-storage-badge">In-Geheue Klad</span>
                         </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            <div class="bg-slate-50 p-4 rounded-xl text-center border border-slate-100">
-                                <span class="text-2xl font-black text-tjokkieGreen-900" id="stat-terrein-active">4</span>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">Aktiewe Herstelwerke</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                                <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-terrein-active">0</span>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Aktiewe Herstelwerke</p>
                             </div>
-                            <div class="bg-slate-50 p-4 rounded-xl text-center border border-slate-100">
-                                <span class="text-2xl font-black text-tjokkieGreen-900" id="stat-pr-scheduled">2</span>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">Bemarking Geskeduleer</p>
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                                <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-pr-scheduled">0</span>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Bemarking Geskeduleer</p>
                             </div>
-                            <div class="bg-slate-50 p-4 rounded-xl text-center border border-slate-100">
-                                <span class="text-2xl font-black text-tjokkieGreen-900" id="stat-it-tickets">3</span>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">Oop IT Kaartjies</p>
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                                <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-bus-trips">0</span>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Oop Bus Ritte</p>
                             </div>
-                            <div class="bg-slate-50 p-4 rounded-xl text-center border border-slate-100">
-                                <span class="text-2xl font-black text-green-600">100%</span>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase mt-1">Skool WiFi Status</p>
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                                <span class="text-xl sm:text-2xl font-black text-tjokkieBlue-900" id="stat-it-tickets">0</span>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">Oop IT Kaartjies</p>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100">
+                                <span class="text-xl sm:text-2xl font-black text-blue-600">100%</span>
+                                <p class="text-[9px] text-slate-500 font-bold uppercase mt-1">WiFi Status</p>
                             </div>
                         </div>
 
-                        <!-- Info Boks oor die Beplande Struktuur -->
-                        <div class="bg-yellow-50 border-l-4 border-tjokkieGold-500 p-4 rounded-r-xl">
+                        <!-- Info Boks -->
+                        <div class="bg-blue-50 border-l-4 border-tjokkieGold-500 p-4 rounded-r-xl">
                             <div class="flex space-x-3">
-                                <i class="fa-solid fa-circle-info text-tjokkieGold-600 text-lg mt-0.5"></i>
+                                <i class="fa-solid fa-circle-info text-tjokkieBlue-800 text-lg mt-0.5"></i>
                                 <div>
-                                    <h4 class="text-sm font-bold text-amber-900">Volgende Stap vir die Tjokkie Ontwerper:</h4>
-                                    <p class="text-xs text-amber-800 mt-1 leading-relaxed">
-                                        Hierdie is 'n lewendige prototipe om die gevoel te toets. Klik op enige departement hierbo of aan die linkerkant, kyk na die funksionele invoervorms, en laat weet my presies watter velde, databasisse of e-posse gekoppel moet word onder elke afdeling!
+                                    <h4 class="text-sm font-bold text-blue-900">Firebase Databasis Koppelvlak Gereed!</h4>
+                                    <p class="text-xs text-blue-800 mt-1 leading-relaxed">
+                                        Die stelsel is nou toegerus met intydse Firebase-integrasie. Dit sal outomaties Firestore-sinchronisasie aktiveer wanneer die stelsel met jou Firebase-tokens en sleutels gelaai word!
                                     </p>
                                 </div>
                             </div>
@@ -267,36 +378,8 @@
                         <div>
                             <h3 class="text-base font-bold text-slate-900 mb-4">Onlangse Log-Aktiwiteite</h3>
                             <div class="space-y-4" id="recent-logs-list">
-                                <!-- Log Item -->
-                                <div class="flex items-start space-x-3 text-xs">
-                                    <div class="w-6 h-6 rounded-full bg-amber-100 text-tjokkieGold-600 flex items-center justify-center shrink-0 mt-0.5">
-                                        <i class="fa-solid fa-wrench text-[10px]"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-slate-800">Rugbyveld grassnyers gediens</p>
-                                        <span class="text-[10px] text-slate-400">Terreinbestuurder • Vandag 08:30</span>
-                                    </div>
-                                </div>
-                                <!-- Log Item -->
-                                <div class="flex items-start space-x-3 text-xs">
-                                    <div class="w-6 h-6 rounded-full bg-emerald-100 text-tjokkieGreen-800 flex items-center justify-center shrink-0 mt-0.5">
-                                        <i class="fa-solid fa-share-nodes text-[10px]"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-slate-800">Facebook plasing geskeduleer: Tjokkie Atletiek</p>
-                                        <span class="text-[10px] text-slate-400">Skakelbeampte • Vandag 09:15</span>
-                                    </div>
-                                </div>
-                                <!-- Log Item -->
-                                <div class="flex items-start space-x-3 text-xs">
-                                    <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
-                                        <i class="fa-solid fa-wifi text-[10px]"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-semibold text-slate-800">Klaskamer 14 Smartboard herlaai en opgedateer</p>
-                                        <span class="text-[10px] text-slate-400">IT-Ondersteuning • Gister 14:00</span>
-                                    </div>
-                                </div>
+                                <!-- Dynamic logs load here -->
+                                <div class="text-slate-400 text-xs text-center py-4">Wag vir stelselaktiwiteit...</div>
                             </div>
                         </div>
 
@@ -311,7 +394,7 @@
             </section>
 
             <!-- ============================================== -->
-            <!-- TAB 2: TERREINBESTUURDER (MAINTENANCE)        -->
+            <!-- TAB 2: TERREINBESTUURDER                      -->
             <!-- ============================================== -->
             <section id="tab-terrein" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                 <!-- Header -->
@@ -319,12 +402,11 @@
                     <div>
                         <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
                             <i class="fa-solid fa-hard-hat"></i>
-                            <span>Skool Grondbestuur & Instandhouding</span>
+                            <span>Terreinbestuur & Instandhouding</span>
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Terreinbestuurder</h2>
                     </div>
-                    <!-- Quick action triggers -->
-                    <button onclick="toggleModal('modal-terrein-taak')" class="bg-tjokkieGreen-900 hover:bg-emerald-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                    <button onclick="toggleModal('modal-terrein-taak')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
                         <i class="fa-solid fa-plus text-tjokkieGold-400"></i>
                         <span>Rapporteer Nuwe Probleem</span>
                     </button>
@@ -332,36 +414,33 @@
 
                 <!-- Live Velde Inligtingsblokke -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <!-- Velde & Sportkompleks -->
                     <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-lg bg-green-100 text-green-700 flex items-center justify-center text-xl shrink-0">
+                        <div class="w-12 h-12 rounded-lg bg-blue-50 text-tjokkieBlue-800 flex items-center justify-center text-xl shrink-0">
                             <i class="fa-solid fa-football"></i>
                         </div>
                         <div>
                             <h4 class="font-bold text-slate-900">A-Rugbyveld</h4>
-                            <p class="text-xs text-slate-500">Kondisie: <span class="text-green-600 font-bold">Uitstekend</span></p>
+                            <p class="text-xs text-slate-500">Kondisie: <span class="text-blue-600 font-bold">Uitstekend</span></p>
                             <p class="text-[10px] text-slate-400 mt-1">Sny en lyne geskeduleer vir Vrydag</p>
                         </div>
                     </div>
-                    <!-- Swembad chemiese status -->
                     <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
-                        <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xl shrink-0">
+                        <div class="w-12 h-12 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center text-xl shrink-0">
                             <i class="fa-solid fa-droplet"></i>
                         </div>
                         <div>
                             <h4 class="font-bold text-slate-900">Skool Swembad</h4>
-                            <p class="text-xs text-slate-500">pH Vlak: <span class="text-blue-600 font-bold">7.2 (Optimaal)</span></p>
+                            <p class="text-xs text-slate-500">pH Vlak: <span class="text-sky-600 font-bold">7.2 (Optimaal)</span></p>
                             <p class="text-[10px] text-slate-400 mt-1 font-semibold">Chloorvlakke is perfek vandag</p>
                         </div>
                     </div>
-                    <!-- Algemene Geboue status -->
                     <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
                         <div class="w-12 h-12 rounded-lg bg-yellow-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
                             <i class="fa-solid fa-building"></i>
                         </div>
                         <div>
                             <h4 class="font-bold text-slate-900">Klaskamerblokke A-D</h4>
-                            <p class="text-xs text-slate-500">Oop Herstelwerke: <span class="text-red-500 font-bold">2 hangende</span></p>
+                            <p class="text-xs text-slate-500">Status: <span class="text-blue-600 font-bold">Aanlyn Monitor</span></p>
                             <p class="text-[10px] text-slate-400 mt-1">Grootskaalse vensterinspeksie aan die gang</p>
                         </div>
                     </div>
@@ -373,7 +452,7 @@
                         <h3 class="font-bold text-slate-900 text-sm">Lys van Aktiewe Terrein-take</h3>
                         <div class="flex items-center space-x-2">
                             <span class="text-xs text-slate-500">Filter volgens:</span>
-                            <select id="filter-terrein-status" onchange="filterTerreinTasks()" class="bg-white border border-slate-200 text-xs rounded-lg px-2 py-1 focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                            <select id="filter-terrein-status" onchange="filterTerreinTasks()" class="bg-white border border-slate-200 text-xs rounded-lg px-2 py-1 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                                 <option value="alle">Wys Almal</option>
                                 <option value="Dringend">Dringend</option>
                                 <option value="Normal">Normaal</option>
@@ -393,29 +472,7 @@
                                 </tr>
                             </thead>
                             <tbody id="terrein-task-rows" class="divide-y divide-slate-100">
-                                <!-- Dynamic Rows -->
-                                <tr>
-                                    <td class="px-6 py-4 font-bold text-slate-900">Klaskamer 4</td>
-                                    <td class="px-6 py-4">Ligskakelaar stukkend, vonk wanneer aangeskakel word</td>
-                                    <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-red-100 text-red-800 font-bold uppercase text-[9px]">Dringend</span></td>
-                                    <td class="px-6 py-4 text-slate-500">Mnr. van Wyk</td>
-                                    <td class="px-6 py-4">
-                                        <button onclick="completeTerreinTask(this)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold px-3 py-1.5 rounded transition">
-                                            Voltooi
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-bold text-slate-900">Snoepie agterdeur</td>
-                                    <td class="px-6 py-4">Deurhandvatsel sit vas en sluit nie behoorlik van buite af nie</td>
-                                    <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-amber-100 text-amber-800 font-bold uppercase text-[9px]">Normal</span></td>
-                                    <td class="px-6 py-4 text-slate-500">Mev. Du Toit</td>
-                                    <td class="px-6 py-4">
-                                        <button onclick="completeTerreinTask(this)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold px-3 py-1.5 rounded transition">
-                                            Voltooi
-                                        </button>
-                                    </td>
-                                </tr>
+                                <!-- Dynamic rows -->
                             </tbody>
                         </table>
                     </div>
@@ -423,7 +480,7 @@
             </section>
 
             <!-- ============================================== -->
-            <!-- TAB 3: SKAKELBEAMPTE (PUBLIC RELATIONS)       -->
+            <!-- TAB 3: SKAKELBEAMPTE                          -->
             <!-- ============================================== -->
             <section id="tab-skakel" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                 <!-- Header -->
@@ -431,11 +488,11 @@
                     <div>
                         <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
                             <i class="fa-solid fa-bullhorn"></i>
-                            <span>Bemarking, Nuusbriewe & Skoolskakeling</span>
+                            <span>Bemarking, Nuusbriewe & Skakelwerk</span>
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skakelbeampte (PRO)</h2>
                     </div>
-                    <button onclick="toggleModal('modal-skakel-nuus')" class="bg-tjokkieGreen-900 hover:bg-emerald-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                    <button onclick="toggleModal('modal-skakel-nuus')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
                         <i class="fa-solid fa-plus text-tjokkieGold-400"></i>
                         <span>Beplan Sosiale Plasing</span>
                     </button>
@@ -453,22 +510,22 @@
                         <div class="space-y-3">
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nuusbrief Hoofopskrif</label>
-                                <input type="text" id="newsletter-title" placeholder="bv. Tjokkie-Atletiek Blink Uit by Interprimêr!" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                                <input type="text" id="newsletter-title" placeholder="bv. Tjokkie-Atletiek Blink Uit by Interprimêr!" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nuus Brief Inhoud (Kort Opsomming)</label>
-                                <textarea id="newsletter-body" rows="3" placeholder="Tik die hoofnuus of sportuitslae hier in vir ouers om dadelik te sien..." class="w-full text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none"></textarea>
+                                <textarea id="newsletter-body" rows="3" placeholder="Tik die hoofnuus of sportuitslae hier in vir ouers om dadelik te sien..." class="w-full text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
                             </div>
-                            <button onclick="generateNewsletterPreview()" class="w-full py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieGreen-900 font-extrabold text-xs rounded-lg transition">
+                            <button onclick="generateNewsletterPreview()" class="w-full py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-extrabold text-xs rounded-lg transition">
                                 <i class="fa-solid fa-envelope-open-text mr-1"></i> Publiseer & Preview Nuusbrief
                             </button>
                         </div>
 
                         <!-- Generated Preview Display -->
-                        <div id="newsletter-preview-container" class="hidden mt-4 p-4 bg-emerald-50 rounded-xl border border-emerald-100 space-y-2">
-                            <h4 class="text-xs font-bold text-tjokkieGreen-900 uppercase tracking-wider">Regstreekse Voorskou:</h4>
+                        <div id="newsletter-preview-container" class="hidden mt-4 p-4 bg-sky-50 rounded-xl border border-sky-100 space-y-2">
+                            <h4 class="text-xs font-bold text-tjokkieBlue-900 uppercase tracking-wider">Regstreekse Voorskou:</h4>
                             <div class="bg-white p-4 rounded-lg shadow-sm border border-slate-100">
-                                <h5 class="font-extrabold text-sm text-tjokkieGreen-900" id="preview-title">Titel</h5>
+                                <h5 class="font-extrabold text-sm text-tjokkieBlue-900" id="preview-title">Titel</h5>
                                 <p class="text-[11px] text-slate-600 mt-2 leading-relaxed" id="preview-body">Inhoud van die nuusbrief...</p>
                                 <div class="mt-4 flex items-center justify-between text-[9px] text-slate-400 border-t border-slate-100 pt-2">
                                     <span>Gepubliseer deur: Skakelbeampte</span>
@@ -484,26 +541,7 @@
                         <p class="text-xs text-slate-500 leading-relaxed">Geskeduleerde plasings vir Facebook & Instagram hierdie week:</p>
                         
                         <div class="space-y-3" id="social-posts-list">
-                            <!-- Post 1 -->
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs flex flex-col justify-between">
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-blue-600 font-bold flex items-center gap-1">
-                                        <i class="fa-brands fa-facebook"></i> Facebook
-                                    </span>
-                                    <span class="text-[10px] text-slate-400 font-bold">Vrydag 14:00</span>
-                                </div>
-                                <p class="text-slate-700 font-medium">Foto's van vandag se Netbal herfstoernooi!</p>
-                            </div>
-                            <!-- Post 2 -->
-                            <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs flex flex-col justify-between">
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="text-pink-600 font-bold flex items-center gap-1">
-                                        <i class="fa-brands fa-instagram"></i> Instagram
-                                    </span>
-                                    <span class="text-[10px] text-slate-400 font-bold">Saterdag 09:00</span>
-                                </div>
-                                <p class="text-slate-700 font-medium">Geluk met ons skoolhoof se verjaarsdag! 🎉</p>
-                            </div>
+                            <!-- Dynamic posts -->
                         </div>
                     </div>
 
@@ -511,7 +549,86 @@
             </section>
 
             <!-- ============================================== -->
-            <!-- TAB 4: IT-ONDERSTEUNING (IT SUPPORT)          -->
+            <!-- TAB 4: BUSVERVOER                             -->
+            <!-- ============================================== -->
+            <section id="tab-bus" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                    <div>
+                        <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
+                            <i class="fa-solid fa-bus"></i>
+                            <span>Vlootbeheer & Skoolritte Skedulering</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Busvervoer</h2>
+                    </div>
+                    <button onclick="toggleModal('modal-bus-rit')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus text-tjokkieGold-400"></i>
+                        <span>Skeduleer Nuwe Rit</span>
+                    </button>
+                </div>
+
+                <!-- Skool Busstatus Vloot Monitor -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-bus-simple"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Bus A (Groot 60-Sitplek)</h4>
+                            <p class="text-xs text-slate-500">Status: <span class="text-blue-600 font-bold">In Depot</span></p>
+                            <p class="text-[10px] text-slate-400 mt-1">Lisensie gekontroleer</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-van-shuttle"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Bus B (Midi 35-Sitplek)</h4>
+                            <p class="text-xs text-slate-500">Status: <span class="text-blue-500 font-bold">Aktief</span></p>
+                            <p class="text-[10px] text-slate-400 mt-1">Daaglikse roetes gemonitor</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center space-x-4">
+                        <div class="w-12 h-12 rounded-lg bg-red-100 text-red-700 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900">Bus C (Klein 15-Sitplek)</h4>
+                            <p class="text-xs text-slate-500">Status: <span class="text-red-600 font-bold">Instandhouding</span></p>
+                            <p class="text-[10px] text-slate-400 mt-1">Remme word herstel deur Terreinspan</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Busritte Tabel -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <h3 class="font-bold text-slate-900 text-sm">Aktiewe & Geskeduleerde Skoolritte</h3>
+                        <span class="text-xs text-slate-400">Sien alle besprekings en roetes</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 bg-slate-50 text-slate-500 uppercase font-semibold">
+                                    <th class="px-6 py-3">Bestemming / Doel</th>
+                                    <th class="px-6 py-3">Vertrek Tyd</th>
+                                    <th class="px-6 py-3">Bus Toegewys</th>
+                                    <th class="px-6 py-3">Bestuurder</th>
+                                    <th class="px-6 py-3">Aksie</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bus-trip-rows" class="divide-y divide-slate-100">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================== -->
+            <!-- TAB 5: IT-ONDERSTEUNING                        -->
             <!-- ============================================== -->
             <section id="tab-it" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                 <!-- Header -->
@@ -523,7 +640,7 @@
                         </div>
                         <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">IT-Ondersteuning</h2>
                     </div>
-                    <button onclick="toggleModal('modal-it-ticket')" class="bg-tjokkieGreen-900 hover:bg-emerald-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
+                    <button onclick="toggleModal('modal-it-ticket')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
                         <i class="fa-solid fa-plus text-tjokkieGold-400"></i>
                         <span>Nuwe IT Kaartjie</span>
                     </button>
@@ -532,32 +649,32 @@
                 <!-- WiFi & Server Health checks -->
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
-                        <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-lg mx-auto mb-2">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg mx-auto mb-2">
                             <i class="fa-solid fa-wifi"></i>
                         </div>
                         <h4 class="font-bold text-xs text-slate-900">Skool WiFi Netwerk</h4>
-                        <span class="text-[10px] text-green-600 font-bold uppercase mt-1 inline-block">Aanlyn</span>
+                        <span class="text-[10px] text-blue-600 font-bold uppercase mt-1 inline-block">Aanlyn</span>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
-                        <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-lg mx-auto mb-2">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg mx-auto mb-2">
                             <i class="fa-solid fa-server"></i>
                         </div>
                         <h4 class="font-bold text-xs text-slate-900">Hoofbediener (Server)</h4>
-                        <span class="text-[10px] text-green-600 font-bold uppercase mt-1 inline-block">Stabiel</span>
+                        <span class="text-[10px] text-blue-600 font-bold uppercase mt-1 inline-block">Stabiel</span>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
                         <div class="w-10 h-10 rounded-full bg-amber-50 text-tjokkieGold-600 flex items-center justify-center text-lg mx-auto mb-2">
                             <i class="fa-solid fa-chalkboard"></i>
                         </div>
-                        <h4 class="font-bold text-xs text-slate-900">Smartboards (Klaskamers)</h4>
-                        <span class="text-[10px] text-amber-600 font-bold uppercase mt-1 inline-block">3 Benodig Update</span>
+                        <h4 class="font-bold text-xs text-slate-900">Smartboards</h4>
+                        <span class="text-[10px] text-amber-600 font-bold uppercase mt-1 inline-block">Aktief</span>
                     </div>
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
-                        <div class="w-10 h-10 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-lg mx-auto mb-2">
+                        <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg mx-auto mb-2">
                             <i class="fa-solid fa-computer"></i>
                         </div>
-                        <h4 class="font-bold text-xs text-slate-900">Rekenaarlaboratorium</h4>
-                        <span class="text-[10px] text-green-600 font-bold uppercase mt-1 inline-block">Almal Gekoppel</span>
+                        <h4 class="font-bold text-xs text-slate-900">Rekenaarklas</h4>
+                        <span class="text-[10px] text-blue-600 font-bold uppercase mt-1 inline-block">Almal Gekoppel</span>
                     </div>
                 </div>
 
@@ -565,7 +682,7 @@
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                         <h3 class="font-bold text-slate-900 text-sm">Oop IT Ondersteuningskaartjies</h3>
-                        <span class="text-xs bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded-full" id="it-ticket-count">3 Take</span>
+                        <span class="text-xs bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded-full" id="it-ticket-count">0 Take</span>
                     </div>
                     
                     <div class="overflow-x-auto">
@@ -580,28 +697,7 @@
                                 </tr>
                             </thead>
                             <tbody id="it-ticket-rows" class="divide-y divide-slate-100">
-                                <tr>
-                                    <td class="px-6 py-4 font-bold text-slate-900">#TK-902</td>
-                                    <td class="px-6 py-4">Klaskamer 18 Chromebook</td>
-                                    <td class="px-6 py-4">Sal nie koppel aan die studente-netwerk nie, kry IP adres fout</td>
-                                    <td class="px-6 py-4 text-slate-500">Mev. Labuschagne</td>
-                                    <td class="px-6 py-4">
-                                        <button onclick="resolveTicket(this)" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-3 py-1.5 rounded transition">
-                                            Los Op
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-bold text-slate-900">#TK-894</td>
-                                    <td class="px-6 py-4">Admin Drukker</td>
-                                    <td class="px-6 py-4">Papier loop heeltyd vas in laai 2 gedurende groot druktake</td>
-                                    <td class="px-6 py-4 text-slate-500">Mev. Swart (Sekretaresse)</td>
-                                    <td class="px-6 py-4">
-                                        <button onclick="resolveTicket(this)" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-3 py-1.5 rounded transition">
-                                            Los Op
-                                        </button>
-                                    </td>
-                                </tr>
+                                <!-- Dynamic rows -->
                             </tbody>
                         </table>
                     </div>
@@ -613,7 +709,7 @@
 
     <!-- Footer -->
     <footer class="bg-slate-950 text-slate-500 text-[11px] text-center py-2.5 border-t border-slate-800 shrink-0">
-        &copy; 2026 Laerskool Tjokkies Bestuurstelsel. Ontwikkel vir administratiewe doeltreffendheid.
+        &copy; 2026 Tjokkies Bestuurstelsel. Ontwikkel vir administratiewe doeltreffendheid.
     </footer>
 
     <!-- ============================================== -->
@@ -628,28 +724,28 @@
             <form id="form-terrein" onsubmit="addTerreinTask(event)" class="space-y-4 text-xs">
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Area of Klaskamer</label>
-                    <input type="text" id="terrein-area" placeholder="bv. Klaskamer 12 / Netbalvelde" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                    <input type="text" id="terrein-area" placeholder="bv. Klaskamer 12 / Netbalvelde" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Beskrywing van Herstelwerk</label>
-                    <textarea id="terrein-desc" rows="3" placeholder="Tik die besonderhede hier..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none"></textarea>
+                    <textarea id="terrein-desc" rows="3" placeholder="Tik die besonderhede hier..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-slate-500 font-bold uppercase mb-1">Prioriteit</label>
-                        <select id="terrein-priority" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                        <select id="terrein-priority" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                             <option value="Normal">Normaal</option>
                             <option value="Dringend">Dringend</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-slate-500 font-bold uppercase mb-1">Aangemeld deur</label>
-                        <input type="text" id="terrein-reported" placeholder="Jou Naam" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                        <input type="text" id="terrein-reported" placeholder="Jou Naam" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                     </div>
                 </div>
                 <div class="flex space-x-2 pt-2">
                     <button type="button" onclick="toggleModal('modal-terrein-taak')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieGreen-900 hover:bg-emerald-950 text-white font-bold rounded-xl transition">Voeg Taak By</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Voeg Taak By</button>
                 </div>
             </form>
         </div>
@@ -667,7 +763,7 @@
             <form id="form-skakel" onsubmit="addSocialPost(event)" class="space-y-4 text-xs">
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Sosiale Platform</label>
-                    <select id="skakel-platform" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                    <select id="skakel-platform" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                         <option value="Facebook">Facebook</option>
                         <option value="Instagram">Instagram</option>
                         <option value="d6 Skakelapp">d6 Skakelapp</option>
@@ -675,22 +771,62 @@
                 </div>
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Skeduleer Tyd & Datum</label>
-                    <input type="text" id="skakel-time" placeholder="bv. Maandag 10:00" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                    <input type="text" id="skakel-time" placeholder="bv. Maandag 10:00" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Inhoud / Kopie van Plasing</label>
-                    <textarea id="skakel-content" rows="3" placeholder="Skryf die plasing se teks hier..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none"></textarea>
+                    <textarea id="skakel-content" rows="3" placeholder="Skryf die plasing se teks hier..." required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
                 </div>
                 <div class="flex space-x-2 pt-2">
                     <button type="button" onclick="toggleModal('modal-skakel-nuus')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieGreen-900 hover:bg-emerald-950 text-white font-bold rounded-xl transition">Skeduleer Plasing</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Skeduleer Plasing</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- ============================================== -->
-    <!-- MODAL 3: IT - NUWE KAARTJIE                    -->
+    <!-- MODAL 3: BUS - NUWE RIT                        -->
+    <!-- ============================================== -->
+    <div id="modal-bus-rit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                <h3 class="font-extrabold text-slate-900 text-sm">Skeduleer Nuwe Busrit</h3>
+                <button onclick="toggleModal('modal-bus-rit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="form-bus" onsubmit="addBusTrip(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Bestemming / Doel</label>
+                    <input type="text" id="bus-destination" placeholder="bv. Welkom Hokkietoer / Suid-Roete" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Vertrek Tyd & Dag</label>
+                        <input type="text" id="bus-time" placeholder="bv. Maandag, 14:00" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-500 font-bold uppercase mb-1">Bus Toegewys</label>
+                        <select id="bus-vehicle" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                            <option value="Bus A (60-sitplek)">Bus A (60-sitplek)</option>
+                            <option value="Bus B (35-sitplek)">Bus B (35-sitplek)</option>
+                            <option value="Bus C (15-sitplek)">Bus C (15-sitplek)</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Bestuurder se Naam</label>
+                    <input type="text" id="bus-driver" placeholder="bv. Oom Piet / Oom Johan" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
+                </div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="toggleModal('modal-bus-rit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Beplan Rit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MODAL 4: IT - NUWE KAARTJIE                    -->
     <!-- ============================================== -->
     <div id="modal-it-ticket" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
@@ -701,38 +837,529 @@
             <form id="form-it" onsubmit="addITTicket(event)" class="space-y-4 text-xs">
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Foutiewe Toestel / Diens</label>
-                    <input type="text" id="it-device" placeholder="bv. Smartboard Klas 2, Personeel WiFi" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                    <input type="text" id="it-device" placeholder="bv. Smartboard Klas 2, Personeel WiFi" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Foutbeskrywing</label>
-                    <textarea id="it-desc" rows="3" placeholder="Wat is fout?" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none"></textarea>
+                    <textarea id="it-desc" rows="3" placeholder="Wat is fout?" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></textarea>
                 </div>
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Jou Naam (Skool Personeel)</label>
-                    <input type="text" id="it-staff" placeholder="bv. Mev. Coetzee" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieGreen-500 focus:outline-none">
+                    <input type="text" id="it-staff" placeholder="bv. Mev. Coetzee" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div class="flex space-x-2 pt-2">
                     <button type="button" onclick="toggleModal('modal-it-ticket')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieGreen-900 hover:bg-emerald-950 text-white font-bold rounded-xl transition">Stuur Kaartjie</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Stuur Kaartjie</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Firebase SDK Modules -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, addDoc, deleteDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    <!-- ============================================== -->
-    <!-- INTERAKTIEWE JAVASCRIPT LOGIKA                -->
-    <!-- ============================================== -->
-    <script>
-        // Opstel van regstreekse datum op die hoofskerm
-        window.onload = function() {
-            const dateObj = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('live-date').innerText = dateObj.toLocaleDateString('af-ZA', options);
-            updateDashboardCounters();
+        // ======================================================================
+        // STEP 3: PASTE YOUR COPIED FIREBASE CONFIGURATION OBJECT BELOW:
+        // ======================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCrtypArIkk3Z2wjh13QI4MSV8dK4BS8eo",
+            authDomain: "tjokkies-4fa02.firebaseapp.com",
+            projectId: "tjokkies-4fa02",
+            storageBucket: "tjokkies-4fa02.firebasestorage.app",
+            messagingSenderId: "851257260312",
+            appId: "1:851257260312:web:40c00c169866bed232466d",
+            measurementId: "G-F7NNLDW2TH"
         };
+        // ======================================================================
 
-        // Funksie om oop/toe te maak vir enige popup-skerm (Modal)
+        // Global State & Fallbacks
+        let db = null;
+        let auth = null;
+        let appId = "default-app-id";
+        let user = null;
+
+        // Offline Fallback Data Store (Browser RAM simulation)
+        let localTerreinTasks = [
+            { id: "1", area: "Classroom 4", desc: "Light switch broken, sparking when flipped", priority: "Urgent", reported: "Mr. Smith" },
+            { id: "2", area: "Tuckshop back door", desc: "Door handle jammed, won't lock properly", priority: "Normal", reported: "Mrs. Jones" }
+        ];
+        let localSocialPosts = [
+            { id: "1", platform: "Facebook", time: "Friday 14:00", content: "Action photos from today's Autumn Netball Tournament!" },
+            { id: "2", platform: "Instagram", time: "Saturday 09:00", content: "Happy birthday to our school principal! 🎉" }
+        ];
+        let localBusTrips = [
+            { id: "1", dest: "Pretoria Athletics Championship", time: "Friday, 06:00", vehicle: "Bus A (60-seater)", driver: "Uncle Johan" },
+            { id: "2", dest: "North Route (Daily Commute)", time: "Today, 13:45", vehicle: "Bus B (35-seater)", driver: "Uncle Piet" }
+        ];
+        let localITTickets = [
+            { id: "1", device: "Room 18 Chromebook", desc: "Will not connect to student network, IP error", staff: "Mrs. Labuschagne" },
+            { id: "2", device: "Admin Printer", desc: "Paper jamming repeatedly in Tray 2", staff: "Mrs. Swart" }
+        ];
+        let localLogs = [
+            { id: "1", desc: "Rugby field grass mowers serviced", dept: "Grounds", timestamp: Date.now() - 3600000 },
+            { id: "2", desc: "Facebook post scheduled: Athletics Highlights", dept: "PR", timestamp: Date.now() - 1800000 }
+        ];
+
+        // Bootstrapping
+        window.addEventListener('DOMContentLoaded', () => {
+            initFirebaseAndApp();
+        });
+
+        async function initFirebaseAndApp() {
+            let configActive = false;
+
+            // Check if user filled in their custom Firebase configuration parameters
+            if (firebaseConfig && firebaseConfig.apiKey !== "" && firebaseConfig.projectId !== "") {
+                try {
+                    const app = initializeApp(firebaseConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    appId = typeof __app_id !== 'undefined' ? __app_id : 'tjokkies-app';
+                    configActive = true;
+                } catch (e) {
+                    console.warn("Could not start cloud database. Booting local mock database.", e);
+                }
+            } else if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+                // Automated backup configuration parser for Sandbox environment
+                try {
+                    const parsedConfig = JSON.parse(__firebase_config);
+                    const app = initializeApp(parsedConfig);
+                    auth = getAuth(app);
+                    db = getFirestore(app);
+                    appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+                    configActive = true;
+                } catch(e) {}
+            }
+
+            if (configActive && auth && db) {
+                try {
+                    // Establish authentication gate prior to database queries
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    onAuthStateChanged(auth, (currentUser) => {
+                        user = currentUser;
+                        if (currentUser) {
+                            document.getElementById('db-status-text').innerText = "Live Cloud Sync Active.";
+                            document.getElementById('live-storage-badge').innerText = "Cloud Syncing";
+                            document.getElementById('live-storage-badge').className = "text-xs bg-emerald-500 text-white px-2 py-1 rounded font-bold";
+                            setupRealtimeListeners();
+                        } else {
+                            runLocalFallback();
+                        }
+                    });
+                } catch (err) {
+                    console.error("Auth Exception occurred:", err);
+                    runLocalFallback();
+                }
+            } else {
+                runLocalFallback();
+            }
+        }
+
+        function runLocalFallback() {
+            document.getElementById('db-status-text').innerText = "Connected to local memory.";
+            renderTerreinTasks(localTerreinTasks);
+            renderSocialPosts(localSocialPosts);
+            renderBusTrips(localBusTrips);
+            renderITTickets(localITTickets);
+            renderActivityLogs(localLogs);
+        }
+
+        // Setup real-time cloud sync routines
+        function setupRealtimeListeners() {
+            if (!db || !user) return;
+
+            // Terrein Tasks
+            const terreinRef = collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks');
+            onSnapshot(terreinRef, (snapshot) => {
+                const tasks = [];
+                snapshot.forEach((doc) => {
+                    tasks.push({ id: doc.id, ...doc.data() });
+                });
+                renderTerreinTasks(tasks);
+            }, (error) => console.error("Grounds monitoring exception:", error));
+
+            // Public Relations Posts
+            const socialRef = collection(db, 'artifacts', appId, 'public', 'data', 'social_posts');
+            onSnapshot(socialRef, (snapshot) => {
+                const posts = [];
+                snapshot.forEach((doc) => {
+                    posts.push({ id: doc.id, ...doc.data() });
+                });
+                renderSocialPosts(posts);
+            }, (error) => console.error("PR monitoring exception:", error));
+
+            // Bus Commutes
+            const busRef = collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips');
+            onSnapshot(busRef, (snapshot) => {
+                const trips = [];
+                snapshot.forEach((doc) => {
+                    trips.push({ id: doc.id, ...doc.data() });
+                });
+                renderBusTrips(trips);
+            }, (error) => console.error("Transit monitoring exception:", error));
+
+            // IT Tickets
+            const itRef = collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets');
+            onSnapshot(itRef, (snapshot) => {
+                const tickets = [];
+                snapshot.forEach((doc) => {
+                    tickets.push({ id: doc.id, ...doc.data() });
+                });
+                renderITTickets(tickets);
+            }, (error) => console.error("IT monitoring exception:", error));
+
+            // System Audit Logs
+            const logsRef = collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs');
+            onSnapshot(logsRef, (snapshot) => {
+                const logs = [];
+                snapshot.forEach((doc) => {
+                    logs.push({ id: doc.id, ...doc.data() });
+                });
+                logs.sort((a, b) => b.timestamp - a.timestamp);
+                renderActivityLogs(logs);
+            }, (error) => console.error("Audit log monitoring exception:", error));
+        }
+
+        // ==============================================
+        // DOM RENDERING ENGINE
+        // ==============================================
+        function renderTerreinTasks(tasks) {
+            const tbody = document.getElementById('terrein-task-rows');
+            tbody.innerHTML = '';
+            tasks.forEach(task => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50 transition duration-150';
+                const badgeColor = task.priority === 'Urgent' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-900">${task.area}</td>
+                    <td class="px-6 py-4">${task.desc}</td>
+                    <td class="px-6 py-4"><span class="px-2 py-1 rounded-full ${badgeColor} font-bold uppercase text-[9px]">${task.priority}</span></td>
+                    <td class="px-6 py-4 text-slate-500">${task.reported}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="completeTerreinTask('${task.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-3 py-1.5 rounded transition">
+                            Resolve
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            updateDashboardCounters();
+        }
+
+        function renderSocialPosts(posts) {
+            const list = document.getElementById('social-posts-list');
+            list.innerHTML = '';
+            posts.forEach(post => {
+                const card = document.createElement('div');
+                card.className = 'p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs flex flex-col justify-between';
+                let platformStyle = 'text-blue-600';
+                let platformIcon = 'fa-facebook';
+                if(post.platform === 'Instagram') { platformStyle = 'text-pink-600'; platformIcon = 'fa-instagram'; }
+                if(post.platform === 'd6 Connect App') { platformStyle = 'text-sky-700'; platformIcon = 'fa-envelope'; }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="${platformStyle} font-bold flex items-center gap-1">
+                            <i class="fa-brands ${platformIcon}"></i> ${post.platform}
+                        </span>
+                        <span class="text-[10px] text-slate-400 font-bold">${post.time}</span>
+                    </div>
+                    <p class="text-slate-700 font-medium">${post.content}</p>
+                `;
+                list.appendChild(card);
+            });
+            updateDashboardCounters();
+        }
+
+        function renderBusTrips(trips) {
+            const tbody = document.getElementById('bus-trip-rows');
+            tbody.innerHTML = '';
+            trips.forEach(trip => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50 transition duration-150';
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-900">${trip.dest}</td>
+                    <td class="px-6 py-4">${trip.time}</td>
+                    <td class="px-6 py-4">${trip.vehicle}</td>
+                    <td class="px-6 py-4 text-slate-500">${trip.driver}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="cancelBusTrip('${trip.id}')" class="bg-red-50 hover:bg-red-100 text-red-700 font-bold px-3 py-1.5 rounded transition">
+                            Cancel
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            updateDashboardCounters();
+        }
+
+        function renderITTickets(tickets) {
+            const tbody = document.getElementById('it-ticket-rows');
+            tbody.innerHTML = '';
+            tickets.forEach(ticket => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50 transition duration-150';
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-900">#TK-${ticket.id.substring(0, 3).toUpperCase()}</td>
+                    <td class="px-6 py-4">${ticket.device}</td>
+                    <td class="px-6 py-4">${ticket.desc}</td>
+                    <td class="px-6 py-4 text-slate-500">${ticket.staff}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="resolveTicket('${ticket.id}')" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-3 py-1.5 rounded transition">
+                            Fix
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            updateDashboardCounters();
+        }
+
+        function renderActivityLogs(logs) {
+            const list = document.getElementById('recent-logs-list');
+            list.innerHTML = '';
+            if (logs.length === 0) {
+                list.innerHTML = `<div class="text-slate-400 text-xs text-center py-4">Awaiting system activities...</div>`;
+                return;
+            }
+            logs.slice(0, 5).forEach(log => {
+                let color = 'bg-slate-100 text-slate-600';
+                let icon = 'fa-info';
+                if(log.dept === 'Grounds') { color = 'bg-amber-100 text-tjokkieGold-600'; icon = 'fa-wrench'; }
+                if(log.dept === 'PR') { color = 'bg-sky-100 text-tjokkieBlue-800'; icon = 'fa-share-nodes'; }
+                if(log.dept === 'Transport') { color = 'bg-amber-100 text-amber-600'; icon = 'fa-bus'; }
+                if(log.dept === 'IT') { color = 'bg-blue-100 text-blue-600'; icon = 'fa-wifi'; }
+
+                const timeNow = new Date(log.timestamp).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
+
+                const item = document.createElement('div');
+                item.className = 'flex items-start space-x-3 text-xs';
+                item.innerHTML = `
+                    <div class="w-6 h-6 rounded-full ${color} flex items-center justify-center shrink-0 mt-0.5">
+                        <i class="fa-solid ${icon} text-[10px]"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-slate-800">${log.desc}</p>
+                        <span class="text-[10px] text-slate-400">${log.dept} • Today ${timeNow}</span>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // ==============================================
+        // LOGIC ACTIONS (WITH FIREBASE LINKING)
+        // ==============================================
+        async function logEvent(desc, dept) {
+            const logData = { desc, dept, timestamp: Date.now() };
+            if (db && user) {
+                try {
+                    await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), logData);
+                } catch (e) {
+                    console.error("Log write error:", e);
+                }
+            } else {
+                localLogs.unshift({ id: Math.random().toString(), ...logData });
+                renderActivityLogs(localLogs);
+            }
+        }
+
+        async function addTerreinTask(event) {
+            event.preventDefault();
+            const area = document.getElementById('terrein-area').value;
+            const desc = document.getElementById('terrein-desc').value;
+            const priority = document.getElementById('terrein-priority').value;
+            const reported = document.getElementById('terrein-reported').value;
+            
+            const taskData = { area, desc, priority, reported };
+
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData);
+            } else {
+                localTerreinTasks.push({ id: Math.random().toString(), ...taskData });
+                renderTerreinTasks(localTerreinTasks);
+            }
+
+            await logEvent(`New maintenance reported at ${area}`, 'Grounds');
+            showToast("Task Added", `Maintenance team notified about issue at ${area}.`);
+            
+            document.getElementById('form-terrein').reset();
+            toggleModal('modal-terrein-taak');
+        }
+        window.addTerreinTask = addTerreinTask;
+
+        async function completeTerreinTask(id) {
+            let taskName = "Repair task";
+            if (db && user) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks', id));
+            } else {
+                const index = localTerreinTasks.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    taskName = localTerreinTasks[index].area;
+                    localTerreinTasks.splice(index, 1);
+                }
+                renderTerreinTasks(localTerreinTasks);
+            }
+            await logEvent(`Maintenance completed at ${taskName}`, 'Grounds');
+            showToast("Task Complete!", `Repair has been marked as resolved.`);
+        }
+        window.completeTerreinTask = completeTerreinTask;
+
+        async function addSocialPost(event) {
+            event.preventDefault();
+            const platform = document.getElementById('skakel-platform').value;
+            const time = document.getElementById('skakel-time').value;
+            const content = document.getElementById('skakel-content').value;
+
+            const postData = { platform, time, content };
+
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'social_posts'), postData);
+            } else {
+                localSocialPosts.push({ id: Math.random().toString(), ...postData });
+                renderSocialPosts(localSocialPosts);
+            }
+
+            await logEvent(`Social post scheduled on ${platform}`, 'PR');
+            showToast("Post Scheduled", `New post successfully queued for ${platform}.`);
+
+            document.getElementById('form-skakel').reset();
+            toggleModal('modal-skakel-nuus');
+        }
+        window.addSocialPost = addSocialPost;
+
+        async function addBusTrip(event) {
+            event.preventDefault();
+            const dest = document.getElementById('bus-destination').value;
+            const time = document.getElementById('bus-time').value;
+            const vehicle = document.getElementById('bus-vehicle').value;
+            const driver = document.getElementById('bus-driver').value;
+
+            const tripData = { dest, time, vehicle, driver };
+
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData);
+            } else {
+                localBusTrips.push({ id: Math.random().toString(), ...tripData });
+                renderBusTrips(localBusTrips);
+            }
+
+            await logEvent(`New trip scheduled to ${dest}`, 'Transport');
+            showToast("Trip Scheduled!", `Bus transport to ${dest} registered.`);
+
+            document.getElementById('form-bus').reset();
+            toggleModal('modal-bus-rit');
+        }
+        window.addBusTrip = addBusTrip;
+
+        async function cancelBusTrip(id) {
+            let destName = "Bus trip";
+            if (db && user) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_trips', id));
+            } else {
+                const index = localBusTrips.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    destName = localBusTrips[index].dest;
+                    localBusTrips.splice(index, 1);
+                }
+                renderBusTrips(localBusTrips);
+            }
+            await logEvent(`Bus trip to ${destName} cancelled`, 'Transport');
+            showToast("Trip Cancelled", `The commute to ${destName} was removed.`);
+        }
+        window.cancelBusTrip = cancelBusTrip;
+
+        async function addITTicket(event) {
+            event.preventDefault();
+            const device = document.getElementById('it-device').value;
+            const desc = document.getElementById('it-desc').value;
+            const staff = document.getElementById('it-staff').value;
+
+            const ticketData = { device, desc, staff };
+
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), ticketData);
+            } else {
+                localITTickets.push({ id: Math.random().toString(), ...ticketData });
+                renderITTickets(localITTickets);
+            }
+
+            await logEvent(`New IT ticket opened`, 'IT');
+            showToast("IT Ticket Created", `Support request has been logged.`);
+
+            document.getElementById('form-it').reset();
+            toggleModal('modal-it-ticket');
+        }
+        window.addITTicket = addITTicket;
+
+        async function resolveTicket(id) {
+            if (db && user) {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_tickets', id));
+            } else {
+                const index = localITTickets.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    localITTickets.splice(index, 1);
+                }
+                renderITTickets(localITTickets);
+            }
+            await logEvent(`IT Ticket successfully resolved`, 'IT');
+            showToast("Ticket Closed!", `The system fault is marked as fixed.`);
+        }
+        window.resolveTicket = resolveTicket;
+
+        async function clearLogs() {
+            if (db && user) {
+                showToast("Action Denied", "Logs can only be cleared by a database administrator.");
+            } else {
+                localLogs = [];
+                renderActivityLogs(localLogs);
+                showToast("Success", "Activity log history cleared.");
+            }
+        }
+        window.clearLogs = clearLogs;
+
+        // UI Globals
+        window.switchTab = switchTab;
+        window.toggleModal = toggleModal;
+        window.showToast = showToast;
+        window.showNotificationAlert = showNotificationAlert;
+        window.filterTerreinTasks = filterTerreinTasks;
+        window.generateNewsletterPreview = generateNewsletterPreview;
+
+    </script>
+
+    <!-- UI Helper Scripts -->
+    <script>
+        function switchTab(tabId) {
+            document.getElementById('tab-dashboard').classList.add('hidden');
+            document.getElementById('tab-terrein').classList.add('hidden');
+            document.getElementById('tab-skakel').classList.add('hidden');
+            document.getElementById('tab-bus').classList.add('hidden');
+            document.getElementById('tab-it').classList.add('hidden');
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            const buttons = document.querySelectorAll('.sidebar-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-tjokkieBlue-800', 'text-white', 'font-semibold');
+                btn.classList.add('text-slate-300');
+            });
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-tjokkieBlue-800', 'text-white', 'font-semibold');
+                activeBtn.classList.remove('text-slate-300');
+            }
+        }
+
         function toggleModal(id) {
             const modal = document.getElementById(id);
             if(modal.classList.contains('hidden')) {
@@ -742,7 +1369,6 @@
             }
         }
 
-        // Toon 'n pasgemaakte sukses boodskap bo-aan die skerm
         function showToast(title, msg) {
             const toast = document.getElementById('toast-notification');
             document.getElementById('toast-title').innerText = title;
@@ -757,139 +1383,29 @@
             }, 3500);
         }
 
-        // Funksie om te wissel tussen die verskillende departemente (Tabs)
-        function switchTab(tabId) {
-            // Skryf al die hoofafdelings weg
-            document.getElementById('tab-dashboard').classList.add('hidden');
-            document.getElementById('tab-terrein').classList.add('hidden');
-            document.getElementById('tab-skakel').classList.add('hidden');
-            document.getElementById('tab-it').classList.add('hidden');
-
-            // Maak geselekteerde een oop
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-
-            // Verander die geselekteerde styl op die sybalk knoppies
-            const buttons = document.querySelectorAll('.sidebar-btn');
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-tjokkieGreen-800', 'text-white', 'font-semibold');
-                btn.classList.add('text-slate-300');
-            });
-
-            // Voeg aktiewe klas by die gedrukte een
-            const activeBtn = document.getElementById(`btn-${tabId}`);
-            if(activeBtn) {
-                activeBtn.classList.add('bg-tjokkieGreen-800', 'text-white', 'font-semibold');
-                activeBtn.classList.remove('text-slate-300');
-            }
-        }
-
-        // Tel die aantal oop kaartjies en take op om die dashboard statistieke op datum te hou
-        function updateDashboardCounters() {
-            // Tel terrein take
-            const terreinCount = document.getElementById('terrein-task-rows').children.length;
-            document.getElementById('stat-terrein-active').innerText = terreinCount;
-
-            // Tel sosiale plasings
-            const socialCount = document.getElementById('social-posts-list').children.length;
-            document.getElementById('stat-pr-scheduled').innerText = socialCount;
-
-            // Tel IT Kaartjies
-            const itCount = document.getElementById('it-ticket-rows').children.length;
-            document.getElementById('stat-it-tickets').innerText = itCount;
-            document.getElementById('it-ticket-count').innerText = `${itCount} Kaartjies`;
-        }
-
-        // Skakel Kennisgewing Alert
         function showNotificationAlert() {
-            showToast("Kennisgewings", "Geen nuwe stelsel waarskuwings nie. Al 3 departemente loop glad.");
+            showToast("Notifications", "System is connected and monitoring all departments.");
         }
 
-        // logs skoonmaak funksie
-        function clearLogs() {
-            document.getElementById('recent-logs-list').innerHTML = `
-                <div class="text-slate-400 text-xs text-center py-4">Geskiedenis skoongemaak. Nuwe logs sal hier verskyn.</div>
-            `;
-            showToast("Sukses", "Aktiwiteitslogboek is skoongemaak.");
-        }
+        function updateDashboardCounters() {
+            try {
+                // Grounds
+                const terreinRows = document.getElementById('terrein-task-rows').children.length;
+                document.getElementById('stat-terrein-active').innerText = terreinRows;
 
-        // Voeg nuwe aktiwiteit by logboek toe
-        function addLogEntry(desc, dept) {
-            const list = document.getElementById('recent-logs-list');
-            const placeholder = list.querySelector('.text-center');
-            if(placeholder) {
-                list.innerHTML = '';
-            }
+                // PR
+                const socialRows = document.getElementById('social-posts-list').children.length;
+                document.getElementById('stat-pr-scheduled').innerText = socialRows;
 
-            let color = 'bg-slate-100 text-slate-600';
-            let icon = 'fa-info';
-            if(dept === 'Terrein') { color = 'bg-amber-100 text-tjokkieGold-600'; icon = 'fa-wrench'; }
-            if(dept === 'Skakel') { color = 'bg-emerald-100 text-tjokkieGreen-800'; icon = 'fa-share-nodes'; }
-            if(dept === 'IT') { color = 'bg-blue-100 text-blue-600'; icon = 'fa-wifi'; }
+                // Bus
+                const busRows = document.getElementById('bus-trip-rows').children.length;
+                document.getElementById('stat-bus-trips').innerText = busRows;
 
-            const timeNow = "Vandag " + new Date().toLocaleTimeString('af-ZA', {hour: '2-digit', minute:'2-digit'});
-
-            const item = document.createElement('div');
-            item.className = 'flex items-start space-x-3 text-xs animate-in slide-in-from-top-2 duration-300';
-            item.innerHTML = `
-                <div class="w-6 h-6 rounded-full ${color} flex items-center justify-center shrink-0 mt-0.5">
-                    <i class="fa-solid ${icon} text-[10px]"></i>
-                </div>
-                <div>
-                    <p class="font-semibold text-slate-800">${desc}</p>
-                    <span class="text-[10px] text-slate-400">${dept} • ${timeNow}</span>
-                </div>
-            `;
-            list.insertBefore(item, list.firstChild);
-        }
-
-        // ==============================================
-        // DEPT LOGIKA: TERREINBESTUURDER
-        // ==============================================
-        function addTerreinTask(event) {
-            event.preventDefault();
-            const area = document.getElementById('terrein-area').value;
-            const desc = document.getElementById('terrein-desc').value;
-            const priority = document.getElementById('terrein-priority').value;
-            const reported = document.getElementById('terrein-reported').value;
-
-            const tbody = document.getElementById('terrein-task-rows');
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-slate-50 transition duration-150';
-
-            const badgeColor = priority === 'Dringend' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
-
-            row.innerHTML = `
-                <td class="px-6 py-4 font-bold text-slate-900">${area}</td>
-                <td class="px-6 py-4">${desc}</td>
-                <td class="px-6 py-4"><span class="px-2 py-1 rounded-full ${badgeColor} font-bold uppercase text-[9px]">${priority}</span></td>
-                <td class="px-6 py-4 text-slate-500">${reported}</td>
-                <td class="px-6 py-4">
-                    <button onclick="completeTerreinTask(this)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold px-3 py-1.5 rounded transition">
-                        Voltooi
-                    </button>
-                </td>
-            `;
-
-            tbody.appendChild(row);
-            
-            // Log & Kennisgewing
-            addLogEntry(`Nuwe herstelwerk gerapporteer by ${area}`, 'Terrein');
-            showToast("Taak Suksesvol Bygevoeg", `Terreinspan in kennis gestel oor probleem by ${area}.`);
-            
-            // Maak skoon en sluit toe
-            document.getElementById('form-terrein').reset();
-            toggleModal('modal-terrein-taak');
-            updateDashboardCounters();
-        }
-
-        function completeTerreinTask(button) {
-            const row = button.closest('tr');
-            const area = row.cells[0].innerText;
-            row.remove();
-            
-            addLogEntry(`Instandhouding voltooi by ${area}`, 'Terrein');
-            showToast("Taak Voltooi!", `Herstelwerk by ${area} is gemerk as afgehandel.`);
-            updateDashboardCounters();
+                // IT
+                const itRows = document.getElementById('it-ticket-rows').children.length;
+                document.getElementById('stat-it-tickets').innerText = itRows;
+                document.getElementById('it-ticket-count').innerText = `${itRows} Tasks`;
+            } catch(e) {}
         }
 
         function filterTerreinTasks() {
@@ -898,7 +1414,7 @@
 
             for(let row of rows) {
                 const badge = row.cells[2].innerText.trim();
-                if(filterVal === 'alle') {
+                if(filterVal === 'all') {
                     row.classList.remove('hidden');
                 } else if(badge !== filterVal) {
                     row.classList.add('hidden');
@@ -908,15 +1424,12 @@
             }
         }
 
-        // ==============================================
-        // DEPT LOGIKA: SKAKELBEAMPTE
-        // ==============================================
         function generateNewsletterPreview() {
             const title = document.getElementById('newsletter-title').value;
             const body = document.getElementById('newsletter-body').value;
 
             if(!title || !body) {
-                showToast("Fout", "Vul asseblief beide die titel en die inhoud van die nuusbrief in.");
+                showToast("Error", "Please fill in both the headline and the content.");
                 return;
             }
 
@@ -924,90 +1437,7 @@
             document.getElementById('preview-body').innerText = body;
             document.getElementById('newsletter-preview-container').classList.remove('hidden');
 
-            addLogEntry(`Kwik-Nuusbrief voorskou gegenereer: ${title}`, 'Skakel');
-            showToast("Kwik-Nuusbrief Reg!", "Kyk na die regstreekse voorskou hieronder.");
-        }
-
-        function addSocialPost(event) {
-            event.preventDefault();
-            const platform = document.getElementById('skakel-platform').value;
-            const time = document.getElementById('skakel-time').value;
-            const content = document.getElementById('skakel-content').value;
-
-            const list = document.getElementById('social-posts-list');
-            const card = document.createElement('div');
-            card.className = 'p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs flex flex-col justify-between animate-in slide-in-from-top-2 duration-200';
-
-            let platformStyle = 'text-blue-600';
-            let platformIcon = 'fa-facebook';
-            if(platform === 'Instagram') { platformStyle = 'text-pink-600'; platformIcon = 'fa-instagram'; }
-            if(platform === 'd6 Skakelapp') { platformStyle = 'text-emerald-700'; platformIcon = 'fa-envelope'; }
-
-            card.innerHTML = `
-                <div class="flex items-center justify-between mb-2">
-                    <span class="${platformStyle} font-bold flex items-center gap-1">
-                        <i class="fa-brands ${platformIcon}"></i> ${platform}
-                    </span>
-                    <span class="text-[10px] text-slate-400 font-bold">${time}</span>
-                </div>
-                <p class="text-slate-700 font-medium">${content}</p>
-            `;
-
-            list.insertBefore(card, list.firstChild);
-
-            addLogEntry(`Sosiale plasing geskeduleer op ${platform}`, 'Skakel');
-            showToast("Plasing Geskeduleer", `Die nuwe plasing is suksesvol vir ${platform} geskeduleer.`);
-
-            document.getElementById('form-skakel').reset();
-            toggleModal('modal-skakel-nuus');
-            updateDashboardCounters();
-        }
-
-        // ==============================================
-        // DEPT LOGIKA: IT-ONDERSTEUNING
-        // ==============================================
-        function addITTicket(event) {
-            event.preventDefault();
-            const device = document.getElementById('it-device').value;
-            const desc = document.getElementById('it-desc').value;
-            const staff = document.getElementById('it-staff').value;
-
-            const ticketId = `#TK-${Math.floor(100 + Math.random() * 900)}`;
-
-            const tbody = document.getElementById('it-ticket-rows');
-            const row = document.createElement('tr');
-            row.className = 'hover:bg-slate-50 transition duration-150';
-
-            row.innerHTML = `
-                <td class="px-6 py-4 font-bold text-slate-900">${ticketId}</td>
-                <td class="px-6 py-4">${device}</td>
-                <td class="px-6 py-4">${desc}</td>
-                <td class="px-6 py-4 text-slate-500">${staff}</td>
-                <td class="px-6 py-4">
-                    <button onclick="resolveTicket(this)" class="bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold px-3 py-1.5 rounded transition">
-                        Los Op
-                    </button>
-                </td>
-            `;
-
-            tbody.appendChild(row);
-
-            addLogEntry(`Nuwe IT kaartjie oopgemaak: ${ticketId}`, 'IT');
-            showToast("IT Kaartjie Geskep", `Ondersteuningskaartjie is geregistreer.`);
-
-            document.getElementById('form-it').reset();
-            toggleModal('modal-it-ticket');
-            updateDashboardCounters();
-        }
-
-        function resolveTicket(button) {
-            const row = button.closest('tr');
-            const ticketId = row.cells[0].innerText;
-            row.remove();
-
-            addLogEntry(`IT Kaartjie ${ticketId} suksesvol opgelos`, 'IT');
-            showToast("Kaartjie Opgelos!", `Die stelsel fout vir ${ticketId} is gemerk as opgelos.`);
-            updateDashboardCounters();
+            showToast("Draft Ready!", "Check the live preview generated below.");
         }
     </script>
 </body>
