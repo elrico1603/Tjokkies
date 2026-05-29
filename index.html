@@ -53,6 +53,13 @@
 <body class="h-full overflow-hidden text-slate-800 bg-slate-50 relative">
 
     <!-- ======================================================= -->
+    <!-- DYNAMIC TOAST ALERT (GLOBAAL SIGBAAR OP ALLE SKERME)    -->
+    <!-- ======================================================= -->
+    <div id="toast-notification" class="fixed top-4 right-4 bg-tjokkieBlue-900 border-l-4 border-tjokkieGold-500 text-white px-4 py-3 rounded-lg shadow-2xl z-[200] transform translate-x-80 transition duration-300 opacity-0 pointer-events-none">
+        <div class="flex items-center space-x-3"><span class="text-tjokkieGold-400"><i class="fa-solid fa-circle-check text-xl"></i></span><div><p class="font-bold text-sm" id="toast-title">Kennisgewing</p><p class="text-xs text-slate-300" id="toast-msg">Stelsel opgedateer.</p></div></div>
+    </div>
+
+    <!-- ======================================================= -->
     <!-- AFDELING 2: LAADSKERM (LAAI PROSES)                     -->
     <!-- ======================================================= -->
     <div id="loading-screen" class="w-full h-full flex flex-col items-center justify-center bg-slate-100 absolute inset-0 z-[100] transition-opacity duration-500">
@@ -60,10 +67,38 @@
         <p class="mt-5 text-slate-500 font-extrabold text-xs tracking-widest uppercase animate-pulse">Koppel aan Stelsel...</p>
     </div>
     <script>
+        // GLOBALE UI FUNKSIES VIR DIE HTML KNOPPIES
         window.hideLoadingScreen = function() {
             const loader = document.getElementById('loading-screen');
             if(loader) loader.classList.add('hidden');
         };
+        window.switchTab = function(tabId) {
+            const tabs = ['dashboard', 'terrein', 'skakel', 'bemarking', 'bus', 'it', 'rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
+            tabs.forEach(t => { const el = document.getElementById(`tab-${t}`); if(el) el.classList.add('hidden'); });
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            if(activeTab) activeTab.classList.remove('hidden');
+
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('bg-tjokkieBlue-800', 'text-white', 'font-semibold');
+                btn.classList.add('text-slate-300');
+            });
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if(activeBtn) { activeBtn.classList.add('bg-tjokkieBlue-800', 'text-white', 'font-semibold'); activeBtn.classList.remove('text-slate-300'); }
+        };
+        window.toggleModal = function(id) {
+            const modal = document.getElementById(id);
+            if(modal) { modal.classList.toggle('hidden'); }
+        };
+        window.showToast = function(title, msg) {
+            const toast = document.getElementById('toast-notification');
+            if(toast) {
+                document.getElementById('toast-title').innerText = title; document.getElementById('toast-msg').innerText = msg;
+                toast.classList.remove('translate-x-80', 'opacity-0'); toast.classList.add('translate-x-0', 'opacity-100');
+                setTimeout(() => { toast.classList.add('translate-x-80', 'opacity-0'); toast.classList.remove('translate-x-0', 'opacity-100'); }, 3500);
+            }
+        };
+        window.showNotificationAlert = function() { window.showToast("Kennisgewings", "Stelsel is gekoppel en aktief."); };
+        
         window.addEventListener('load', function() {
             setTimeout(function() {
                 if (!window.appInitialized) {
@@ -84,7 +119,7 @@
     <!-- AFDELING 3: TEKEN IN & REGISTREER SKERM                 -->
     <!-- ======================================================= -->
     <div id="auth-wrapper" class="w-full h-full flex flex-col items-center justify-center bg-slate-100 relative hidden">
-        <button onclick="promptDevSettingsAuth()" class="absolute top-6 right-6 text-slate-400 hover:text-tjokkieBlue-800 transition text-2xl" title="Developer / IT Settings">
+        <button onclick="window.promptDevSettingsAuth()" class="absolute top-6 right-6 text-slate-400 hover:text-tjokkieBlue-800 transition text-2xl" title="Developer / IT Settings">
             <i class="fa-solid fa-gear"></i>
         </button>
         <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-xl max-w-md w-full border border-slate-200">
@@ -96,19 +131,19 @@
                 <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Stelsel Toegang</p>
             </div>
             <!-- Login Form -->
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
+            <form id="login-form" onsubmit="window.handleLogin(event)" class="space-y-5">
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Eposadres</label><input type="email" id="login-email" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Wagwoord</label><input type="password" id="login-password" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <button type="submit" class="w-full py-3 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-extrabold rounded-xl transition shadow-md">Teken In</button>
-                <div class="text-center pt-2"><button type="button" onclick="toggleAuthForms()" class="text-xs text-tjokkieBlue-600 hover:text-tjokkieBlue-800 font-bold">Nuwe Personeellid? Registreer Hier</button></div>
+                <div class="text-center pt-2"><button type="button" onclick="window.toggleAuthForms()" class="text-xs text-tjokkieBlue-600 hover:text-tjokkieBlue-800 font-bold">Nuwe Personeellid? Registreer Hier</button></div>
             </form>
             <!-- Register Form -->
-            <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+            <form id="register-form" onsubmit="window.handleRegister(event)" class="space-y-4 hidden">
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Voorletters & Van</label><input type="text" id="reg-name" required placeholder="bv. Mnr. P Nel" class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Skool Eposadres</label><input type="email" id="reg-email" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Skep Wagwoord (Min 6 Karakters)</label><input type="password" id="reg-password" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <button type="submit" class="w-full py-3 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-950 font-extrabold rounded-xl transition shadow-md mt-2">Registreer Profiel</button>
-                <div class="text-center pt-2"><button type="button" onclick="toggleAuthForms()" class="text-xs text-slate-500 hover:text-slate-700 font-bold">Terug na Teken In</button></div>
+                <div class="text-center pt-2"><button type="button" onclick="window.toggleAuthForms()" class="text-xs text-slate-500 hover:text-slate-700 font-bold">Terug na Teken In</button></div>
             </form>
         </div>
     </div>
@@ -119,7 +154,7 @@
             <i class="fa-solid fa-user-clock text-6xl text-amber-500 mb-5"></i>
             <h2 class="text-xl font-black text-slate-900 mb-2">Profiel Wagtend</h2>
             <p class="text-sm text-slate-500 leading-relaxed mb-6">Jou profiel is suksesvol geskep. Die stelsel administrateur moet eers jou toegang goedkeur voordat jy die portaal kan sien.</p>
-            <button onclick="handleLogout()" class="w-full py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition">Teken Uit</button>
+            <button onclick="window.handleLogout()" class="w-full py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl transition">Teken Uit</button>
         </div>
     </div>
 
@@ -132,49 +167,9 @@
         <header class="bg-tjokkieBlue-900 text-white shadow-md border-b-4 border-tjokkieGold-500 shrink-0 z-30 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="switchTab('dashboard')">
+                    <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="window.switchTab('dashboard')">
                         <div id="school-logo-container" class="w-12 h-14 flex items-center justify-center filter drop-shadow-md">
-                            <!-- Standaard SVG Logo -->
-                            <svg viewBox="0 0 200 240" class="w-full h-full">
-                                <path d="M 35,42 L 25,35 L 40,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path d="M 165,42 L 175,35 L 160,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path d="M 25,28 Q 100,10 175,28 L 170,45 Q 100,27 30,45 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path id="top-text-path" d="M 28,39 Q 100,21 172,39" fill="none" />
-                                <text font-family="'Arial', sans-serif" font-weight="900" font-size="14" letter-spacing="1">
-                                    <textPath href="#top-text-path" startOffset="50%" text-anchor="middle">UNIVERSITAS</textPath>
-                                </text>
-                                <path id="shield-base" d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="#E31837" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
-                                <clipPath id="shield-clip">
-                                    <path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" />
-                                </clipPath>
-                                <g clip-path="url(#shield-clip)">
-                                    <rect x="0" y="0" width="200" height="100" fill="#FFD100" />
-                                    <path d="M 33,95 Q 67.5,115 100,95 Q 132.5,115 167,95 L 167,125 Q 132.5,145 100,125 Q 67.5,145 33,125 Z" fill="#003366" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
-                                </g>
-                                <path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
-                                <g transform="translate(100, 72)">
-                                    <path d="M -28,-14 L 28,-14 L 25,12 L 0,18 L -25,12 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M -24,-11 L -3,-11 L -3,12 L -21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
-                                    <path d="M 24,-11 L 3,-11 L 3,12 L 21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
-                                    <path d="M -4,13 L 4,13 L 0,17 Z" fill="#E31837" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
-                                </g>
-                                <g transform="translate(100, 160)">
-                                    <path d="M 0,-30 C 12,-10 12,10 4,15 L -4,15 C -12,10 -12,-10 0,-30 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M -2,5 C -25,-5 -35,20 -15,30 C -5,35 -5,15 -2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M 2,5 C 25,-5 35,20 15,30 C 5,35 5,15 2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M -5,15 C -20,25 -20,35 -10,35 C -5,35 -2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M 5,15 C 20,25 20,35 10,35 C 5,35 2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M -5,25 L 5,25 L 0,40 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <rect x="-14" y="15" width="28" height="6" rx="3" fill="#FFD100" stroke="#000000" stroke-width="3" />
-                                </g>
-                                <path d="M 38,206 L 28,198 L 33,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path d="M 162,206 L 172,198 L 167,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path d="M 25,200 Q 100,225 175,200 L 170,218 Q 100,243 30,218 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path id="bottom-text-path" d="M 28,212 Q 100,237 172,212" fill="none" />
-                                <text font-family="'Arial', sans-serif" font-weight="900" font-size="13.5" letter-spacing="1">
-                                    <textPath href="#bottom-text-path" startOffset="50%" text-anchor="middle">NET MY BESTE</textPath>
-                                </text>
-                            </svg>
+                            <svg viewBox="0 0 200 240" class="w-full h-full"><path d="M 35,42 L 25,35 L 40,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 165,42 L 175,35 L 160,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 25,28 Q 100,10 175,28 L 170,45 Q 100,27 30,45 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path id="top-text-path" d="M 28,39 Q 100,21 172,39" fill="none" /><text font-family="'Arial', sans-serif" font-weight="900" font-size="14" letter-spacing="1"><textPath href="#top-text-path" startOffset="50%" text-anchor="middle">UNIVERSITAS</textPath></text><path id="shield-base" d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="#E31837" stroke="#000000" stroke-width="4" stroke-linejoin="round" /><clipPath id="shield-clip"><path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" /></clipPath><g clip-path="url(#shield-clip)"><rect x="0" y="0" width="200" height="100" fill="#FFD100" /><path d="M 33,95 Q 67.5,115 100,95 Q 132.5,115 167,95 L 167,125 Q 132.5,145 100,125 Q 67.5,145 33,125 Z" fill="#003366" stroke="#000000" stroke-width="4" stroke-linejoin="round" /></g><path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="round" /><g transform="translate(100, 72)"><path d="M -28,-14 L 28,-14 L 25,12 L 0,18 L -25,12 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M -24,-11 L -3,-11 L -3,12 L -21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" /><path d="M 24,-11 L 3,-11 L 3,12 L 21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" /><path d="M -4,13 L 4,13 L 0,17 Z" fill="#E31837" stroke="#000000" stroke-width="2" stroke-linejoin="round" /></g><g transform="translate(100, 160)"><path d="M 0,-30 C 12,-10 12,10 4,15 L -4,15 C -12,10 -12,-10 0,-30 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M -2,5 C -25,-5 -35,20 -15,30 C -5,35 -5,15 -2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 2,5 C 25,-5 35,20 15,30 C 5,35 5,15 2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M -5,15 C -20,25 -20,35 -10,35 C -5,35 -2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 5,15 C 20,25 20,35 10,35 C 5,35 2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M -5,25 L 5,25 L 0,40 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><rect x="-14" y="15" width="28" height="6" rx="3" fill="#FFD100" stroke="#000000" stroke-width="3" /></g><path d="M 38,206 L 28,198 L 33,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 162,206 L 172,198 L 167,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 25,200 Q 100,225 175,200 L 170,218 Q 100,243 30,218 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path id="bottom-text-path" d="M 28,212 Q 100,237 172,212" fill="none" /><text font-family="'Arial', sans-serif" font-weight="900" font-size="13.5" letter-spacing="1"><textPath href="#bottom-text-path" startOffset="50%" text-anchor="middle">NET MY BESTE</textPath></text></svg>
                         </div>
                         <div>
                             <h1 class="text-xl font-black tracking-tight text-white leading-none school-name-display">Tjokkies</h1>
@@ -183,10 +178,10 @@
                     </div>
                     <div class="flex items-center space-x-6">
                         <div class="hidden md:flex flex-col text-right"><span id="live-date" class="text-xs text-slate-300 font-medium">Datum</span></div>
-                        <div class="relative cursor-pointer hover:text-tjokkieGold-400 transition" onclick="showNotificationAlert()">
+                        <div class="relative cursor-pointer hover:text-tjokkieGold-400 transition" onclick="window.showNotificationAlert()">
                             <i class="fa-regular fa-bell text-xl"></i><span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">3</span>
                         </div>
-                        <div class="flex items-center space-x-3 border-l border-tjokkieBlue-800 pl-4 cursor-pointer" onclick="handleLogout()" title="Teken Uit">
+                        <div class="flex items-center space-x-3 border-l border-tjokkieBlue-800 pl-4 cursor-pointer" onclick="window.handleLogout()" title="Teken Uit">
                             <div class="w-8 h-8 rounded-full bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
                             <span class="hidden sm:inline-block text-xs font-semibold text-slate-300 hover:text-white" id="nav-user-name">Personeel</span>
                         </div>
@@ -200,54 +195,54 @@
             <aside class="w-20 md:w-64 bg-tjokkieBlue-900 text-slate-300 flex flex-col shrink-0 shadow-lg border-r border-tjokkieBlue-800 z-10 relative transition-colors duration-300">
                 <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto custom-scrollbar">
                     
-                    <button onclick="switchTab('dashboard')" id="btn-dashboard" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group bg-tjokkieBlue-800 text-white font-semibold">
+                    <button onclick="window.switchTab('dashboard')" id="btn-dashboard" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group bg-tjokkieBlue-800 text-white font-semibold">
                         <i class="fa-solid fa-chart-line text-lg w-6 text-center group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm">Dashboard Tuis</span>
                     </button>
 
                     <div class="pt-4 pb-2"><span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Departemente</span></div>
 
-                    <button onclick="switchTab('terrein')" id="btn-terrein" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('terrein')" id="btn-terrein" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-hard-hat text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Terreinbestuur</span>
                     </button>
-                    <button onclick="switchTab('skakel')" id="btn-skakel" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('skakel')" id="btn-skakel" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-bullhorn text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Skakelbeampte</span>
                     </button>
-                    <button onclick="switchTab('bemarking')" id="btn-bemarking" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('bemarking')" id="btn-bemarking" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-lightbulb text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Bemarking</span>
                     </button>
-                    <button onclick="switchTab('bus')" id="btn-bus" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('bus')" id="btn-bus" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-bus text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Busvervoer</span>
                     </button>
-                    <button onclick="switchTab('it')" id="btn-it" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('it')" id="btn-it" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-laptop-code text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">IT-Ondersteuning</span>
                     </button>
 
                     <div class="pt-4 pb-2"><span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Sport & Kultuur</span></div>
                     
-                    <button onclick="switchTab('rugby')" id="btn-rugby" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('rugby')" id="btn-rugby" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-football text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Rugbyhoof</span>
                     </button>
-                    <button onclick="switchTab('netbal')" id="btn-netbal" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('netbal')" id="btn-netbal" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-basketball text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Netbalhoof</span>
                     </button>
-                    <button onclick="switchTab('tennis')" id="btn-tennis" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('tennis')" id="btn-tennis" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-table-tennis-paddle-ball text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Tennishoof</span>
                     </button>
-                    <button onclick="switchTab('swem')" id="btn-swem" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('swem')" id="btn-swem" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-person-swimming text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Swemhoof</span>
                     </button>
-                    <button onclick="switchTab('hokkie')" id="btn-hokkie" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('hokkie')" id="btn-hokkie" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-hockey-puck text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Hokkiehoof</span>
                     </button>
-                    <button onclick="switchTab('skaak')" id="btn-skaak" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('skaak')" id="btn-skaak" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-chess-knight text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Skaakhoof</span>
                     </button>
-                    <button onclick="switchTab('voortrekkers')" id="btn-voortrekkers" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                    <button onclick="window.switchTab('voortrekkers')" id="btn-voortrekkers" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                         <i class="fa-solid fa-campground text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Voortrekkers</span>
                     </button>
 
                     <div class="px-2 mt-4 pb-4">
-                        <button onclick="promptDevSettingsAuth('module')" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl transition border border-dashed border-tjokkieGold-500/50 text-tjokkieGold-400 hover:bg-tjokkieBlue-800/50">
+                        <button onclick="window.promptDevSettingsAuth('module')" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl transition border border-dashed border-tjokkieGold-500/50 text-tjokkieGold-400 hover:bg-tjokkieBlue-800/50">
                             <i class="fa-solid fa-plus text-sm"></i><span class="hidden md:inline text-xs font-bold">Nuwe Module</span>
                         </button>
                     </div>
@@ -266,10 +261,6 @@
             <!-- HOOF INHOUDS AREA -->
             <main class="flex-1 flex flex-col overflow-y-auto custom-scrollbar relative">
                 
-                <div id="toast-notification" class="fixed top-4 right-4 bg-tjokkieBlue-900 border-l-4 border-tjokkieGold-500 text-white px-4 py-3 rounded-lg shadow-2xl z-50 transform translate-x-80 transition duration-300 opacity-0 pointer-events-none">
-                    <div class="flex items-center space-x-3"><span class="text-tjokkieGold-400"><i class="fa-solid fa-circle-check text-xl"></i></span><div><p class="font-bold text-sm" id="toast-title">Kennisgewing</p><p class="text-xs text-slate-300" id="toast-msg">Stelsel opgedateer.</p></div></div>
-                </div>
-
                 <!-- ============================================== -->
                 <!-- AFDELING 5: TUISSKREEM (DASHBOARD)             -->
                 <!-- ============================================== -->
@@ -293,31 +284,31 @@
                         <h3 class="text-base font-bold text-slate-500 uppercase tracking-widest mb-4">Administratiewe Hubs</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                             <!-- Kaartjies -->
-                            <div onclick="switchTab('terrein')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div onclick="window.switchTab('terrein')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                                 <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieGold-500"></div>
                                 <div><div class="w-10 h-10 rounded-xl bg-amber-50 text-tjokkieGold-500 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieGold-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-hard-hat"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Terreinbestuur</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Fokus op instandhouding van sportvelde en skoolgeboue.</p></div>
                             </div>
-                            <div onclick="switchTab('skakel')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div onclick="window.switchTab('skakel')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                                 <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieBlue-800"></div>
                                 <div><div class="w-10 h-10 rounded-xl bg-sky-50 text-tjokkieBlue-800 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieBlue-800 group-hover:text-white transition duration-300"><i class="fa-solid fa-bullhorn"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skakelbeampte</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Hanteer daaglikse skool-afkondigings en d6-nuusbriewe.</p></div>
                             </div>
-                            <div onclick="switchTab('bemarking')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div onclick="window.switchTab('bemarking')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                                 <div class="absolute top-0 left-0 w-2 h-full bg-rose-500"></div>
                                 <div><div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg mb-3 group-hover:bg-rose-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-lightbulb"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Bemarking</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Beplan bemarkingsveldtogte, opedae en toekomsbeplanning.</p></div>
                             </div>
-                            <div onclick="switchTab('bus')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div onclick="window.switchTab('bus')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                                 <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
                                 <div><div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-3 group-hover:bg-amber-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-bus"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Busvervoer</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Koördineer skoolbusse, sportritte en bestuurder roetes.</p></div>
                             </div>
-                            <div onclick="switchTab('it')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div onclick="window.switchTab('it')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                                 <div class="absolute top-0 left-0 w-2 h-full bg-sky-500"></div>
                                 <div><div class="w-10 h-10 rounded-xl bg-blue-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-laptop-code"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">IT-Ondersteuning</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Moniteer skool-WiFi, bedieners en hanteer IT-kaartjies.</p></div>
                             </div>
-                            <div onclick="switchTab('rugby')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div onclick="window.switchTab('rugby')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                                 <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
                                 <div><div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-3 group-hover:bg-blue-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-football"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Rugbyhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur rugby-oefeninge, wedstryde, spanlyste en toerusting.</p></div>
                             </div>
-                            <div onclick="switchTab('netbal')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div onclick="window.switchTab('netbal')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                                 <div class="absolute top-0 left-0 w-2 h-full bg-sky-400"></div>
                                 <div><div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-basketball"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Netbalhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur netbal-oefeninge, toernooie, spanlyste en reëlings.</p></div>
                             </div>
@@ -372,20 +363,22 @@
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Terreinbestuurder</h2>
                         </div>
                         <div class="flex space-x-2">
-                            <button onclick="toggleModal('modal-terrein-taak')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-triangle-exclamation text-red-500"></i><span class="hidden sm:inline">Rapporteer Probleem</span></button>
-                            <button onclick="promptCalendarAuth('')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieGold-400"></i><span>Beplan Instandhouding</span></button>
+                            <button onclick="window.toggleModal('modal-terrein-taak')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-triangle-exclamation text-red-500"></i><span class="hidden sm:inline">Rapporteer Probleem</span></button>
+                            <button onclick="window.promptCalendarAuth('')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieGold-400"></i><span>Beplan Instandhouding</span></button>
                         </div>
                     </div>
+
                     <!-- Live Velde Inligtingsblokke -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="facilities-container"></div>
+
                     <!-- Instandhoudingskalender -->
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 overflow-hidden">
                         <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
                             <h3 class="font-bold text-slate-900 text-sm"><i class="fa-regular fa-calendar-days text-tjokkieBlue-500 mr-2"></i>Instandhoudingskalender</h3>
                             <div class="flex items-center space-x-4">
-                                <button type="button" onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 text-slate-600 hover:bg-tjokkieBlue-500 hover:text-white transition cursor-pointer z-10 shadow-sm"><i class="fa-solid fa-chevron-left"></i></button>
+                                <button type="button" onclick="window.changeMonth(-1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 text-slate-600 hover:bg-tjokkieBlue-500 hover:text-white transition cursor-pointer z-10 shadow-sm"><i class="fa-solid fa-chevron-left"></i></button>
                                 <div class="text-sm font-extrabold text-tjokkieBlue-900 bg-tjokkieGold-400 px-6 py-2 rounded-full shadow-sm min-w-[160px] text-center select-none" id="calendar-month">Mei 2026</div>
-                                <button type="button" onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 text-slate-600 hover:bg-tjokkieBlue-500 hover:text-white transition cursor-pointer z-10 shadow-sm"><i class="fa-solid fa-chevron-right"></i></button>
+                                <button type="button" onclick="window.changeMonth(1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 text-slate-600 hover:bg-tjokkieBlue-500 hover:text-white transition cursor-pointer z-10 shadow-sm"><i class="fa-solid fa-chevron-right"></i></button>
                             </div>
                         </div>
                         <div class="grid grid-cols-7 gap-2 text-center text-[11px] font-black text-slate-500 mb-2 uppercase tracking-widest">
@@ -393,13 +386,14 @@
                         </div>
                         <div id="calendar-grid" class="grid grid-cols-7 gap-2"></div>
                     </div>
+
                     <!-- Taak Lys -->
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                         <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <h3 class="font-bold text-slate-900 text-sm">Lys van Aktiewe Terrein-take</h3>
                             <div class="flex items-center space-x-2">
                                 <span class="text-xs text-slate-500">Filter volgens:</span>
-                                <select id="filter-terrein-status" onchange="filterTerreinTasks()" class="bg-white border border-slate-200 text-xs rounded-lg px-2 py-1 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"><option value="alle">Wys Almal</option><option value="Dringend">Dringend</option><option value="Normal">Normaal</option></select>
+                                <select id="filter-terrein-status" onchange="window.filterTerreinTasks()" class="bg-white border border-slate-200 text-xs rounded-lg px-2 py-1 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"><option value="alle">Wys Almal</option><option value="Dringend">Dringend</option><option value="Normal">Normaal</option></select>
                             </div>
                         </div>
                         <div class="overflow-x-auto">
@@ -422,13 +416,13 @@
                             <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-bullhorn"></i><span>Kommunikasie & Inligting</span></div>
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skakelbeampte</h2>
                         </div>
-                        <button onclick="toggleModal('modal-afkondiging')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Plaas Afkondiging</span></button>
+                        <button onclick="window.toggleModal('modal-afkondiging')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Plaas Afkondiging</span></button>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 space-y-6">
                             <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                                 <div class="flex items-center justify-between border-b border-slate-100 pb-3"><h3 class="font-bold text-slate-900 text-sm">Laai Nuusbrief Op</h3><span class="text-[10px] text-slate-400">Publiseer nuusbriewe aanlyn</span></div>
-                                <form id="form-nuusbrief" onsubmit="uploadNuusbrief(event)" class="space-y-4">
+                                <form id="form-nuusbrief" onsubmit="window.uploadNuusbrief(event)" class="space-y-4">
                                     <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nuusbrief Naam</label><input type="text" id="upload-nuusbrief-titel" required class="w-full text-xs border border-slate-200 rounded-lg p-2.5 focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></div>
                                     <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Kies PDF / Word Lêer</label><input type="file" id="upload-nuusbrief-file" accept=".pdf,.doc,.docx" required class="w-full text-xs border border-slate-200 rounded-lg p-2 focus:outline-none file:bg-tjokkieBlue-50 file:text-tjokkieBlue-800 hover:file:bg-tjokkieBlue-100 transition cursor-pointer"></div>
                                     <button type="submit" class="w-full py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-extrabold text-xs rounded-lg transition flex items-center justify-center"><i class="fa-solid fa-cloud-arrow-up mr-2"></i> Publiseer Nuusbrief Aanlyn</button>
@@ -456,7 +450,7 @@
                             <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-lightbulb"></i><span>Bemarkingstrategie & Geleenthede</span></div>
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Bemarking Veldtogte</h2>
                         </div>
-                        <button onclick="toggleModal('modal-bemarking-taak')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Beplan Nuwe Veldtog / Taak</span></button>
+                        <button onclick="window.toggleModal('modal-bemarking-taak')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Beplan Nuwe Veldtog / Taak</span></button>
                     </div>
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                         <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -482,7 +476,7 @@
                             <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-bus"></i><span>Vlootbeheer & Skoolritte Skedulering</span></div>
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Busvervoer</h2>
                         </div>
-                        <button onclick="toggleModal('modal-bus-rit')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Skeduleer Nuwe Rit</span></button>
+                        <button onclick="window.toggleModal('modal-bus-rit')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Skeduleer Nuwe Rit</span></button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="bus-status-container"></div>
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -509,7 +503,7 @@
                             <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-laptop-code"></i><span>Skool WiFi, Smartboards & Chromebooks</span></div>
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">IT-Ondersteuning</h2>
                         </div>
-                        <button onclick="toggleModal('modal-it-ticket')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Nuwe IT Kaartjie</span></button>
+                        <button onclick="window.toggleModal('modal-it-ticket')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Nuwe IT Kaartjie</span></button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="it-status-container"></div>
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -540,8 +534,8 @@
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Rugbyhoof</h2>
                         </div>
                         <div class="flex space-x-2">
-                            <button onclick="openSportEventModal('rugby', 'Rugby')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer Geleentheid</span></button>
-                            <button onclick="openSportResultModal('rugby', 'Rugby')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button>
+                            <button onclick="window.openSportEventModal('rugby', 'Rugby')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer Geleentheid</span></button>
+                            <button onclick="window.openSportResultModal('rugby', 'Rugby')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -554,7 +548,7 @@
                 <section id="tab-netbal" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-basketball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Netbalhoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="openSportEventModal('netbal', 'Netbal')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="openSportResultModal('netbal', 'Netbal')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
+                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('netbal', 'Netbal')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('netbal', 'Netbal')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-events-list"></div></div>
@@ -566,7 +560,7 @@
                 <section id="tab-tennis" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-table-tennis-paddle-ball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Tennishoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="openSportEventModal('tennis', 'Tennis')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="openSportResultModal('tennis', 'Tennis')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
+                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('tennis', 'Tennis')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('tennis', 'Tennis')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-events-list"></div></div>
@@ -578,7 +572,7 @@
                 <section id="tab-swem" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-person-swimming"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Swemhoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="openSportEventModal('swem', 'Swem')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="openSportResultModal('swem', 'Swem')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
+                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('swem', 'Swem')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('swem', 'Swem')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="swem-events-list"></div></div>
@@ -590,7 +584,7 @@
                 <section id="tab-hokkie" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-hockey-puck"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Hokkiehoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="openSportEventModal('hokkie', 'Hokkie')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="openSportResultModal('hokkie', 'Hokkie')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
+                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('hokkie', 'Hokkie')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('hokkie', 'Hokkie')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-events-list"></div></div>
@@ -602,7 +596,7 @@
                 <section id="tab-skaak" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-chess-knight"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skaakhoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="openSportEventModal('skaak', 'Skaak')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="openSportResultModal('skaak', 'Skaak')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
+                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('skaak', 'Skaak')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('skaak', 'Skaak')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-events-list"></div></div>
@@ -614,7 +608,7 @@
                 <section id="tab-voortrekkers" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-campground"></i><span>Kultuur & Jeug</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Voortrekkershoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="openSportEventModal('voortrekkers', 'Voortrekkers')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="openSportResultModal('voortrekkers', 'Voortrekkers')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Prestasie Op</span></button></div>
+                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('voortrekkers', 'Voortrekkers')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('voortrekkers', 'Voortrekkers')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Prestasie Op</span></button></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Byeenkomste & Kampe</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-events-list"></div></div>
@@ -640,15 +634,15 @@
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                 <h3 class="font-extrabold text-slate-900 text-sm">Stelsel Administrateur</h3>
-                <button onclick="toggleModal('modal-dev-auth')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+                <button onclick="window.toggleModal('modal-dev-auth')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
             </div>
-            <form onsubmit="verifyDevAuth(event)" class="space-y-4 text-xs">
+            <form onsubmit="window.verifyDevAuth(event)" class="space-y-4 text-xs">
                 <div>
                     <label class="block text-slate-500 font-bold uppercase mb-1">Meester Wagwoord</label>
                     <input type="password" id="dev-password-input" placeholder="••••••••" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="toggleModal('modal-dev-auth')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="button" onclick="window.toggleModal('modal-dev-auth')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
                     <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Ontsluit Stelsel</button>
                 </div>
             </form>
@@ -660,12 +654,15 @@
         <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4 shrink-0">
                 <h3 class="font-extrabold text-slate-900 text-lg"><i class="fa-solid fa-wrench text-tjokkieGold-500 mr-2"></i>Ontwikkelaar Paneel</h3>
-                <button onclick="toggleModal('modal-dev-panel')" class="text-slate-400 hover:text-red-500 transition text-xl"><i class="fa-solid fa-times"></i></button>
+                <button onclick="window.toggleModal('modal-dev-panel')" class="text-slate-400 hover:text-red-500 transition text-xl"><i class="fa-solid fa-times"></i></button>
             </div>
+            
             <div class="flex space-x-4 mb-4 border-b border-slate-100 shrink-0">
-                <button type="button" onclick="switchDevTab('theme')" id="btn-dev-theme" class="pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700">Voorkoms & Logo</button>
-                <button type="button" onclick="switchDevTab('users')" id="btn-dev-users" class="pb-2 text-sm font-bold text-slate-400 hover:text-slate-600">Gebruikers (Onderwysers)</button>
+                <button type="button" onclick="window.switchDevTab('theme')" id="btn-dev-theme" class="pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700">Voorkoms & Logo</button>
+                <button type="button" onclick="window.switchDevTab('users')" id="btn-dev-users" class="pb-2 text-sm font-bold text-slate-400 hover:text-slate-600">Gebruikers (Onderwysers)</button>
             </div>
+
+            <!-- Tab: Kleure & Logo -->
             <div id="dev-tab-theme" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 text-sm pr-2">
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <label class="block font-bold text-slate-700 mb-2">Skoolnaam</label>
@@ -683,10 +680,12 @@
                     <input type="file" id="dev-logo-upload" accept="image/*" class="w-full text-xs border border-slate-300 rounded-lg p-2 focus:outline-none bg-white">
                     <p class="text-[10px] text-slate-400 mt-2">Laai 'n .PNG of .JPG op (Base64 kodering word outomaties gedoen). As oopgelaat, gebruik die stelsel die standaard SVG.</p>
                 </div>
-                <button onclick="saveDeveloperSettings()" class="w-full py-3 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition shadow-md">
+                <button onclick="window.saveDeveloperSettings()" class="w-full py-3 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition shadow-md">
                     Stoor Voorkoms Veranderinge
                 </button>
             </div>
+
+            <!-- Tab: Gebruikers -->
             <div id="dev-tab-users" class="flex-1 overflow-y-auto custom-scrollbar hidden">
                 <p class="text-xs text-slate-500 mb-3">Keur nuwe onderwysers goed sodat hulle kan inteken, of vee hulle profiele uit om toegang te weier.</p>
                 <div id="admin-users-list" class="space-y-3"><div class="text-center py-6 text-sm text-slate-400">Geen gebruikers gevind nie.</div></div>
@@ -702,8 +701,8 @@
             <p class="text-xs text-slate-500 leading-relaxed mb-6">Om addisionele sport- of kultuur-afdelings in die stelsel in te bou, behels 'n strukturele opgradering. Beraamde koste: <b>R350 eenmalig per nuwe module</b>.</p>
             <input type="password" id="upgrade-password" placeholder="Ontwikkelaar Wagwoord" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs mb-4 text-center focus:outline-none">
             <div class="flex space-x-2">
-                <button onclick="toggleModal('modal-upgrade')" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Maak Toe</button>
-                <button onclick="verifyUpgradeAuth()" class="flex-1 py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl text-xs transition">Bevestig</button>
+                <button onclick="window.toggleModal('modal-upgrade')" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Maak Toe</button>
+                <button onclick="window.verifyUpgradeAuth()" class="flex-1 py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl text-xs transition">Bevestig</button>
             </div>
         </div>
     </div>
@@ -711,35 +710,35 @@
     <!-- TERREIN MODALS -->
     <div id="modal-terrein-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Rapporteer Terreinprobleem</h3><button onclick="toggleModal('modal-terrein-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-terrein" onsubmit="addTerreinTask(event)" class="space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Rapporteer Terreinprobleem</h3><button onclick="window.toggleModal('modal-terrein-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-terrein" onsubmit="window.addTerreinTask(event)" class="space-y-4 text-xs">
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Fasiliteit / Area</label><input type="text" id="terrein-area" required class="w-full border border-slate-200 p-2.5 rounded-lg"></div>
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Datum (Opsioneel)</label><input type="date" id="terrein-date" class="w-full border border-slate-200 p-2.5 rounded-lg"></div>
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Probleem</label><textarea id="terrein-desc" rows="3" required class="w-full border border-slate-200 p-2.5 rounded-lg"></textarea></div>
                 <div class="grid grid-cols-2 gap-4"><div><label class="block text-slate-500 font-bold uppercase mb-1">Prioriteit</label><select id="terrein-priority" class="w-full border border-slate-200 p-2.5 rounded-lg"><option value="Normal">Normaal</option><option value="Urgent">Dringend</option></select></div><div><label class="block text-slate-500 font-bold uppercase mb-1">Aangemeld Deur</label><input type="text" id="terrein-reported" required class="w-full border border-slate-200 p-2.5 rounded-lg"></div></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-terrein-taak')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Stuur In</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-terrein-taak')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Stuur In</button></div>
             </form>
         </div>
     </div>
     <div id="modal-terrein-beplan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-sm">Beplan Instandhouding</h3><button onclick="toggleModal('modal-terrein-beplan')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-beplan" onsubmit="addPlannedTask(event)" class="space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-sm">Beplan Instandhouding</h3><button onclick="window.toggleModal('modal-terrein-beplan')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-beplan" onsubmit="window.addPlannedTask(event)" class="space-y-4 text-xs">
                 <div><label class="block font-bold mb-1">Fasiliteit / Area</label><input type="text" id="plan-area" required class="w-full border p-2.5 rounded-lg"></div>
                 <div><label class="block font-bold mb-1">Datum</label><input type="date" id="plan-date" required class="w-full border p-2.5 rounded-lg"></div>
                 <div><label class="block font-bold mb-1">Beskrywing</label><textarea id="plan-desc" rows="3" required class="w-full border p-2.5 rounded-lg"></textarea></div>
                 <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Prioriteit</label><select id="plan-priority" class="w-full border p-2.5 rounded-lg"><option>Normaal</option><option>Dringend</option></select></div><div><label class="block font-bold mb-1">Toegewys</label><input type="text" id="plan-reported" required class="w-full border p-2.5 rounded-lg"></div></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-terrein-beplan')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl">Stoor Skedule</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-terrein-beplan')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl">Stoor Skedule</button></div>
             </form>
         </div>
     </div>
     <div id="modal-calendar-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Wagwoord Vereis</h3><button onclick="toggleModal('modal-calendar-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-calendar-password" onsubmit="verifyCalendarAuth(event)" class="space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Wagwoord Vereis</h3><button onclick="window.toggleModal('modal-calendar-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-calendar-password" onsubmit="window.verifyCalendarAuth(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="auth-calendar-date">
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="calendar-password-input" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-calendar-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-calendar-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
             </form>
         </div>
     </div>
@@ -747,13 +746,13 @@
     <!-- SKAKELBEAMPTE MODALS -->
     <div id="modal-afkondiging" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Plaas Afkondiging</h3><button onclick="toggleModal('modal-afkondiging')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-afkondiging" onsubmit="addAfkondiging(event)" class="space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Plaas Afkondiging</h3><button onclick="window.toggleModal('modal-afkondiging')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-afkondiging" onsubmit="window.addAfkondiging(event)" class="space-y-4 text-xs">
                 <div><label class="block font-bold mb-1">Geleentheid/Doel?</label><input type="text" id="afkondiging-doel" required class="w-full border p-2.5 rounded-lg"></div>
                 <div><label class="block font-bold mb-1">Kies Tyd/Pouse</label><select id="afkondiging-pouse" class="w-full border p-2.5 rounded-lg"><option>Eerste Pouse</option><option>Tweede Pouse</option><option>Aan die einde van die dag</option><option>Algemeen / Heeldag</option></select></div>
                 <div><label class="block font-bold mb-1">Inhoud</label><textarea id="afkondiging-inhoud" rows="4" required class="w-full border p-2.5 rounded-lg"></textarea></div>
                 <div><label class="block font-bold mb-1">Wie plaas afkondiging?</label><input type="text" id="afkondiging-persoon" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-afkondiging')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Voeg By</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-afkondiging')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Voeg By</button></div>
             </form>
         </div>
     </div>
@@ -761,12 +760,12 @@
     <!-- BEMARKING MODALS -->
     <div id="modal-bemarking-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Beplan Nuwe Bemarkingstaak</h3><button onclick="toggleModal('modal-bemarking-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-bemarking" onsubmit="addBemarkingTaak(event)" class="space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Beplan Nuwe Bemarkingstaak</h3><button onclick="window.toggleModal('modal-bemarking-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-bemarking" onsubmit="window.addBemarkingTaak(event)" class="space-y-4 text-xs">
                 <div><label class="block font-bold mb-1">Veldtog</label><input type="text" id="bem-taak" required class="w-full border p-2.5 rounded-lg"></div>
                 <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Sperdatum</label><input type="date" id="bem-datum" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Status</label><select id="bem-status" class="w-full border p-2.5 rounded-lg"><option>Beplan</option><option>Besig</option></select></div></div>
                 <div><label class="block font-bold mb-1">Verantwoordelike Persoon</label><input type="text" id="bem-verant" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-bemarking-taak')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-rose-600 text-white rounded-xl font-bold">Stoor</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bemarking-taak')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-rose-600 text-white rounded-xl font-bold">Stoor</button></div>
             </form>
         </div>
     </div>
@@ -774,24 +773,24 @@
     <!-- BUSVERVOER MODALS -->
     <div id="modal-bus-rit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Skeduleer Nuwe Busrit</h3><button onclick="toggleModal('modal-bus-rit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-bus" onsubmit="addBusTrip(event)" class="space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Skeduleer Nuwe Busrit</h3><button onclick="window.toggleModal('modal-bus-rit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-bus" onsubmit="window.addBusTrip(event)" class="space-y-4 text-xs">
                 <div><label class="block font-bold mb-1">Bestemming / Doel</label><input type="text" id="bus-destination" required class="w-full border p-2.5 rounded-lg"></div>
                 <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Vertrek Tyd</label><input type="text" id="bus-time" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Bus Toegewys</label><select id="bus-vehicle" class="w-full border p-2.5 rounded-lg"><option>Bus A</option><option>Bus B</option><option>Bus C</option><option>Bus D</option></select></div></div>
                 <div><label class="block font-bold mb-1">Bestuurder</label><input type="text" id="bus-driver" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-bus-rit')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Beplan</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bus-rit')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Beplan</button></div>
             </form>
         </div>
     </div>
 
     <!-- IT ONDERSTEUNING MODALS -->
     <div id="modal-it-ticket" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100"><div class="flex items-center justify-between border-b pb-3 mb-4"><h3 class="font-extrabold text-sm">Skep IT Kaartjie</h3><button onclick="toggleModal('modal-it-ticket')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-it" onsubmit="addITTicket(event)" class="space-y-4 text-xs">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100"><div class="flex items-center justify-between border-b pb-3 mb-4"><h3 class="font-extrabold text-sm">Skep IT Kaartjie</h3><button onclick="window.toggleModal('modal-it-ticket')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-it" onsubmit="window.addITTicket(event)" class="space-y-4 text-xs">
                 <div><label class="block font-bold mb-1">Toestel / Diens</label><input type="text" id="it-device" required class="w-full border p-2.5 rounded-lg"></div>
                 <div><label class="block font-bold mb-1">Foutbeskrywing</label><textarea id="it-desc" rows="3" required class="w-full border p-2.5 rounded-lg"></textarea></div>
                 <div><label class="block font-bold mb-1">Jou Naam</label><input type="text" id="it-staff" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-it-ticket')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Stuur</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-it-ticket')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Stuur</button></div>
             </form>
         </div>
     </div>
@@ -799,11 +798,11 @@
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                 <h3 class="font-extrabold text-slate-900 text-sm">Admin Wagwoord Vereis</h3>
-                <button onclick="toggleModal('modal-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
+                <button onclick="window.toggleModal('modal-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
             </div>
-            <form id="form-password" onsubmit="verifyAndClearLogs(event)" class="space-y-4 text-xs">
+            <form id="form-password" onsubmit="window.verifyAndClearLogs(event)" class="space-y-4 text-xs">
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="admin-password-input" placeholder="••••••••" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition">Vee Logs Uit</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl transition">Vee Logs Uit</button></div>
             </form>
         </div>
     </div>
@@ -811,25 +810,25 @@
     <!-- SPORT GELEENTHEID & UITSLAG MODALS -->
     <div id="modal-sport-event" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-sm" id="sport-event-title-display">Skeduleer Geleentheid</h3><button onclick="toggleModal('modal-sport-event')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-sport-event" onsubmit="saveSportEvent(event)" class="space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-sm" id="sport-event-title-display">Skeduleer Geleentheid</h3><button onclick="window.toggleModal('modal-sport-event')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-sport-event" onsubmit="window.saveSportEvent(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="sport-event-dept">
                 <div><label class="block font-bold mb-1">Geleentheid Naam</label><input type="text" id="sport-event-title" required class="w-full border p-2.5 rounded-lg"></div>
                 <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Datum</label><input type="date" id="sport-event-date" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Plek</label><input type="text" id="sport-event-location" required class="w-full border p-2.5 rounded-lg"></div></div>
                 <div><label class="block font-bold mb-1">Algemene Inligting</label><textarea id="sport-event-desc" rows="3" required class="w-full border p-2.5 rounded-lg"></textarea></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-sport-event')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Stoor</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-sport-event')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Stoor</button></div>
             </form>
         </div>
     </div>
     <div id="modal-sport-result" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-sm" id="sport-result-title-display">Laai Uitslag Op</h3><button onclick="toggleModal('modal-sport-result')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-sport-result" onsubmit="saveSportResult(event)" class="space-y-4 text-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-sm" id="sport-result-title-display">Laai Uitslag Op</h3><button onclick="window.toggleModal('modal-sport-result')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-sport-result" onsubmit="window.saveSportResult(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="sport-result-dept">
                 <div><label class="block font-bold mb-1">Tipe Wedstryd</label><input type="text" id="sport-result-match" required class="w-full border p-2.5 rounded-lg"></div>
                 <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Ons Span</label><input type="text" id="sport-result-team" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Teenstander</label><input type="text" id="sport-result-opponent" required class="w-full border p-2.5 rounded-lg"></div></div>
                 <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Telling</label><input type="text" id="sport-result-score" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Uitslag</label><select id="sport-result-outcome" class="w-full border p-2.5 rounded-lg"><option>Wen</option><option>Verloor</option><option>Gelykop</option></select></div></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="toggleModal('modal-sport-result')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 rounded-xl font-bold">Stoor</button></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-sport-result')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 rounded-xl font-bold">Stoor</button></div>
             </form>
         </div>
     </div>
@@ -867,6 +866,65 @@
         let localAfkondigings = []; let localBemarkingTake = []; let localNewsletters = []; let localBusTrips = []; let localITTickets = []; let localLogs = []; let localSportEvents = []; let localSportResults = [];
         let calDate = new Date();
 
+        window.runLocalFallback = function() {
+            document.getElementById('db-status-text').innerText = "Gekoppel aan plaaslike geheue.";
+            currentTerreinTasks = localTerreinTasks;
+            window.renderFacilities(localFacilities);
+            window.renderItStatus(localItStatus);
+            window.renderBusStatus(localBusStatus);
+            window.renderTerreinTasks(localTerreinTasks);
+            window.renderAfkondigings(localAfkondigings);
+            window.renderBemarkingTake(localBemarkingTake);
+            window.renderNewsletters(localNewsletters);
+            window.renderBusTrips(localBusTrips);
+            window.renderITTickets(localITTickets);
+            window.renderActivityLogs(localLogs);
+            window.renderSportEvents(localSportEvents);
+            window.renderSportResults(localSportResults);
+        }
+
+        function setupRealtimeListeners() {
+            if (!db || !user) return;
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'facilities'), (snap) => {
+                let f = { ...localFacilities }; snap.forEach(doc => { f[doc.id] = { ...f[doc.id], ...doc.data() }; }); window.renderFacilities(f);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_status'), (snap) => {
+                let i = { ...localItStatus }; snap.forEach(doc => { i[doc.id] = { ...i[doc.id], ...doc.data() }; }); window.renderItStatus(i);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_status'), (snap) => {
+                let b = { ...localBusStatus }; snap.forEach(doc => { b[doc.id] = { ...b[doc.id], ...doc.data() }; }); window.renderBusStatus(b);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), (snap) => {
+                let t = []; snap.forEach(doc => { t.push({ id: doc.id, ...doc.data() }); }); currentTerreinTasks = t; window.renderTerreinTasks(t);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), (snap) => {
+                let a = []; snap.forEach(doc => { a.push({ id: doc.id, ...doc.data() }); }); window.renderAfkondigings(a);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), (snap) => {
+                let b = []; snap.forEach(doc => { b.push({ id: doc.id, ...doc.data() }); }); window.renderBemarkingTake(b);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), (snap) => {
+                let n = []; snap.forEach(doc => { n.push({ id: doc.id, ...doc.data() }); }); 
+                n.sort((a,b) => b.timestamp - a.timestamp); window.renderNewsletters(n);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), (snap) => {
+                let bt = []; snap.forEach(doc => { bt.push({ id: doc.id, ...doc.data() }); }); window.renderBusTrips(bt);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), (snap) => {
+                let it = []; snap.forEach(doc => { it.push({ id: doc.id, ...doc.data() }); }); window.renderITTickets(it);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), (snap) => {
+                let logs = []; snap.forEach(doc => { logs.push({ id: doc.id, ...doc.data() }); });
+                logs.sort((a,b) => b.timestamp - a.timestamp); window.renderActivityLogs(logs);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), (snap) => {
+                let se = []; snap.forEach(doc => { se.push({ id: doc.id, ...doc.data() }); }); window.renderSportEvents(se);
+            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), (snap) => {
+                let sr = []; snap.forEach(doc => { sr.push({ id: doc.id, ...doc.data() }); }); window.renderSportResults(sr);
+            });
+        }
+
         // JS-AFDELING 1.2: LAAI PROSES (INIT)
         window.initFirebaseAndApp = async function() {
             let configActive = false;
@@ -887,6 +945,8 @@
                         window.hideLoadingScreen();
 
                         if (currentUser) {
+                            if (window.isRegistering) return; // Vermy foute tydens nuwe profiel-skep
+
                             document.getElementById('db-status-text').innerText = "Regstreeks gekoppel aan Wolk.";
                             document.getElementById('live-storage-badge').innerText = "Gekoppel";
                             document.getElementById('live-storage-badge').className = "text-xs bg-emerald-500 text-white px-2 py-1 rounded font-bold";
@@ -903,19 +963,50 @@
                             }
 
                             if(isApproved) {
-                                showAppContainer();
+                                document.getElementById('auth-wrapper').classList.add('hidden');
+                                document.getElementById('auth-wrapper').classList.remove('flex');
+                                document.getElementById('pending-wrapper').classList.add('hidden');
+                                document.getElementById('pending-wrapper').classList.remove('flex');
+                                document.getElementById('app-wrapper').classList.remove('hidden');
+                                document.getElementById('app-wrapper').classList.add('flex');
                                 loadGlobalSettings();
                                 setupRealtimeListeners();
-                            } else { showPendingContainer(); }
-                        } else { showAuthContainer(); }
+                            } else { 
+                                document.getElementById('auth-wrapper').classList.add('hidden');
+                                document.getElementById('auth-wrapper').classList.remove('flex');
+                                document.getElementById('app-wrapper').classList.add('hidden');
+                                document.getElementById('pending-wrapper').classList.remove('hidden');
+                                document.getElementById('pending-wrapper').classList.add('flex');
+                            }
+                        } else { 
+                            document.getElementById('app-wrapper').classList.add('hidden');
+                            document.getElementById('pending-wrapper').classList.add('hidden');
+                            document.getElementById('auth-wrapper').classList.remove('hidden');
+                            document.getElementById('auth-wrapper').classList.add('flex');
+                        }
                     }, (error) => {
-                        window.appInitialized = true; window.hideLoadingScreen(); showAppContainer(); runLocalFallback();
+                        window.appInitialized = true; window.hideLoadingScreen(); 
+                        document.getElementById('auth-wrapper').classList.add('hidden');
+                        document.getElementById('pending-wrapper').classList.add('hidden');
+                        document.getElementById('app-wrapper').classList.remove('hidden');
+                        document.getElementById('app-wrapper').classList.add('flex');
+                        window.runLocalFallback();
                     });
                 } catch(catchErr) {
-                    window.appInitialized = true; window.hideLoadingScreen(); showAppContainer(); runLocalFallback();
+                    window.appInitialized = true; window.hideLoadingScreen(); 
+                    document.getElementById('auth-wrapper').classList.add('hidden');
+                    document.getElementById('pending-wrapper').classList.add('hidden');
+                    document.getElementById('app-wrapper').classList.remove('hidden');
+                    document.getElementById('app-wrapper').classList.add('flex');
+                    window.runLocalFallback();
                 }
             } else {
-                window.appInitialized = true; window.hideLoadingScreen(); showAppContainer(); runLocalFallback();
+                window.appInitialized = true; window.hideLoadingScreen(); 
+                document.getElementById('auth-wrapper').classList.add('hidden');
+                document.getElementById('pending-wrapper').classList.add('hidden');
+                document.getElementById('app-wrapper').classList.remove('hidden');
+                document.getElementById('app-wrapper').classList.add('flex');
+                window.runLocalFallback();
             }
         };
 
@@ -928,12 +1019,12 @@
             if(db) {
                 try {
                     const docSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'));
-                    if(docSnap.exists()) applyThemeVariables(docSnap.data());
+                    if(docSnap.exists()) window.applyThemeVariables(docSnap.data());
                 } catch(e) {}
             }
         }
 
-        function applyThemeVariables(settings) {
+        window.applyThemeVariables = function(settings) {
             if(settings.primaryColor) {
                 document.documentElement.style.setProperty('--school-pri-500', settings.primaryColor);
                 document.documentElement.style.setProperty('--school-pri-800', settings.primaryColor);
@@ -953,12 +1044,14 @@
             const schoolName = document.getElementById('dev-school-name').value;
             const primaryColor = document.getElementById('dev-primary-color').value;
             const logoFile = document.getElementById('dev-logo-upload').files[0];
+
             let logoBase64 = null;
             if(logoFile) {
                 logoBase64 = await new Promise((resolve) => {
                     const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.readAsDataURL(logoFile);
                 });
             }
+
             const newSettings = {};
             if(schoolName) newSettings.schoolName = schoolName;
             if(primaryColor && primaryColor !== '#000000') newSettings.primaryColor = primaryColor;
@@ -966,10 +1059,10 @@
 
             if(db && Object.keys(newSettings).length > 0) {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'), newSettings, { merge: true });
-                applyThemeVariables(newSettings);
-                showToast("Gestoor", "Die skool se wolk-voorkoms is opgedateer.");
+                window.applyThemeVariables(newSettings);
+                window.showToast("Gestoor", "Die skool se wolk-voorkoms is opgedateer.");
             }
-            toggleModal('modal-dev-panel');
+            window.toggleModal('modal-dev-panel');
         }
 
         // ======================================================= //
@@ -980,9 +1073,9 @@
             const email = document.getElementById('login-email').value; const pwd = document.getElementById('login-password').value;
             if(auth) {
                 try {
-                    showToast("Besig om in te teken...", "Wag asseblief");
+                    window.showToast("Inligting", "Besig om in te teken...");
                     await signInWithEmailAndPassword(auth, email, pwd);
-                } catch(error) { showToast("Fout", "Teken in het gefaal: Kontroleer epos of wagwoord."); }
+                } catch(error) { window.showToast("Fout", "Teken in het gefaal. Verkeerde wagwoord of epos."); }
             }
         }
 
@@ -991,18 +1084,37 @@
             const naam = document.getElementById('reg-name').value; const email = document.getElementById('reg-email').value; const pwd = document.getElementById('reg-password').value;
             if(auth && db) {
                 try {
+                    window.showToast("Koppel...", "Besig om profiel te skep");
+                    window.isRegistering = true;
                     const cred = await createUserWithEmailAndPassword(auth, email, pwd);
                     await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', cred.user.uid), { name: naam, email: email, status: 'pending', role: 'teacher' });
-                    showToast("Geregistreer", "Profiel is wagtend vir goedkeuring.");
-                } catch(error) { showToast("Fout", "Kon nie registreer nie. Probeer weer."); }
+                    window.isRegistering = false;
+                    
+                    document.getElementById('auth-wrapper').classList.add('hidden');
+                    document.getElementById('auth-wrapper').classList.remove('flex');
+                    document.getElementById('app-wrapper').classList.add('hidden');
+                    document.getElementById('pending-wrapper').classList.remove('hidden');
+                    document.getElementById('pending-wrapper').classList.add('flex');
+                    window.showToast("Geregistreer", "Profiel is wagtend vir goedkeuring.");
+                } catch(error) { 
+                    window.isRegistering = false;
+                    console.error("Firebase Reg Fout:", error);
+                    if (error.code === 'auth/operation-not-allowed') {
+                        window.showToast("Firebase Fout", "Gaan na Firebase Console -> Authentication en skakel 'Email/Password' aan!");
+                    } else if (error.code === 'auth/email-already-in-use') {
+                        window.showToast("Epos Bestaan", "Hierdie epos is reeds geregistreer. Teken asb in.");
+                    } else if (error.code === 'auth/weak-password') {
+                        window.showToast("Wagwoord Swak", "Wagwoord moet ten minste 6 karakters lank wees.");
+                    } else {
+                        window.showToast("Fout", "Kon nie registreer nie: " + error.message); 
+                    }
+                }
+            } else {
+                window.showToast("Vanlyn", "Die databasis is tans nie gekoppel nie.");
             }
         }
 
         window.handleLogout = async function() { if(auth) await signOut(auth); location.reload(); }
-        
-        function showAuthContainer() { document.getElementById('app-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.add('hidden'); document.getElementById('auth-wrapper').classList.remove('hidden'); document.getElementById('auth-wrapper').classList.add('flex'); }
-        function showPendingContainer() { document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('auth-wrapper').classList.remove('flex'); document.getElementById('app-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.remove('hidden'); document.getElementById('pending-wrapper').classList.add('flex'); }
-        function showAppContainer() { document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('auth-wrapper').classList.remove('flex'); document.getElementById('pending-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.remove('flex'); document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex'); }
         
         window.toggleAuthForms = function() {
             const login = document.getElementById('login-form'); const reg = document.getElementById('register-form');
@@ -1012,12 +1124,12 @@
         // ======================================================= //
         // JS-AFDELING 4: GEBRUIKER BESTUUR (ADMIN)                //
         // ======================================================= //
-        window.promptDevSettingsAuth = function(intent = 'settings') { devModeActive = intent; document.getElementById('dev-password-input').value = ''; toggleModal('modal-dev-auth'); }
+        window.promptDevSettingsAuth = function(intent = 'settings') { devModeActive = intent; document.getElementById('dev-password-input').value = ''; window.toggleModal('modal-dev-auth'); }
         window.verifyDevAuth = function(e) {
             e.preventDefault(); const pwd = document.getElementById('dev-password-input').value;
-            if (pwd === "Elrico1603!!") { toggleModal('modal-dev-auth'); if(devModeActive === 'module') { toggleModal('modal-upgrade'); } else { toggleModal('modal-dev-panel'); fetchAdminUsers(); } } else { showToast("Geweier", "Verkeerde wagwoord."); }
+            if (pwd === "Elrico1603!!") { window.toggleModal('modal-dev-auth'); if(devModeActive === 'module') { window.toggleModal('modal-upgrade'); } else { window.toggleModal('modal-dev-panel'); fetchAdminUsers(); } } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
-        window.verifyUpgradeAuth = function() { const pwd = document.getElementById('upgrade-password').value; if(pwd === "Elrico1603!!") { toggleModal('modal-upgrade'); showToast("Versoek", "Kontak asb. die stelsel argitek om hierdie te hardekodeer."); } else { showToast("Geweier", "Ongeldig."); } }
+        window.verifyUpgradeAuth = function() { const pwd = document.getElementById('upgrade-password').value; if(pwd === "Elrico1603!!") { window.toggleModal('modal-upgrade'); window.showToast("Versoek", "Kontak asb. die stelsel argitek om hierdie te hardekodeer."); } else { window.showToast("Geweier", "Ongeldig."); } }
         window.switchDevTab = function(tab) {
             document.getElementById('dev-tab-theme').classList.add('hidden'); document.getElementById('dev-tab-users').classList.add('hidden');
             document.getElementById('btn-dev-theme').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600"; document.getElementById('btn-dev-users').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600";
@@ -1036,45 +1148,21 @@
                         <div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg">
                             <div><p class="font-bold text-slate-900">${u.name}</p><p class="text-[10px] text-slate-500">${u.email} ${badge}</p></div>
                             <div class="space-x-2 flex">
-                                ${u.status === 'pending' ? `<button onclick="approveUser('${id}')" class="px-3 py-1 bg-tjokkieBlue-100 text-tjokkieBlue-800 rounded font-bold text-[10px]">Keur Goed</button>` : ''}
-                                <button onclick="deleteUserProfile('${id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded font-bold text-[10px]">Verwyder</button>
+                                ${u.status === 'pending' ? `<button onclick="window.approveUser('${id}')" class="px-3 py-1 bg-tjokkieBlue-100 text-tjokkieBlue-800 rounded font-bold text-[10px]">Keur Goed</button>` : ''}
+                                <button onclick="window.deleteUserProfile('${id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded font-bold text-[10px]">Verwyder</button>
                             </div>
                         </div>`;
                 });
                 if(snap.empty) list.innerHTML = '<div class="text-center py-6 text-sm text-slate-400">Geen gebruikers in databasis.</div>';
             } catch(e) {}
         }
-        window.approveUser = async function(uid) { if(db) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid), { status: 'approved' }); fetchAdminUsers(); showToast("Goedgekeur", "Die gebruiker het nou toegang."); } }
-        window.deleteUserProfile = async function(uid) { if(db) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid)); fetchAdminUsers(); showToast("Uitgevee", "Profiel toegang verwyder."); } }
-
-        // ======================================================= //
-        // JS-AFDELING 5: DATABASIS SINKRONISASIE (REALTIME)       //
-        // ======================================================= //
-        window.runLocalFallback = function() {
-            document.getElementById('db-status-text').innerText = "Gekoppel aan plaaslike geheue."; currentTerreinTasks = localTerreinTasks;
-            renderFacilities(localFacilities); renderItStatus(localItStatus); renderBusStatus(localBusStatus); renderTerreinTasks(localTerreinTasks); renderAfkondigings(localAfkondigings); renderBemarkingTake(localBemarkingTake); renderNewsletters(localNewsletters); renderBusTrips(localBusTrips); renderITTickets(localITTickets); renderActivityLogs(localLogs); renderSportEvents(localSportEvents); renderSportResults(localSportResults);
-        }
-
-        function setupRealtimeListeners() {
-            if (!db || !user) return;
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'facilities'), (snap) => { let f = { ...localFacilities }; snap.forEach(doc => { f[doc.id] = { ...f[doc.id], ...doc.data() }; }); renderFacilities(f); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_status'), (snap) => { let i = { ...localItStatus }; snap.forEach(doc => { i[doc.id] = { ...i[doc.id], ...doc.data() }; }); renderItStatus(i); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_status'), (snap) => { let b = { ...localBusStatus }; snap.forEach(doc => { b[doc.id] = { ...b[doc.id], ...doc.data() }; }); renderBusStatus(b); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), (snap) => { let t = []; snap.forEach(doc => { t.push({ id: doc.id, ...doc.data() }); }); currentTerreinTasks = t; renderTerreinTasks(t); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), (snap) => { let a = []; snap.forEach(doc => { a.push({ id: doc.id, ...doc.data() }); }); renderAfkondigings(a); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), (snap) => { let b = []; snap.forEach(doc => { b.push({ id: doc.id, ...doc.data() }); }); renderBemarkingTake(b); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), (snap) => { let n = []; snap.forEach(doc => { n.push({ id: doc.id, ...doc.data() }); }); n.sort((a,b) => b.timestamp - a.timestamp); renderNewsletters(n); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), (snap) => { let bt = []; snap.forEach(doc => { bt.push({ id: doc.id, ...doc.data() }); }); renderBusTrips(bt); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), (snap) => { let it = []; snap.forEach(doc => { it.push({ id: doc.id, ...doc.data() }); }); renderITTickets(it); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), (snap) => { let logs = []; snap.forEach(doc => { logs.push({ id: doc.id, ...doc.data() }); }); logs.sort((a,b) => b.timestamp - a.timestamp); renderActivityLogs(logs); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), (snap) => { let se = []; snap.forEach(doc => { se.push({ id: doc.id, ...doc.data() }); }); renderSportEvents(se); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), (snap) => { let sr = []; snap.forEach(doc => { sr.push({ id: doc.id, ...doc.data() }); }); renderSportResults(sr); });
-        }
+        window.approveUser = async function(uid) { if(db) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid), { status: 'approved' }); fetchAdminUsers(); window.showToast("Goedgekeur", "Die gebruiker het nou toegang."); } }
+        window.deleteUserProfile = async function(uid) { if(db) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid)); fetchAdminUsers(); window.showToast("Uitgevee", "Profiel toegang verwyder."); } }
 
         // ======================================================= //
         // JS-AFDELING 6: DATA VERTREK (RENDERING ENGINE)          //
         // ======================================================= //
-        function renderFacilities(facilities) {
+        window.renderFacilities = function(facilities) {
             const container = document.getElementById('facilities-container');
             if(!container) return; container.innerHTML = '';
             for (const [id, fac] of Object.entries(facilities)) {
@@ -1084,17 +1172,13 @@
                     <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 rounded-lg ${iconColor} flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${fac.icon}"></i></div>
-                            <div>
-                                <h4 class="font-bold text-slate-900">${fac.name}</h4>
-                                <p class="text-xs text-slate-500">Kondisie: <span class="${statusColor} font-bold">${fac.status}</span></p>
-                                <p class="text-[10px] text-slate-400 mt-1">${fac.subtext}</p>
-                            </div>
+                            <div><h4 class="font-bold text-slate-900">${fac.name}</h4><p class="text-xs text-slate-500">Kondisie: <span class="${statusColor} font-bold">${fac.status}</span></p><p class="text-[10px] text-slate-400 mt-1">${fac.subtext}</p></div>
                         </div>
                     </div>`;
             }
         }
 
-        function renderBusStatus(statusData) {
+        window.renderBusStatus = function(statusData) {
             const container = document.getElementById('bus-status-container');
             if(!container) return; container.innerHTML = '';
             for (const [id, item] of Object.entries(statusData)) {
@@ -1104,17 +1188,13 @@
                     <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 rounded-lg ${item.iconBg} flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${item.icon}"></i></div>
-                            <div>
-                                <h4 class="font-bold text-slate-900">${item.name}</h4>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase">${item.desc}</p>
-                                <p class="text-xs text-slate-500 mt-1">Status: <span class="${col} font-bold">${item.status}</span></p>
-                            </div>
+                            <div><h4 class="font-bold text-slate-900">${item.name}</h4><p class="text-[10px] text-slate-500 font-bold uppercase">${item.desc}</p><p class="text-xs text-slate-500 mt-1">Status: <span class="${col} font-bold">${item.status}</span></p></div>
                         </div>
                     </div>`;
             }
         }
 
-        function renderItStatus(statusData) {
+        window.renderItStatus = function(statusData) {
             const container = document.getElementById('it-status-container');
             if(!container) return; container.innerHTML = '';
             for (const [id, item] of Object.entries(statusData)) {
@@ -1138,11 +1218,9 @@
             }
         }
 
-        window.changeMonth = function(offset) {
-            calDate.setMonth(calDate.getMonth() + offset); renderCalendar(currentTerreinTasks || []);
-        }
+        window.changeMonth = function(offset) { calDate.setMonth(calDate.getMonth() + offset); window.renderCalendar(currentTerreinTasks || []); }
 
-        function renderCalendar(tasks) {
+        window.renderCalendar = function(tasks) {
             const grid = document.getElementById('calendar-grid'); const monthLabel = document.getElementById('calendar-month');
             if(!grid || !monthLabel) return; grid.innerHTML = '';
             const year = calDate.getFullYear(); const month = calDate.getMonth();
@@ -1158,7 +1236,7 @@
                 let highlightClass = dayTasks.length > 0 ? 'border-tjokkieBlue-300 bg-sky-50 shadow-sm' : 'border-slate-200 bg-white hover:border-tjokkieBlue-400 hover:shadow-md';
 
                 grid.innerHTML += `
-                    <div class="p-2 border ${highlightClass} rounded-lg min-h-[90px] flex flex-col transition-all cursor-pointer group relative" onclick="promptCalendarAuth('${dateStr}')">
+                    <div class="p-2 border ${highlightClass} rounded-lg min-h-[90px] flex flex-col transition-all cursor-pointer group relative" onclick="window.promptCalendarAuth('${dateStr}')">
                         <div class="flex justify-between items-start mb-1">
                             <span class="text-xs font-black ${dayTasks.length > 0 ? 'text-tjokkieBlue-800' : 'text-slate-500'}">${day}</span>
                             <div class="w-5 h-5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm"><i class="fa-solid fa-plus text-[10px]"></i></div>
@@ -1170,62 +1248,52 @@
             for(let i=0; i<remainingCells; i++) { grid.innerHTML += `<div class="p-2 border border-slate-100 bg-slate-50/50 rounded-lg min-h-[90px] opacity-50"></div>`; }
         }
 
-        function renderTerreinTasks(tasks) {
+        window.renderTerreinTasks = function(tasks) {
             const tbody = document.getElementById('terrein-task-rows');
             if(!tbody) return; tbody.innerHTML = '';
             tasks.forEach(task => {
                 const badgeColor = task.priority === 'Urgent' || task.priority === 'Dringend' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800';
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition duration-150">
-                        <td class="px-6 py-4 font-bold text-slate-900 flex flex-col">
-                            <span>${task.area}</span><span class="text-[9px] text-tjokkieBlue-600 font-bold uppercase mt-1"><i class="fa-regular fa-calendar mr-1"></i>${task.date || 'Geen'}</span>
-                        </td>
-                        <td class="px-6 py-4">${task.desc}</td>
-                        <td class="px-6 py-4"><span class="px-2 py-1 rounded-full ${badgeColor} font-bold uppercase text-[9px]">${task.priority}</span></td>
-                        <td class="px-6 py-4 text-slate-500">${task.reported}</td>
-                        <td class="px-6 py-4"><button onclick="completeTerreinTask('${task.id}')" class="bg-tjokkieBlue-50 hover:bg-tjokkieBlue-100 text-tjokkieBlue-700 font-bold px-3 py-1.5 rounded transition">Klaar</button></td>
+                        <td class="px-6 py-4 font-bold text-slate-900 flex flex-col"><span>${task.area}</span><span class="text-[9px] text-tjokkieBlue-600 font-bold uppercase mt-1"><i class="fa-regular fa-calendar mr-1"></i>${task.date || 'Geen'}</span></td>
+                        <td class="px-6 py-4">${task.desc}</td><td class="px-6 py-4"><span class="px-2 py-1 rounded-full ${badgeColor} font-bold uppercase text-[9px]">${task.priority}</span></td>
+                        <td class="px-6 py-4 text-slate-500">${task.reported}</td><td class="px-6 py-4"><button onclick="window.completeTerreinTask('${task.id}')" class="bg-tjokkieBlue-50 hover:bg-tjokkieBlue-100 text-tjokkieBlue-700 font-bold px-3 py-1.5 rounded transition">Klaar</button></td>
                     </tr>`;
             });
-            updateDashboardCounters(); renderCalendar(tasks);
+            updateDashboardCounters(); window.renderCalendar(tasks);
         }
 
-        function renderAfkondigings(items) {
+        window.renderAfkondigings = function(items) {
             const list = document.getElementById('afkondigings-list');
             if(!list) return; list.innerHTML = '';
             items.forEach(item => {
                 let pouseColor = item.pouse === 'Eerste Pouse' ? 'text-tjokkieBlue-600' : item.pouse === 'Tweede Pouse' ? 'text-amber-600' : 'text-slate-500';
                 list.innerHTML += `
                     <div class="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs flex flex-col justify-between">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="font-bold text-slate-900">${item.doel}</span><span class="text-[9px] ${pouseColor} font-bold bg-white px-2 py-1 rounded shadow-sm">${item.pouse}</span>
-                        </div>
+                        <div class="flex items-center justify-between mb-2"><span class="font-bold text-slate-900">${item.doel}</span><span class="text-[9px] ${pouseColor} font-bold bg-white px-2 py-1 rounded shadow-sm">${item.pouse}</span></div>
                         <p class="text-slate-700 font-medium mb-3">${item.inhoud}</p>
-                        <div class="flex justify-between items-center border-t border-slate-200 pt-2 text-[10px]">
-                            <span class="text-slate-400">Deur: <b>${item.persoon}</b></span><button onclick="deleteAfkondiging('${item.id}', '${item.doel}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button>
-                        </div>
+                        <div class="flex justify-between items-center border-t border-slate-200 pt-2 text-[10px]"><span class="text-slate-400">Deur: <b>${item.persoon}</b></span><button onclick="window.deleteAfkondiging('${item.id}', '${item.doel}')" class="text-red-500 hover:text-red-700"><i class="fa-solid fa-trash-can"></i></button></div>
                     </div>`;
             });
             updateDashboardCounters();
         }
 
-        function renderBemarkingTake(items) {
+        window.renderBemarkingTake = function(items) {
             const tbody = document.getElementById('bemarking-task-rows');
             if(!tbody) return; tbody.innerHTML = '';
             items.forEach(item => {
                 const bc = item.status === 'Besig' ? 'bg-rose-100 text-rose-800' : 'bg-slate-200 text-slate-600';
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition duration-150">
-                        <td class="px-6 py-4 font-bold text-slate-900">${item.taak}</td>
-                        <td class="px-6 py-4"><span class="text-[10px] text-slate-500 font-bold bg-white border border-slate-200 px-2 py-1 rounded"><i class="fa-regular fa-calendar mr-1"></i>${item.datum}</span></td>
-                        <td class="px-6 py-4 text-slate-600">${item.verant}</td>
-                        <td class="px-6 py-4"><span class="px-2 py-1 rounded-full ${bc} font-bold uppercase text-[9px]">${item.status}</span></td>
-                        <td class="px-6 py-4"><button onclick="completeBemarkingTaak('${item.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3 py-1.5 rounded transition">Voltooi</button></td>
+                        <td class="px-6 py-4 font-bold text-slate-900">${item.taak}</td><td class="px-6 py-4"><span class="text-[10px] text-slate-500 font-bold bg-white border border-slate-200 px-2 py-1 rounded"><i class="fa-regular fa-calendar mr-1"></i>${item.datum}</span></td>
+                        <td class="px-6 py-4 text-slate-600">${item.verant}</td><td class="px-6 py-4"><span class="px-2 py-1 rounded-full ${bc} font-bold uppercase text-[9px]">${item.status}</span></td>
+                        <td class="px-6 py-4"><button onclick="window.completeBemarkingTaak('${item.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3 py-1.5 rounded transition">Voltooi</button></td>
                     </tr>`;
             });
             updateDashboardCounters();
         }
 
-        function renderNewsletters(items) {
+        window.renderNewsletters = function(items) {
             const list = document.getElementById('nuusbriewe-list');
             if(!list) return; list.innerHTML = '';
             if (items.length === 0) { list.innerHTML = `<div class="text-slate-400 text-[11px] text-center py-4">Geen nuusbriewe tans aanlyn nie.</div>`; return; }
@@ -1233,42 +1301,39 @@
                 const d = new Date(item.timestamp).toLocaleDateString('af-ZA');
                 list.innerHTML += `
                     <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 hover:border-tjokkieBlue-300 transition group">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center shrink-0 shadow-sm"><i class="fa-solid fa-file-pdf"></i></div>
-                            <div><p class="text-xs font-bold text-slate-900">${item.title}</p><p class="text-[9px] text-slate-500">${item.filename} • ${d}</p></div>
-                        </div>
-                        <button onclick="deleteNuusbrief('${item.id}', '${item.title}')" class="text-slate-300 hover:text-red-500 transition px-2"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                        <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center shrink-0 shadow-sm"><i class="fa-solid fa-file-pdf"></i></div><div><p class="text-xs font-bold text-slate-900">${item.title}</p><p class="text-[9px] text-slate-500">${item.filename} • ${d}</p></div></div>
+                        <button onclick="window.deleteNuusbrief('${item.id}', '${item.title}')" class="text-slate-300 hover:text-red-500 transition px-2"><i class="fa-solid fa-trash-can text-sm"></i></button>
                     </div>`;
             });
         }
 
-        function renderBusTrips(trips) {
+        window.renderBusTrips = function(trips) {
             const tbody = document.getElementById('bus-trip-rows');
             if(!tbody) return; tbody.innerHTML = '';
             trips.forEach(trip => {
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition duration-150">
                     <td class="px-6 py-4 font-bold text-slate-900">${trip.dest}</td><td class="px-6 py-4">${trip.time}</td>
                     <td class="px-6 py-4">${trip.vehicle}</td><td class="px-6 py-4 text-slate-500">${trip.driver}</td>
-                    <td class="px-6 py-4"><button onclick="cancelBusTrip('${trip.id}')" class="bg-red-50 hover:bg-red-100 text-red-700 font-bold px-3 py-1.5 rounded transition">Kanselleer</button></td>
+                    <td class="px-6 py-4"><button onclick="window.cancelBusTrip('${trip.id}')" class="bg-red-50 hover:bg-red-100 text-red-700 font-bold px-3 py-1.5 rounded transition">Kanselleer</button></td>
                 </tr>`;
             });
             updateDashboardCounters();
         }
 
-        function renderITTickets(tickets) {
+        window.renderITTickets = function(tickets) {
             const tbody = document.getElementById('it-ticket-rows');
             if(!tbody) return; tbody.innerHTML = '';
             tickets.forEach(ticket => {
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition duration-150">
-                    <td class="px-6 py-4 font-bold text-slate-900">#TK-${ticket.id.substring(0, 3).toUpperCase()}</td>
-                    <td class="px-6 py-4">${ticket.device}</td><td class="px-6 py-4">${ticket.desc}</td><td class="px-6 py-4 text-slate-500">${ticket.staff}</td>
-                    <td class="px-6 py-4"><button onclick="resolveTicket('${ticket.id}')" class="bg-tjokkieBlue-50 hover:bg-tjokkieBlue-100 text-tjokkieBlue-700 font-bold px-3 py-1.5 rounded transition">Opgelos</button></td>
+                    <td class="px-6 py-4 font-bold text-slate-900">#TK-${ticket.id.substring(0, 3).toUpperCase()}</td><td class="px-6 py-4">${ticket.device}</td>
+                    <td class="px-6 py-4">${ticket.desc}</td><td class="px-6 py-4 text-slate-500">${ticket.staff}</td>
+                    <td class="px-6 py-4"><button onclick="window.resolveTicket('${ticket.id}')" class="bg-tjokkieBlue-50 hover:bg-tjokkieBlue-100 text-tjokkieBlue-700 font-bold px-3 py-1.5 rounded transition">Opgelos</button></td>
                 </tr>`;
             });
             updateDashboardCounters();
         }
 
-        function renderActivityLogs(logs) {
+        window.renderActivityLogs = function(logs) {
             const list = document.getElementById('recent-logs-list');
             if(!list) return; list.innerHTML = '';
             if (logs.length === 0) { list.innerHTML = `<div class="text-slate-400 text-xs text-center py-4">Wag vir stelselaktiwiteit...</div>`; return; }
@@ -1289,7 +1354,7 @@
             });
         }
 
-        function renderSportEvents(events) {
+        window.renderSportEvents = function(events) {
             const depts = ['rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
             depts.forEach(d => { const list = document.getElementById(`${d}-events-list`); if(list) list.innerHTML = ''; });
             events.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -1300,13 +1365,13 @@
                         <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 flex flex-col space-y-2 relative group hover:border-tjokkieBlue-300 transition">
                             <div class="flex items-center justify-between"><span class="text-xs font-bold text-slate-900">${ev.title}</span><span class="text-[10px] text-tjokkieBlue-700 font-bold bg-tjokkieBlue-50 px-2 py-0.5 rounded shadow-sm"><i class="fa-regular fa-calendar mr-1"></i>${ev.date}</span></div>
                             <p class="text-[11px] text-slate-600">${ev.desc}</p>
-                            <div class="flex justify-between items-center mt-1"><span class="text-[9px] text-slate-400 font-medium">📍 ${ev.location}</span><button onclick="deleteSportEvent('${ev.id}', '${ev.dept}')" class="text-red-400 hover:text-red-600 text-[10px] px-2 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash-can"></i></button></div>
+                            <div class="flex justify-between items-center mt-1"><span class="text-[9px] text-slate-400 font-medium">📍 ${ev.location}</span><button onclick="window.deleteSportEvent('${ev.id}', '${ev.dept}')" class="text-red-400 hover:text-red-600 text-[10px] px-2 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash-can"></i></button></div>
                         </div>`;
                 }
             });
         }
 
-        function renderSportResults(results) {
+        window.renderSportResults = function(results) {
             const depts = ['rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
             depts.forEach(d => { const list = document.getElementById(`${d}-results-list`); if(list) list.innerHTML = ''; });
             results.sort((a, b) => b.timestamp - a.timestamp);
@@ -1318,10 +1383,30 @@
                         <div class="p-3 bg-white rounded-xl border border-slate-100 shadow-sm flex flex-col space-y-2 relative overflow-hidden group hover:border-tjokkieBlue-300 transition">
                             <div class="absolute left-0 top-0 bottom-0 w-1 ${bc.split(' ')[0]}"></div>
                             <div class="pl-2 flex items-center justify-between"><span class="text-xs font-bold text-slate-900">${res.team} vs ${res.opponent}</span><span class="text-[10px] font-extrabold ${bc} px-2 py-0.5 rounded">${res.score}</span></div>
-                            <div class="pl-2 flex justify-between items-center mt-1"><span class="text-[10px] text-slate-500">${res.matchTitle}</span><button onclick="deleteSportResult('${res.id}', '${res.dept}')" class="text-red-400 hover:text-red-600 text-[10px] px-2 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash-can"></i></button></div>
+                            <div class="pl-2 flex justify-between items-center mt-1"><span class="text-[10px] text-slate-500">${res.matchTitle}</span><button onclick="window.deleteSportResult('${res.id}', '${res.dept}')" class="text-red-400 hover:text-red-600 text-[10px] px-2 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-trash-can"></i></button></div>
                         </div>`;
                 }
             });
+        }
+
+        function updateDashboardCounters() {
+            try {
+                if(document.getElementById('terrein-task-rows')) document.getElementById('stat-terrein-active').innerText = document.getElementById('terrein-task-rows').children.length;
+                if(document.getElementById('afkondigings-list')) document.getElementById('stat-afkondigings').innerText = document.getElementById('afkondigings-list').children.length;
+                if(document.getElementById('bemarking-task-rows')) document.getElementById('stat-bemarking-take').innerText = document.getElementById('bemarking-task-rows').children.length;
+                if(document.getElementById('bus-trip-rows')) document.getElementById('stat-bus-trips').innerText = document.getElementById('bus-trip-rows').children.length;
+                if(document.getElementById('it-ticket-rows')) document.getElementById('stat-it-tickets').innerText = document.getElementById('it-ticket-rows').children.length;
+            } catch(e) {}
+        }
+
+        window.filterTerreinTasks = function() {
+            const filterVal = document.getElementById('filter-terrein-status').value;
+            const rows = document.getElementById('terrein-task-rows').children;
+            for(let row of rows) {
+                if(filterVal === 'alle') row.classList.remove('hidden');
+                else if(row.cells[2].innerText.trim() !== filterVal) row.classList.add('hidden');
+                else row.classList.remove('hidden');
+            }
         }
 
         // ======================================================= //
@@ -1337,8 +1422,8 @@
             const area = document.getElementById('terrein-area').value;
             const taskData = { area, date: document.getElementById('terrein-date').value, desc: document.getElementById('terrein-desc').value, priority: document.getElementById('terrein-priority').value, reported: document.getElementById('terrein-reported').value };
             if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData);
-            logEvent(`Nuwe probleem: ${area}`, 'Terrein');
-            document.getElementById('form-terrein').reset(); toggleModal('modal-terrein-taak');
+            window.logEvent(`Nuwe probleem: ${area}`, 'Terrein');
+            document.getElementById('form-terrein').reset(); window.toggleModal('modal-terrein-taak');
         }
 
         window.addPlannedTask = async function(event) {
@@ -1346,13 +1431,13 @@
             const area = document.getElementById('plan-area').value;
             const taskData = { area, date: document.getElementById('plan-date').value, desc: document.getElementById('plan-desc').value, priority: document.getElementById('plan-priority').value, reported: document.getElementById('plan-reported').value };
             if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData);
-            logEvent(`Beplan: ${area}`, 'Terrein');
-            document.getElementById('form-beplan').reset(); toggleModal('modal-terrein-beplan');
+            window.logEvent(`Beplan: ${area}`, 'Terrein');
+            document.getElementById('form-beplan').reset(); window.toggleModal('modal-terrein-beplan');
         }
 
         window.completeTerreinTask = async function(id) {
             if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks', id));
-            logEvent(`Herstelwerk afgehandel`, 'Terrein');
+            window.logEvent(`Herstelwerk afgehandel`, 'Terrein');
         }
 
         window.addAfkondiging = async function(event) {
@@ -1360,8 +1445,8 @@
             const doel = document.getElementById('afkondiging-doel').value;
             const itemData = { doel, pouse: document.getElementById('afkondiging-pouse').value, inhoud: document.getElementById('afkondiging-inhoud').value, persoon: document.getElementById('afkondiging-persoon').value };
             if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), itemData);
-            logEvent(`Afkondiging: ${doel}`, 'Skakel');
-            document.getElementById('form-afkondiging').reset(); toggleModal('modal-afkondiging');
+            window.logEvent(`Afkondiging: ${doel}`, 'Skakel');
+            document.getElementById('form-afkondiging').reset(); window.toggleModal('modal-afkondiging');
         }
 
         window.deleteAfkondiging = async function(id, doel) {
@@ -1373,8 +1458,8 @@
             const taak = document.getElementById('bem-taak').value;
             const bemData = { taak, datum: document.getElementById('bem-datum').value, status: document.getElementById('bem-status').value, verant: document.getElementById('bem-verant').value };
             if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), bemData);
-            logEvent(`Bemarkingstaak: ${taak}`, 'Bemarking');
-            document.getElementById('form-bemarking').reset(); toggleModal('modal-bemarking-taak');
+            window.logEvent(`Bemarkingstaak: ${taak}`, 'Bemarking');
+            document.getElementById('form-bemarking').reset(); window.toggleModal('modal-bemarking-taak');
         }
 
         window.completeBemarkingTaak = async function(id) {
@@ -1386,7 +1471,7 @@
             const title = document.getElementById('upload-nuusbrief-titel').value;
             const filename = document.getElementById('upload-nuusbrief-file').files[0]?.name || "Dokument";
             if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), { title, filename, timestamp: Date.now() });
-            logEvent(`Nuusbrief opgelaai: ${title}`, 'Skakel');
+            window.logEvent(`Nuusbrief opgelaai: ${title}`, 'Skakel');
             document.getElementById('form-nuusbrief').reset();
         }
 
@@ -1399,8 +1484,8 @@
             const dest = document.getElementById('bus-destination').value;
             const tripData = { dest, time: document.getElementById('bus-time').value, vehicle: document.getElementById('bus-vehicle').value, driver: document.getElementById('bus-driver').value };
             if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData);
-            logEvent(`Rit na ${dest}`, 'Busvervoer');
-            document.getElementById('form-bus').reset(); toggleModal('modal-bus-rit');
+            window.logEvent(`Rit na ${dest}`, 'Busvervoer');
+            document.getElementById('form-bus').reset(); window.toggleModal('modal-bus-rit');
         }
 
         window.cancelBusTrip = async function(id) {
@@ -1411,30 +1496,30 @@
             event.preventDefault();
             const ticketData = { device: document.getElementById('it-device').value, desc: document.getElementById('it-desc').value, staff: document.getElementById('it-staff').value };
             if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), ticketData);
-            logEvent(`Nuwe IT kaartjie`, 'IT');
-            document.getElementById('form-it').reset(); toggleModal('modal-it-ticket');
+            window.logEvent(`Nuwe IT kaartjie`, 'IT');
+            document.getElementById('form-it').reset(); window.toggleModal('modal-it-ticket');
         }
 
         window.resolveTicket = async function(id) {
             if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_tickets', id));
         }
 
-        window.promptCalendarAuth = function(dateStr = '') { document.getElementById('auth-calendar-date').value = dateStr; document.getElementById('calendar-password-input').value = ''; toggleModal('modal-calendar-password'); }
-        window.verifyCalendarAuth = function(e) { e.preventDefault(); if (document.getElementById('calendar-password-input').value === "1603") { toggleModal('modal-calendar-password'); document.getElementById('form-beplan').reset(); document.getElementById('plan-date').value = document.getElementById('auth-calendar-date').value; toggleModal('modal-terrein-beplan'); } else { showToast("Geweier", "Verkeerde wagwoord."); } }
+        window.promptCalendarAuth = function(dateStr = '') { document.getElementById('auth-calendar-date').value = dateStr; document.getElementById('calendar-password-input').value = ''; window.toggleModal('modal-calendar-password'); }
+        window.verifyCalendarAuth = function(e) { e.preventDefault(); if (document.getElementById('calendar-password-input').value === "1603") { window.toggleModal('modal-calendar-password'); document.getElementById('form-beplan').reset(); document.getElementById('plan-date').value = document.getElementById('auth-calendar-date').value; window.toggleModal('modal-terrein-beplan'); } else { window.showToast("Geweier", "Verkeerde wagwoord."); } }
         
-        window.openSportEventModal = function(deptId, deptName) { document.getElementById('form-sport-event').reset(); document.getElementById('sport-event-dept').value = deptId; document.getElementById('sport-event-title-display').innerText = `Skeduleer Geleentheid: ${deptName}`; toggleModal('modal-sport-event'); }
-        window.saveSportEvent = async function(e) { e.preventDefault(); const dept = document.getElementById('sport-event-dept').value; const title = document.getElementById('sport-event-title').value; const d = { dept: dept, title: title, date: document.getElementById('sport-event-date').value, location: document.getElementById('sport-event-location').value, desc: document.getElementById('sport-event-desc').value, timestamp: Date.now() }; if(db) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), d); logEvent(`Geleentheid: ${title}`, dept.toUpperCase()); toggleModal('modal-sport-event'); }
+        window.openSportEventModal = function(deptId, deptName) { document.getElementById('form-sport-event').reset(); document.getElementById('sport-event-dept').value = deptId; document.getElementById('sport-event-title-display').innerText = `Skeduleer Geleentheid: ${deptName}`; window.toggleModal('modal-sport-event'); }
+        window.saveSportEvent = async function(e) { e.preventDefault(); const dept = document.getElementById('sport-event-dept').value; const title = document.getElementById('sport-event-title').value; const d = { dept: dept, title: title, date: document.getElementById('sport-event-date').value, location: document.getElementById('sport-event-location').value, desc: document.getElementById('sport-event-desc').value, timestamp: Date.now() }; if(db) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), d); window.logEvent(`Geleentheid: ${title}`, dept.toUpperCase()); window.toggleModal('modal-sport-event'); }
         window.deleteSportEvent = async function(id) { if(db) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_events', id)); }
         
-        window.openSportResultModal = function(deptId, deptName) { document.getElementById('form-sport-result').reset(); document.getElementById('sport-result-dept').value = deptId; document.getElementById('sport-result-title-display').innerText = `Laai Uitslag Op: ${deptName}`; toggleModal('modal-sport-result'); }
-        window.saveSportResult = async function(e) { e.preventDefault(); const dept = document.getElementById('sport-result-dept').value; const team = document.getElementById('sport-result-team').value; const d = { dept: dept, matchTitle: document.getElementById('sport-result-match').value, team: team, opponent: document.getElementById('sport-result-opponent').value, score: document.getElementById('sport-result-score').value, outcome: document.getElementById('sport-result-outcome').value, timestamp: Date.now() }; if(db) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), d); logEvent(`Uitslag gelaai: ${team}`, dept.toUpperCase()); toggleModal('modal-sport-result'); }
+        window.openSportResultModal = function(deptId, deptName) { document.getElementById('form-sport-result').reset(); document.getElementById('sport-result-dept').value = deptId; document.getElementById('sport-result-title-display').innerText = `Laai Uitslag Op: ${deptName}`; window.toggleModal('modal-sport-result'); }
+        window.saveSportResult = async function(e) { e.preventDefault(); const dept = document.getElementById('sport-result-dept').value; const team = document.getElementById('sport-result-team').value; const d = { dept: dept, matchTitle: document.getElementById('sport-result-match').value, team: team, opponent: document.getElementById('sport-result-opponent').value, score: document.getElementById('sport-result-score').value, outcome: document.getElementById('sport-result-outcome').value, timestamp: Date.now() }; if(db) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), d); window.logEvent(`Uitslag gelaai: ${team}`, dept.toUpperCase()); window.toggleModal('modal-sport-result'); }
         window.deleteSportResult = async function(id) { if(db) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_results', id)); }
 
         window.verifyAndClearLogs = async function(e) {
             e.preventDefault();
             const pwdInput = document.getElementById('admin-password-input').value;
-            if (pwdInput !== "Elrico1603!!") { showToast("Toegang Geweier", "Verkeerde admin wagwoord."); return; }
-            toggleModal('modal-password');
+            if (pwdInput !== "Elrico1603!!") { window.showToast("Toegang Geweier", "Verkeerde admin wagwoord."); return; }
+            window.toggleModal('modal-password');
             if (db && user) {
                 try {
                     const logsRef = collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs');
@@ -1442,63 +1527,8 @@
                     const deletePromises = [];
                     snapshot.forEach((document) => { deletePromises.push(deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'activity_logs', document.id))); });
                     await Promise.all(deletePromises);
-                    showToast("Sukses", "Aktiwiteitslogboek is uitgevee van die databasis.");
-                } catch (error) { showToast("Fout", "Kon nie die logs uitvee nie."); }
-            }
-        }
-    </script>
-
-    <!-- ======================================================= -->
-    <!-- AFDELING 13: UI HELPER FUNKSIES                         -->
-    <!-- ======================================================= -->
-    <script>
-        function switchTab(tabId) {
-            const tabs = ['dashboard', 'terrein', 'skakel', 'bemarking', 'bus', 'it', 'rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
-            tabs.forEach(t => { const el = document.getElementById(`tab-${t}`); if(el) el.classList.add('hidden'); });
-            const activeTab = document.getElementById(`tab-${tabId}`);
-            if(activeTab) activeTab.classList.remove('hidden');
-
-            document.querySelectorAll('.sidebar-btn').forEach(btn => {
-                btn.classList.remove('bg-tjokkieBlue-800', 'text-white', 'font-semibold');
-                btn.classList.add('text-slate-300');
-            });
-            const activeBtn = document.getElementById(`btn-${tabId}`);
-            if(activeBtn) { activeBtn.classList.add('bg-tjokkieBlue-800', 'text-white', 'font-semibold'); activeBtn.classList.remove('text-slate-300'); }
-        }
-
-        function toggleModal(id) {
-            const modal = document.getElementById(id);
-            if(modal) { modal.classList.toggle('hidden'); }
-        }
-
-        function showToast(title, msg) {
-            const toast = document.getElementById('toast-notification');
-            if(toast) {
-                document.getElementById('toast-title').innerText = title; document.getElementById('toast-msg').innerText = msg;
-                toast.classList.remove('translate-x-80', 'opacity-0'); toast.classList.add('translate-x-0', 'opacity-100');
-                setTimeout(() => { toast.classList.add('translate-x-80', 'opacity-0'); toast.classList.remove('translate-x-0', 'opacity-100'); }, 3500);
-            }
-        }
-
-        function showNotificationAlert() { showToast("Kennisgewings", "Stelsel is gekoppel en aktief."); }
-        
-        function updateDashboardCounters() {
-            try {
-                if(document.getElementById('terrein-task-rows')) document.getElementById('stat-terrein-active').innerText = document.getElementById('terrein-task-rows').children.length;
-                if(document.getElementById('afkondigings-list')) document.getElementById('stat-afkondigings').innerText = document.getElementById('afkondigings-list').children.length;
-                if(document.getElementById('bemarking-task-rows')) document.getElementById('stat-bemarking-take').innerText = document.getElementById('bemarking-task-rows').children.length;
-                if(document.getElementById('bus-trip-rows')) document.getElementById('stat-bus-trips').innerText = document.getElementById('bus-trip-rows').children.length;
-                if(document.getElementById('it-ticket-rows')) document.getElementById('stat-it-tickets').innerText = document.getElementById('it-ticket-rows').children.length;
-            } catch(e) {}
-        }
-        
-        function filterTerreinTasks() {
-            const filterVal = document.getElementById('filter-terrein-status').value;
-            const rows = document.getElementById('terrein-task-rows').children;
-            for(let row of rows) {
-                if(filterVal === 'alle') row.classList.remove('hidden');
-                else if(row.cells[2].innerText.trim() !== filterVal) row.classList.add('hidden');
-                else row.classList.remove('hidden');
+                    window.showToast("Sukses", "Aktiwiteitslogboek is uitgevee van die databasis.");
+                } catch (error) { window.showToast("Fout", "Kon nie die logs uitvee nie."); }
             }
         }
     </script>
