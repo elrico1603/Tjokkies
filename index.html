@@ -956,7 +956,7 @@
                         <div>
                             <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest">
                                 <i class="fa-solid fa-campground"></i>
-                                <span>Sportbestuur</span>
+                                <span>Kultuur & Jeug</span>
                             </div>
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Voortrekkershoof</h2>
                         </div>
@@ -967,20 +967,20 @@
                             </button>
                             <button onclick="openSportResultModal('voortrekkers', 'Voortrekkers')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2">
                                 <i class="fa-solid fa-trophy text-tjokkieGold-400"></i>
-                                <span>Laai Uitslag Op</span>
+                                <span>Laai Prestasie Op</span>
                             </button>
                         </div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                                <h3 class="font-bold text-slate-900 text-sm">Komende Geleenthede & Skedule</h3>
+                                <h3 class="font-bold text-slate-900 text-sm">Komende Byeenkomste & Kampe</h3>
                             </div>
                             <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-events-list"></div>
                         </div>
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
                             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                                <h3 class="font-bold text-slate-900 text-sm">Uitslae & Prestasies</h3>
+                                <h3 class="font-bold text-slate-900 text-sm">Prestasies & Toekennings</h3>
                             </div>
                             <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-results-list"></div>
                         </div>
@@ -1299,313 +1299,9 @@
         let localSportResults = [];
         let calDate = new Date();
 
-        window.initFirebaseAndApp = async function() {
-            let configActive = false;
-
-            if (firebaseConfig && firebaseConfig.apiKey !== "" && firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
-                try {
-                    const app = initializeApp(firebaseConfig);
-                    auth = getAuth(app);
-                    db = getFirestore(app);
-                    appId = typeof __app_id !== 'undefined' ? __app_id : 'tjokkies-app';
-                    configActive = true;
-                } catch (e) { console.warn("Firebase Init Fout", e); }
-            }
-
-            if (configActive && auth && db) {
-                try {
-                    onAuthStateChanged(auth, async (currentUser) => {
-                        user = currentUser;
-                        window.appInitialized = true;
-                        window.hideLoadingScreen();
-
-                        if (currentUser) {
-                            document.getElementById('db-status-text').innerText = "Regstreeks gekoppel aan Wolk.";
-                            document.getElementById('live-storage-badge').innerText = "Gekoppel";
-                            document.getElementById('live-storage-badge').className = "text-xs bg-emerald-500 text-white px-2 py-1 rounded font-bold";
-                            document.getElementById('nav-user-name').innerText = currentUser.email;
-                            
-                            let isApproved = false;
-                            try {
-                                const profileSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', currentUser.uid));
-                                if (profileSnap.exists()) {
-                                    if (profileSnap.data().status === 'approved') isApproved = true;
-                                } else {
-                                    isApproved = true; // Fallback vir admins
-                                }
-                            } catch(err) {
-                                console.warn("Kon nie profiel verifieer nie. Outo-toelaat weens instellings.");
-                                isApproved = true;
-                            }
-
-                            if(isApproved) {
-                                showAppContainer();
-                                loadGlobalSettings();
-                                setupRealtimeListeners();
-                            } else {
-                                showPendingContainer();
-                            }
-                        } else {
-                            showAuthContainer();
-                        }
-                    }, (error) => {
-                        console.warn("Auth faling of netwerk geblokkeer.", error);
-                        window.appInitialized = true;
-                        window.hideLoadingScreen();
-                        showAppContainer();
-                        runLocalFallback();
-                    });
-                } catch(catchErr) {
-                    window.appInitialized = true;
-                    window.hideLoadingScreen();
-                    showAppContainer();
-                    runLocalFallback();
-                }
-            } else {
-                window.appInitialized = true;
-                window.hideLoadingScreen();
-                showAppContainer();
-                runLocalFallback();
-            }
-        };
-
-        // Bootstrap immediately if already loaded, else wait
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', window.initFirebaseAndApp);
-        } else {
-            window.initFirebaseAndApp();
-        }
-
-        // ==============================================
-        // THEME & SETTINGS LOGIC
-        // ==============================================
-        async function loadGlobalSettings() {
-            if(db) {
-                try {
-                    const docSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'));
-                    if(docSnap.exists()) {
-                        applyThemeVariables(docSnap.data());
-                    }
-                } catch(e) {}
-            }
-        }
-
-        function applyThemeVariables(settings) {
-            if(settings.primaryColor) {
-                document.documentElement.style.setProperty('--school-pri-500', settings.primaryColor);
-                document.documentElement.style.setProperty('--school-pri-800', settings.primaryColor);
-                document.documentElement.style.setProperty('--school-pri-900', settings.primaryColor);
-                document.documentElement.style.setProperty('--school-pri-950', settings.primaryColor);
-            }
-            if(settings.schoolName) {
-                document.querySelectorAll('.school-name-display').forEach(el => {
-                    el.innerText = settings.schoolName;
-                });
-            }
-            if(settings.logoBase64) {
-                const logoContainer = document.getElementById('school-logo-container');
-                if(logoContainer) {
-                    logoContainer.innerHTML = `<img src="${settings.logoBase64}" class="max-h-full object-contain filter drop-shadow-md" />`;
-                }
-            }
-        }
-
-        window.saveDeveloperSettings = async function() {
-            const schoolName = document.getElementById('dev-school-name').value;
-            const primaryColor = document.getElementById('dev-primary-color').value;
-            const logoFile = document.getElementById('dev-logo-upload').files[0];
-
-            let logoBase64 = null;
-            if(logoFile) {
-                logoBase64 = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(logoFile);
-                });
-            }
-
-            const newSettings = {};
-            if(schoolName) newSettings.schoolName = schoolName;
-            if(primaryColor && primaryColor !== '#000000') newSettings.primaryColor = primaryColor;
-            if(logoBase64) newSettings.logoBase64 = logoBase64;
-
-            if(db && Object.keys(newSettings).length > 0) {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'), newSettings, { merge: true });
-                applyThemeVariables(newSettings);
-                showToast("Gestoor", "Die skool se wolk-voorkoms is opgedateer.");
-            }
-            toggleModal('modal-dev-panel');
-        }
-
-        // ==============================================
-        // AUTHENTICATION LOGIC
-        // ==============================================
-        window.handleLogin = async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pwd = document.getElementById('login-password').value;
-            if(auth) {
-                try {
-                    showToast("Besig om in te teken...", "Wag asseblief");
-                    await signInWithEmailAndPassword(auth, email, pwd);
-                } catch(error) {
-                    showToast("Fout", "Teken in het gefaal: Kontroleer epos of wagwoord.");
-                }
-            }
-        }
-
-        window.handleRegister = async function(e) {
-            e.preventDefault();
-            const naam = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            const pwd = document.getElementById('reg-password').value;
-            
-            if(auth && db) {
-                try {
-                    const cred = await createUserWithEmailAndPassword(auth, email, pwd);
-                    await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', cred.user.uid), {
-                        name: naam,
-                        email: email,
-                        status: 'pending',
-                        role: 'teacher'
-                    });
-                    showToast("Geregistreer", "Profiel is wagtend vir goedkeuring.");
-                } catch(error) {
-                    showToast("Fout", "Kon nie registreer nie. Probeer weer.");
-                }
-            }
-        }
-
-        window.handleLogout = async function() {
-            if(auth) await signOut(auth);
-            location.reload();
-        }
-
-        function showAuthContainer() {
-            document.getElementById('app-wrapper').classList.add('hidden');
-            document.getElementById('pending-wrapper').classList.add('hidden');
-            document.getElementById('auth-wrapper').classList.remove('hidden');
-            document.getElementById('auth-wrapper').classList.add('flex');
-        }
-        function showPendingContainer() {
-            document.getElementById('auth-wrapper').classList.add('hidden');
-            document.getElementById('auth-wrapper').classList.remove('flex');
-            document.getElementById('app-wrapper').classList.add('hidden');
-            document.getElementById('pending-wrapper').classList.remove('hidden');
-            document.getElementById('pending-wrapper').classList.add('flex');
-        }
-        function showAppContainer() {
-            document.getElementById('auth-wrapper').classList.add('hidden');
-            document.getElementById('auth-wrapper').classList.remove('flex');
-            document.getElementById('pending-wrapper').classList.add('hidden');
-            document.getElementById('pending-wrapper').classList.remove('flex');
-            document.getElementById('app-wrapper').classList.remove('hidden');
-            document.getElementById('app-wrapper').classList.add('flex');
-        }
-        window.toggleAuthForms = function() {
-            const login = document.getElementById('login-form');
-            const reg = document.getElementById('register-form');
-            if(login.classList.contains('hidden')) {
-                login.classList.remove('hidden');
-                reg.classList.add('hidden');
-            } else {
-                login.classList.add('hidden');
-                reg.classList.remove('hidden');
-            }
-        }
-
-        // ==============================================
-        // DEVELOPER ADMIN & USERS LIST
-        // ==============================================
-        window.promptDevSettingsAuth = function(intent = 'settings') {
-            devModeActive = intent;
-            document.getElementById('dev-password-input').value = '';
-            toggleModal('modal-dev-auth');
-        }
-
-        window.verifyDevAuth = function(e) {
-            e.preventDefault();
-            const pwd = document.getElementById('dev-password-input').value;
-            if (pwd === "Elrico1603!!") {
-                toggleModal('modal-dev-auth');
-                if(devModeActive === 'module') {
-                    toggleModal('modal-upgrade');
-                } else {
-                    toggleModal('modal-dev-panel');
-                    fetchAdminUsers();
-                }
-            } else {
-                showToast("Geweier", "Verkeerde wagwoord.");
-            }
-        }
-
-        window.verifyUpgradeAuth = function() {
-            const pwd = document.getElementById('upgrade-password').value;
-            if(pwd === "Elrico1603!!") {
-                toggleModal('modal-upgrade');
-                showToast("Versoek", "Kontak asb. die stelsel argitek om hierdie te hardekodeer.");
-            } else {
-                showToast("Geweier", "Ongeldig.");
-            }
-        }
-
-        window.switchDevTab = function(tab) {
-            document.getElementById('dev-tab-theme').classList.add('hidden');
-            document.getElementById('dev-tab-users').classList.add('hidden');
-            document.getElementById('btn-dev-theme').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600";
-            document.getElementById('btn-dev-users').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600";
-            
-            document.getElementById(`dev-tab-${tab}`).classList.remove('hidden');
-            document.getElementById(`btn-dev-${tab}`).className = "pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700";
-        }
-
-        async function fetchAdminUsers() {
-            if(!db) return;
-            try {
-                const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'user_profiles'));
-                const list = document.getElementById('admin-users-list');
-                list.innerHTML = '';
-                snap.forEach(docSnap => {
-                    const u = docSnap.data();
-                    const id = docSnap.id;
-                    let badge = u.status === 'pending' ? '<span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-[10px]">Wagtend</span>' : '<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-[10px]">Goedgekeur</span>';
-                    
-                    list.innerHTML += `
-                        <div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg">
-                            <div>
-                                <p class="font-bold text-slate-900">${u.name}</p>
-                                <p class="text-[10px] text-slate-500">${u.email} ${badge}</p>
-                            </div>
-                            <div class="space-x-2 flex">
-                                ${u.status === 'pending' ? `<button onclick="approveUser('${id}')" class="px-3 py-1 bg-tjokkieBlue-100 text-tjokkieBlue-800 rounded font-bold text-[10px]">Keur Goed</button>` : ''}
-                                <button onclick="deleteUserProfile('${id}')" class="px-3 py-1 bg-red-100 text-red-700 rounded font-bold text-[10px]">Verwyder Toegang</button>
-                            </div>
-                        </div>
-                    `;
-                });
-                if(snap.empty) list.innerHTML = '<div class="text-center py-6 text-sm text-slate-400">Geen gebruikers in databasis.</div>';
-            } catch(e) {}
-        }
-
-        window.approveUser = async function(uid) {
-            if(db) {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid), { status: 'approved' });
-                fetchAdminUsers();
-                showToast("Goedgekeur", "Die gebruiker het nou toegang.");
-            }
-        }
-        window.deleteUserProfile = async function(uid) {
-            if(db) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid));
-                fetchAdminUsers();
-                showToast("Uitgevee", "Profiel toegang verwyder.");
-            }
-        }
-
-        // ==============================================
-        // FALLBACK & REALTIME DATA SYNC
-        // ==============================================
-        window.runLocalFallback = function() {
+        // Alle funksies moet gedefinieer word voordat stelsel inlaai om ReferenceErrors op wolkbedieners te voorkom
+        
+        function runLocalFallback() {
             document.getElementById('db-status-text').innerText = "Gekoppel aan plaaslike geheue.";
             currentTerreinTasks = localTerreinTasks;
             renderFacilities(localFacilities);
@@ -1621,10 +1317,10 @@
             renderSportEvents(localSportEvents);
             renderSportResults(localSportResults);
         }
+        window.runLocalFallback = runLocalFallback;
 
         function setupRealtimeListeners() {
             if (!db || !user) return;
-
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'facilities'), (snap) => {
                 let f = { ...localFacilities }; snap.forEach(doc => { f[doc.id] = { ...f[doc.id], ...doc.data() }; }); renderFacilities(f);
             });
@@ -1666,12 +1362,64 @@
         }
 
         // ==============================================
+        // THEME & SETTINGS LOGIC
+        // ==============================================
+        async function loadGlobalSettings() {
+            if(db) {
+                try {
+                    const docSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'));
+                    if(docSnap.exists()) applyThemeVariables(docSnap.data());
+                } catch(e) {}
+            }
+        }
+
+        function applyThemeVariables(settings) {
+            if(settings.primaryColor) {
+                document.documentElement.style.setProperty('--school-pri-500', settings.primaryColor);
+                document.documentElement.style.setProperty('--school-pri-800', settings.primaryColor);
+                document.documentElement.style.setProperty('--school-pri-900', settings.primaryColor);
+                document.documentElement.style.setProperty('--school-pri-950', settings.primaryColor);
+            }
+            if(settings.schoolName) {
+                document.querySelectorAll('.school-name-display').forEach(el => { el.innerText = settings.schoolName; });
+            }
+            if(settings.logoBase64) {
+                const logoContainer = document.getElementById('school-logo-container');
+                if(logoContainer) logoContainer.innerHTML = `<img src="${settings.logoBase64}" class="max-h-full object-contain filter drop-shadow-md" />`;
+            }
+        }
+
+        window.saveDeveloperSettings = async function() {
+            const schoolName = document.getElementById('dev-school-name').value;
+            const primaryColor = document.getElementById('dev-primary-color').value;
+            const logoFile = document.getElementById('dev-logo-upload').files[0];
+            let logoBase64 = null;
+            if(logoFile) {
+                logoBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(logoFile);
+                });
+            }
+            const newSettings = {};
+            if(schoolName) newSettings.schoolName = schoolName;
+            if(primaryColor && primaryColor !== '#000000') newSettings.primaryColor = primaryColor;
+            if(logoBase64) newSettings.logoBase64 = logoBase64;
+
+            if(db && Object.keys(newSettings).length > 0) {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'), newSettings, { merge: true });
+                applyThemeVariables(newSettings);
+                showToast("Gestoor", "Die skool se wolk-voorkoms is opgedateer.");
+            }
+            toggleModal('modal-dev-panel');
+        }
+
+        // ==============================================
         // DOM RENDERING ENGINE
         // ==============================================
         function renderFacilities(facilities) {
             const container = document.getElementById('facilities-container');
-            if(!container) return;
-            container.innerHTML = '';
+            if(!container) return; container.innerHTML = '';
             for (const [id, fac] of Object.entries(facilities)) {
                 let iconColor = fac.color === 'blue' ? 'bg-tjokkieBlue-50 text-tjokkieBlue-800' : fac.color === 'sky' ? 'bg-sky-50 text-sky-700' : 'bg-yellow-100 text-amber-700';
                 let statusColor = fac.color === 'blue' ? 'text-tjokkieBlue-600' : fac.color === 'sky' ? 'text-sky-600' : 'text-tjokkieBlue-600';
@@ -1691,8 +1439,7 @@
 
         function renderBusStatus(statusData) {
             const container = document.getElementById('bus-status-container');
-            if(!container) return;
-            container.innerHTML = '';
+            if(!container) return; container.innerHTML = '';
             for (const [id, item] of Object.entries(statusData)) {
                 let st = item.status.toLowerCase();
                 let col = (st.includes('aktief')||st.includes('gereed')) ? 'text-emerald-600' : (st.includes('instandhouding')) ? 'text-red-600' : 'text-tjokkieBlue-600';
@@ -1712,8 +1459,7 @@
 
         function renderItStatus(statusData) {
             const container = document.getElementById('it-status-container');
-            if(!container) return;
-            container.innerHTML = '';
+            if(!container) return; container.innerHTML = '';
             for (const [id, item] of Object.entries(statusData)) {
                 let sc = (item.status === 'Aanlyn') ? 'text-emerald-600' : (item.status === 'Onstabiel') ? 'text-amber-500' : 'text-red-600';
                 container.innerHTML += `
@@ -1743,21 +1489,15 @@
         function renderCalendar(tasks) {
             const grid = document.getElementById('calendar-grid');
             const monthLabel = document.getElementById('calendar-month');
-            if(!grid || !monthLabel) return;
-            grid.innerHTML = '';
-            
-            const year = calDate.getFullYear();
-            const month = calDate.getMonth();
+            if(!grid || !monthLabel) return; grid.innerHTML = '';
+            const year = calDate.getFullYear(); const month = calDate.getMonth();
             const monthNames = ["Januarie", "Februarie", "Maart", "April", "Mei", "Junie", "Julie", "Augustus", "September", "Oktober", "November", "Desember"];
             monthLabel.innerText = `${monthNames[month]} ${year}`;
             
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             
-            for(let i=0; i<firstDay; i++) {
-                grid.innerHTML += `<div class="p-2 border border-slate-100 bg-slate-50/50 rounded-lg min-h-[90px] opacity-50"></div>`;
-            }
-            
+            for(let i=0; i<firstDay; i++) { grid.innerHTML += `<div class="p-2 border border-slate-100 bg-slate-50/50 rounded-lg min-h-[90px] opacity-50"></div>`; }
             for(let day=1; day<=daysInMonth; day++) {
                 const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const dayTasks = Array.isArray(tasks) ? tasks.filter(t => t.date === dateStr) : [];
@@ -1771,14 +1511,11 @@
                             <div class="w-5 h-5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm"><i class="fa-solid fa-plus text-[10px]"></i></div>
                         </div>
                         <div class="flex-1 overflow-y-auto custom-scrollbar space-y-1.5">${taskHtml}</div>
-                    </div>
-                `;
+                    </div>`;
             }
             const totalCells = firstDay + daysInMonth;
             const remainingCells = (totalCells % 7 === 0) ? 0 : 7 - (totalCells % 7);
-            for(let i=0; i<remainingCells; i++) {
-                grid.innerHTML += `<div class="p-2 border border-slate-100 bg-slate-50/50 rounded-lg min-h-[90px] opacity-50"></div>`;
-            }
+            for(let i=0; i<remainingCells; i++) { grid.innerHTML += `<div class="p-2 border border-slate-100 bg-slate-50/50 rounded-lg min-h-[90px] opacity-50"></div>`; }
         }
 
         function renderTerreinTasks(tasks) {
@@ -2058,6 +1795,8 @@
             }
         }
 
+        // INIT TRIGGER
+        window.initFirebaseAndApp();
     </script>
 
     <!-- UI Helper Scripts -->
