@@ -179,7 +179,7 @@
                     <span class="hidden md:inline text-sm font-medium">Skakelbeampte</span>
                 </button>
 
-                <!-- Bemarking Knoppie (NUUT) -->
+                <!-- Bemarking Knoppie -->
                 <button onclick="switchTab('bemarking')" id="btn-bemarking" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
                     <i class="fa-solid fa-lightbulb text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i>
                     <span class="hidden md:inline text-sm font-medium">Bemarking</span>
@@ -386,7 +386,7 @@
                             </div>
                         </div>
 
-                        <!-- Bemarking Card (NUUT) -->
+                        <!-- Bemarking Card -->
                         <div onclick="switchTab('bemarking')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
                             <div class="absolute top-0 left-0 w-2 h-full bg-rose-500"></div>
                             <div>
@@ -560,7 +560,7 @@
                                 <p class="text-[9px] text-slate-500 font-bold uppercase mt-1 leading-tight">IT Kaartjies</p>
                             </div>
                             <div class="bg-slate-50 p-3 rounded-xl text-center border border-slate-100 flex flex-col justify-center">
-                                <span class="text-xl sm:text-2xl font-black text-green-600">100%</span>
+                                <span class="text-sm sm:text-lg font-black uppercase text-emerald-600" id="stat-wifi-status">Aanlyn</span>
                                 <p class="text-[9px] text-slate-500 font-bold uppercase mt-1 leading-tight">WiFi Status</p>
                             </div>
                         </div>
@@ -634,12 +634,16 @@
                     <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
                         <h3 class="font-bold text-slate-900 text-sm"><i class="fa-regular fa-calendar-days text-tjokkieBlue-500 mr-2"></i>Instandhoudingskalender</h3>
                         <div class="flex items-center space-x-4">
-                            <button onclick="changeMonth(-1)" class="text-slate-400 hover:text-tjokkieBlue-600 transition"><i class="fa-solid fa-chevron-left"></i></button>
-                            <div class="text-xs font-bold text-tjokkieBlue-900 bg-tjokkieGold-400 px-4 py-1 rounded-full shadow-sm min-w-[130px] text-center" id="calendar-month">Mei 2026</div>
-                            <button onclick="changeMonth(1)" class="text-slate-400 hover:text-tjokkieBlue-600 transition"><i class="fa-solid fa-chevron-right"></i></button>
+                            <button type="button" onclick="changeMonth(-1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 text-slate-600 hover:bg-tjokkieBlue-500 hover:text-white transition cursor-pointer z-10 shadow-sm">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <div class="text-sm font-extrabold text-tjokkieBlue-900 bg-tjokkieGold-400 px-6 py-2 rounded-full shadow-sm min-w-[160px] text-center select-none" id="calendar-month">Mei 2026</div>
+                            <button type="button" onclick="changeMonth(1)" class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 text-slate-600 hover:bg-tjokkieBlue-500 hover:text-white transition cursor-pointer z-10 shadow-sm">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="grid grid-cols-7 gap-2 text-center text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">
+                    <div class="grid grid-cols-7 gap-2 text-center text-[11px] font-black text-slate-500 mb-2 uppercase tracking-widest">
                         <div>So</div><div>Ma</div><div>Di</div><div>Wo</div><div>Do</div><div>Vr</div><div>Sa</div>
                     </div>
                     <div id="calendar-grid" class="grid grid-cols-7 gap-2">
@@ -1410,7 +1414,7 @@
                 </div>
                 <div class="flex space-x-2 pt-2">
                     <button type="button" onclick="toggleModal('modal-facility-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-600 hover:bg-tjokkieBlue-700 text-white font-bold rounded-xl transition">Ontsluit Wysiging</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Ontsluit Wysiging</button>
                 </div>
             </form>
         </div>
@@ -1460,7 +1464,7 @@
                 </div>
                 <div class="flex space-x-2 pt-2">
                     <button type="button" onclick="toggleModal('modal-it-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-600 hover:bg-tjokkieBlue-700 text-white font-bold rounded-xl transition">Ontsluit Wysiging</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Ontsluit Wysiging</button>
                 </div>
             </form>
         </div>
@@ -1481,7 +1485,6 @@
                     <label class="block text-slate-500 font-bold uppercase mb-1">Nuwe Netwerk Status</label>
                     <select id="edit-it-status-val" class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
                         <option value="Aanlyn">Aanlyn</option>
-                        <option value="Stabiel">Stabiel</option>
                         <option value="Onstabiel">Onstabiel</option>
                         <option value="Van lyn af">Van lyn af</option>
                     </select>
@@ -1497,7 +1500,7 @@
     <!-- ============================================== -->
     <!-- MODAL 10: CALENDAR PASSWORD AUTHENTICATION     -->
     <!-- ============================================== -->
-    <div id="modal-calendar-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+    <div id="modal-calendar-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                 <h3 class="font-extrabold text-slate-900 text-sm">Terreinbestuur Wagwoord</h3>
@@ -1511,7 +1514,7 @@
                 </div>
                 <div class="flex space-x-2 pt-2">
                     <button type="button" onclick="toggleModal('modal-calendar-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-600 hover:bg-tjokkieBlue-700 text-white font-bold rounded-xl transition">Ontsluit Kalender</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Ontsluit Kalender</button>
                 </div>
             </form>
         </div>
@@ -1520,7 +1523,7 @@
     <!-- ============================================== -->
     <!-- MODAL 11: PLAN MAINTENANCE TASK                -->
     <!-- ============================================== -->
-    <div id="modal-terrein-beplan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+    <div id="modal-terrein-beplan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
                 <h3 class="font-extrabold text-slate-900 text-sm">Beplan Instandhouding</h3>
@@ -1577,7 +1580,7 @@
                 </div>
                 <div class="flex space-x-2 pt-2">
                     <button type="button" onclick="toggleModal('modal-bus-status-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-600 hover:bg-tjokkieBlue-700 text-white font-bold rounded-xl transition">Ontsluit Wysiging</button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Ontsluit Wysiging</button>
                 </div>
             </form>
         </div>
@@ -1730,7 +1733,7 @@
         // Local IT Status State
         let localItStatus = {
             "wifi": { name: "Skool WiFi Netwerk", status: "Aanlyn", icon: "fa-wifi" },
-            "server": { name: "Hoofbediener (Server)", status: "Stabiel", icon: "fa-server" },
+            "server": { name: "Hoofbediener (Server)", status: "Aanlyn", icon: "fa-server" },
             "fibre": { name: "Fibre Netwerk", status: "Aanlyn", icon: "fa-network-wired" }
         };
 
@@ -2002,39 +2005,10 @@
             }
         }
 
-        function renderItStatus(statusData) {
-            const container = document.getElementById('it-status-container');
-            if(!container) return;
-            container.innerHTML = '';
-
-            for (const [id, item] of Object.entries(statusData)) {
-                let statusColor = (item.status === 'Aanlyn' || item.status === 'Stabiel') ? 'text-emerald-600' :
-                                  (item.status === 'Onstabiel') ? 'text-amber-500' : 'text-red-600';
-
-                container.innerHTML += `
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
-                        <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">
-                                <i class="fa-solid ${item.icon}"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-900">${item.name}</h4>
-                                <span class="text-[10px] font-bold uppercase mt-1 inline-block ${statusColor}">${item.status}</span>
-                            </div>
-                        </div>
-                        <button onclick="promptItStatusAuth('${id}', '${item.name}', '${item.status}')" title="Wysig Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
-                            <i class="fa-solid fa-pen text-xs"></i>
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
         function renderBusStatus(statusData) {
             const container = document.getElementById('bus-status-container');
             if(!container) return;
             container.innerHTML = '';
-
             for (const [id, item] of Object.entries(statusData)) {
                 let statusText = item.status.toLowerCase();
                 let statusColor = (statusText.includes('aktief') || statusText.includes('gereed') || statusText.includes('aanlyn')) ? 'text-emerald-600' :
@@ -2060,10 +2034,50 @@
             }
         }
 
+        function renderItStatus(statusData) {
+            const container = document.getElementById('it-status-container');
+            if(!container) return;
+            container.innerHTML = '';
+            for (const [id, item] of Object.entries(statusData)) {
+                let statusColor = (item.status === 'Aanlyn' || item.status === 'Stabiel') ? 'text-emerald-600' :
+                                  (item.status === 'Onstabiel') ? 'text-amber-500' : 'text-red-600';
+
+                container.innerHTML += `
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">${item.name}</h4>
+                                <span class="text-[10px] font-bold uppercase mt-1 inline-block ${statusColor}">${item.status}</span>
+                            </div>
+                        </div>
+                        <button onclick="promptItStatusAuth('${id}', '${item.name}', '${item.status}')" title="Wysig Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
+                            <i class="fa-solid fa-pen text-xs"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            // Opdateer die Dashboard WiFi Status
+            if (statusData['wifi']) {
+                const wifiStat = statusData['wifi'].status;
+                const dashWifi = document.getElementById('stat-wifi-status');
+                if (dashWifi) {
+                    dashWifi.innerText = ''; // Geen teks meer nie
+                    let bgClass = (wifiStat === 'Aanlyn') ? 'bg-emerald-500' :
+                                  (wifiStat === 'Onstabiel') ? 'bg-amber-500' : 'bg-red-500';
+                    dashWifi.className = `w-5 h-5 rounded-full mx-auto mb-1 shadow-sm transition-colors duration-300 ${bgClass}`;
+                }
+            }
+        }
+
         function changeMonth(offset) {
             calDate.setMonth(calDate.getMonth() + offset);
-            renderCalendar(currentTerreinTasks.length ? currentTerreinTasks : localTerreinTasks);
+            renderCalendar(currentTerreinTasks || []);
         }
+        window.changeMonth = changeMonth;
 
         function renderCalendar(tasks) {
             const grid = document.getElementById('calendar-grid');
@@ -2080,28 +2094,35 @@
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             
             for(let i=0; i<firstDay; i++) {
-                grid.innerHTML += `<div class="p-2 border border-slate-100 bg-slate-50/50 rounded-lg min-h-[80px]"></div>`;
+                grid.innerHTML += `<div class="p-2 border border-slate-100 bg-slate-50/50 rounded-lg min-h-[90px] opacity-50"></div>`;
             }
             
             for(let day=1; day<=daysInMonth; day++) {
                 const dateStr = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayTasks = tasks.filter(t => t.date === dateStr);
                 
-                let taskHtml = dayTasks.map(t => `<div class="bg-tjokkieBlue-100 text-tjokkieBlue-900 border border-tjokkieBlue-200 text-[9px] font-bold px-1.5 py-1 rounded shadow-sm mt-1 truncate" title="${t.desc}">${t.area}</div>`).join('');
+                const dayTasks = Array.isArray(tasks) ? tasks.filter(t => t.date === dateStr) : [];
                 
-                let highlightClass = dayTasks.length > 0 ? 'border-tjokkieBlue-300 bg-sky-50 shadow-inner' : 'border-slate-200 bg-white hover:border-tjokkieBlue-400';
+                let taskHtml = dayTasks.map(t => `<div class="bg-tjokkieBlue-100 text-tjokkieBlue-900 border border-tjokkieBlue-200 text-[10px] font-bold px-1.5 py-1 rounded shadow-sm mt-1 truncate" title="${t.desc}">${t.area}</div>`).join('');
+                
+                let highlightClass = dayTasks.length > 0 ? 'border-tjokkieBlue-300 bg-sky-50 shadow-sm' : 'border-slate-200 bg-white hover:border-tjokkieBlue-400 hover:shadow-md';
 
                 grid.innerHTML += `
-                    <div class="p-1 border ${highlightClass} rounded-lg min-h-[80px] flex flex-col transition-colors cursor-pointer group" onclick="promptCalendarAuth('${dateStr}')">
-                        <div class="flex justify-between items-center px-1">
-                            <span class="text-[10px] font-extrabold text-slate-500">${day}</span>
-                            <i class="fa-solid fa-plus text-[8px] text-slate-300 opacity-0 group-hover:opacity-100 transition"></i>
+                    <div class="p-2 border ${highlightClass} rounded-lg min-h-[90px] flex flex-col transition-all cursor-pointer group relative" onclick="promptCalendarAuth('${dateStr}')">
+                        <div class="flex justify-between items-start mb-1">
+                            <span class="text-xs font-black ${dayTasks.length > 0 ? 'text-tjokkieBlue-800' : 'text-slate-500'}">${day}</span>
+                            <div class="w-5 h-5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm"><i class="fa-solid fa-plus text-[10px]"></i></div>
                         </div>
-                        <div class="flex-1 overflow-y-auto mt-1 custom-scrollbar space-y-1">
+                        <div class="flex-1 overflow-y-auto custom-scrollbar space-y-1.5">
                             ${taskHtml}
                         </div>
                     </div>
                 `;
+            }
+
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = (totalCells % 7 === 0) ? 0 : 7 - (totalCells % 7);
+            for(let i=0; i<remainingCells; i++) {
+                grid.innerHTML += `<div class="p-2 border border-slate-100 bg-slate-50/50 rounded-lg min-h-[90px] opacity-50"></div>`;
             }
         }
 
@@ -2156,6 +2177,32 @@
                     </div>
                 `;
                 list.appendChild(card);
+            });
+            updateDashboardCounters();
+        }
+
+        function renderBemarkingTake(items) {
+            const tbody = document.getElementById('bemarking-task-rows');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-slate-50 transition duration-150';
+                
+                const badgeColor = item.status === 'Besig' ? 'bg-rose-100 text-rose-800' : 'bg-slate-200 text-slate-600';
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-bold text-slate-900">${item.taak}</td>
+                    <td class="px-6 py-4"><span class="text-[10px] text-slate-500 font-bold bg-white border border-slate-200 px-2 py-1 rounded"><i class="fa-regular fa-calendar mr-1"></i>${item.datum}</span></td>
+                    <td class="px-6 py-4 text-slate-600">${item.verant}</td>
+                    <td class="px-6 py-4"><span class="px-2 py-1 rounded-full ${badgeColor} font-bold uppercase text-[9px]">${item.status}</span></td>
+                    <td class="px-6 py-4">
+                        <button onclick="completeBemarkingTaak('${item.id}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold px-3 py-1.5 rounded transition">
+                            Voltooi
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
             });
             updateDashboardCounters();
         }
@@ -2911,29 +2958,7 @@
             toggleModal('modal-sport-result');
         }
         window.saveSportResult = saveSportResult;
-
-        async function deleteSportResult(id, dept) {
-            if (db && user) {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_results', id));
-            } else {
-                localSportResults = localSportResults.filter(t => t.id !== id);
-                renderSportResults(localSportResults);
-            }
-            showToast("Uitslag Verwyder", "Die uitslag is uitgevee.");
-        }
         window.deleteSportResult = deleteSportResult;
-
-        // UI Globals
-        window.switchTab = switchTab;
-        window.toggleModal = toggleModal;
-        window.showToast = showToast;
-        window.showNotificationAlert = showNotificationAlert;
-        window.filterTerreinTasks = filterTerreinTasks;
-        window.generateNewsletterPreview = generateNewsletterPreview;
-        window.changeMonth = changeMonth;
-        window.promptBusStatusAuth = promptBusStatusAuth;
-        window.verifyBusAuth = verifyBusAuth;
-        window.saveBusStatusEdit = saveBusStatusEdit;
 
     </script>
 
