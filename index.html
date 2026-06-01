@@ -1013,6 +1013,8 @@
             if(db && Object.keys(newSettings).length > 0) {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'), newSettings, { merge: true });
                 window.applyThemeVariables(newSettings); window.showToast("Gestoor", "Die skool se wolk-voorkoms is opgedateer.");
+            } else if (Object.keys(newSettings).length > 0) {
+                window.applyThemeVariables(newSettings); window.showToast("Gestoor", "Plaaslike stelsel inligting is opgedateer.");
             }
             window.toggleModal('modal-dev-panel');
         }
