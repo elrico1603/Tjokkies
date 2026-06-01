@@ -587,11 +587,21 @@
                     <label class="block font-bold text-slate-700 mb-2">Skoolnaam</label>
                     <input type="text" id="dev-school-name" placeholder="Bv. Tjokkies" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <label class="block font-bold text-slate-700 mb-2">Skool Admin Wagwoord</label>
-                    <input type="text" id="dev-school-password" placeholder="Bv. 1603" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none">
-                    <p class="text-[10px] text-slate-400 mt-2">Die skool se eie wagwoord vir redigering van modules (vervang die standaard '1603').</p>
+                
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+                    <label class="block font-bold text-slate-700">Skool Admin Wagwoord Verandering</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">Wat was hy? (Huidige wagwoord)</label>
+                            <input type="text" id="dev-school-password-old" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1">Verander na (Nuwe wagwoord)</label>
+                            <input type="text" id="dev-school-password-new" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none">
+                        </div>
+                    </div>
                 </div>
+
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <label class="block font-bold text-slate-700 mb-2">Hoofkleur (Hexkode)</label>
                     <div class="flex space-x-3"><input type="color" id="dev-primary-color" class="h-10 w-14 rounded cursor-pointer"><p class="text-xs text-slate-500 self-center">Hierdie kleur verander al die donkerblou elemente in die hele portaal na die skool se unieke kleur.</p></div>
@@ -974,13 +984,15 @@
         window.applyThemeVariables = function(settings) {
             if(settings.schoolPassword) {
                 window.currentSchoolPassword = settings.schoolPassword;
-                const pwdInput = document.getElementById('dev-school-password');
-                if(pwdInput) pwdInput.value = settings.schoolPassword;
             } else {
                 window.currentSchoolPassword = "1603";
-                const pwdInput = document.getElementById('dev-school-password');
-                if(pwdInput) pwdInput.value = "1603";
             }
+            
+            const oldInput = document.getElementById('dev-school-password-old');
+            if(oldInput) oldInput.value = '';
+            const newInput = document.getElementById('dev-school-password-new');
+            if(newInput) newInput.value = '';
+            
             if(settings.primaryColor) {
                 document.documentElement.style.setProperty('--school-pri-500', settings.primaryColor);
                 document.documentElement.style.setProperty('--school-pri-800', settings.primaryColor);
@@ -997,26 +1009,42 @@
         window.saveDeveloperSettings = async function() {
             const schoolName = document.getElementById('dev-school-name').value;
             const primaryColor = document.getElementById('dev-primary-color').value;
-            const schoolPassword = document.getElementById('dev-school-password').value;
+            const oldPassword = document.getElementById('dev-school-password-old').value;
+            const newPassword = document.getElementById('dev-school-password-new').value;
             const logoFile = document.getElementById('dev-logo-upload').files[0];
+            
             let logoBase64 = null;
             if(logoFile) {
                 logoBase64 = await new Promise((resolve) => {
                     const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.readAsDataURL(logoFile);
                 });
             }
+            
             const newSettings = {};
             if(schoolName) newSettings.schoolName = schoolName;
             if(primaryColor && primaryColor !== '#000000') newSettings.primaryColor = primaryColor;
-            if(schoolPassword) { newSettings.schoolPassword = schoolPassword; window.currentSchoolPassword = schoolPassword; }
             if(logoBase64) newSettings.logoBase64 = logoBase64;
+            
+            if (newPassword) {
+                if (oldPassword === window.currentSchoolPassword) {
+                    newSettings.schoolPassword = newPassword; 
+                    window.currentSchoolPassword = newPassword;
+                } else {
+                    window.showToast("Fout", "Huidige wagwoord is verkeerd. Wagwoord is nie gestoor nie.");
+                    return;
+                }
+            }
+            
             if(db && Object.keys(newSettings).length > 0) {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'), newSettings, { merge: true });
                 window.applyThemeVariables(newSettings); window.showToast("Gestoor", "Die skool se wolk-voorkoms is opgedateer.");
+                window.toggleModal('modal-dev-panel');
             } else if (Object.keys(newSettings).length > 0) {
                 window.applyThemeVariables(newSettings); window.showToast("Gestoor", "Plaaslike stelsel inligting is opgedateer.");
+                window.toggleModal('modal-dev-panel');
+            } else {
+                window.toggleModal('modal-dev-panel');
             }
-            window.toggleModal('modal-dev-panel');
         }
 
         // ======================================================= //
