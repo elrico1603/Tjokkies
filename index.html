@@ -388,6 +388,7 @@
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Terreinbestuurder</h2>
                         </div>
                         <div class="flex space-x-2">
+                            <button onclick="window.promptAddFacilityAuth()" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus-circle text-tjokkieBlue-500"></i><span class="hidden sm:inline">Voeg Terrein By</span></button>
                             <button onclick="window.toggleModal('modal-terrein-taak')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-triangle-exclamation text-red-500"></i><span class="hidden sm:inline">Rapporteer Probleem</span></button>
                             <button onclick="window.promptCalendarAuth('')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieGold-400"></i><span>Beplan Instandhouding</span></button>
                         </div>
@@ -739,6 +740,28 @@
                 <button onclick="window.toggleModal('modal-upgrade')" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Maak Toe</button>
                 <button onclick="window.verifyUpgradeAuth()" class="flex-1 py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl text-xs transition">Bevestig</button>
             </div>
+        </div>
+    </div>
+
+    <!-- NUWE FASILITEIT BYVOEG MODALS -->
+    <div id="modal-add-facility-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[55] hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Terrein Wagwoord Vereis</h3><button onclick="window.toggleModal('modal-add-facility-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-add-facility-password" onsubmit="window.verifyAddFacilityAuth(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="add-facility-password-input" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-facility-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-add-facility" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Registreer Nuwe Terrein/Fasiliteit</h3><button onclick="window.toggleModal('modal-add-facility')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-add-facility" onsubmit="window.saveNewFacility(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Terrein Naam (Bv. Krieketnette)</label><input type="text" id="new-facility-name" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Aanvanklike Kondisie (Bv. Uitstekend)</label><input type="text" id="new-facility-status" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Nota (Opsioneel)</label><input type="text" id="new-facility-subtext" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-facility')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Voeg By</button></div>
+            </form>
         </div>
     </div>
 
@@ -1576,14 +1599,47 @@
         window.logEvent = async function(desc, dept) {
             const logData = { desc, dept, timestamp: Date.now() };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), logData).catch(()=>{}); }
+            else { localLogs.unshift({ id: Math.random().toString(), ...logData }); window.renderActivityLogs(localLogs); }
         }
 
         // TERREIN
+        window.promptAddFacilityAuth = function() {
+            document.getElementById('add-facility-password-input').value = '';
+            window.toggleModal('modal-add-facility-password');
+        }
+        
+        window.verifyAddFacilityAuth = function(event) {
+            event.preventDefault();
+            if (document.getElementById('add-facility-password-input').value === "1603") {
+                window.toggleModal('modal-add-facility-password');
+                document.getElementById('form-add-facility').reset();
+                window.toggleModal('modal-add-facility');
+            } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
+        }
+
+        window.saveNewFacility = async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('new-facility-name').value;
+            const status = document.getElementById('new-facility-status').value;
+            const subtext = document.getElementById('new-facility-subtext').value;
+            
+            const newFacility = { name, status, subtext, icon: "fa-building", color: "amber" };
+            const id = 'fac_' + Date.now();
+
+            if(db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'facilities', id), newFacility); } 
+            else { localFacilities[id] = newFacility; window.renderFacilities(localFacilities); }
+            
+            window.logEvent(`Nuwe terrein bygevoeg: ${name}`, 'Terrein');
+            window.showToast("Sukses", "Nuwe terrein is geregistreer.");
+            window.toggleModal('modal-add-facility');
+        }
+
         window.addTerreinTask = async function(event) {
             event.preventDefault();
             const area = document.getElementById('terrein-area').value;
             const taskData = { area, date: document.getElementById('terrein-date').value, desc: document.getElementById('terrein-desc').value, priority: document.getElementById('terrein-priority').value, reported: document.getElementById('terrein-reported').value };
-            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData);
+            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData); }
+            else { localTerreinTasks.push({ id: Math.random().toString(), ...taskData }); window.renderTerreinTasks(localTerreinTasks); }
             window.logEvent(`Nuwe probleem: ${area}`, 'Terrein');
             document.getElementById('form-terrein').reset(); window.toggleModal('modal-terrein-taak');
         }
@@ -1592,13 +1648,15 @@
             event.preventDefault();
             const area = document.getElementById('plan-area').value;
             const taskData = { area, date: document.getElementById('plan-date').value, desc: document.getElementById('plan-desc').value, priority: document.getElementById('plan-priority').value, reported: document.getElementById('plan-reported').value };
-            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData);
+            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData); }
+            else { localTerreinTasks.push({ id: Math.random().toString(), ...taskData }); window.renderTerreinTasks(localTerreinTasks); }
             window.logEvent(`Beplan: ${area}`, 'Terrein');
             document.getElementById('form-beplan').reset(); window.toggleModal('modal-terrein-beplan');
         }
 
         window.completeTerreinTask = async function(id) {
-            if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks', id));
+            if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks', id)); }
+            else { localTerreinTasks = localTerreinTasks.filter(t => t.id !== id); window.renderTerreinTasks(localTerreinTasks); }
             window.logEvent(`Herstelwerk afgehandel`, 'Terrein');
         }
         
@@ -1728,12 +1786,15 @@
                 vehicle: document.getElementById('bus-vehicle').value, 
                 driver: document.getElementById('bus-driver').value 
             };
-            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData);
+            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData); }
             else { localBusTrips.push({ id: Math.random().toString(), ...tripData }); window.renderBusTrips(localBusTrips); }
             window.logEvent(`Rit na ${dest} (${tripData.pax} kinders)`, 'Busvervoer'); window.showToast("Rit Beplan!", `Geskeduleer vir ${tripData.pax} passasiers.`); window.toggleModal('modal-bus-rit');
         }
 
-        window.cancelBusTrip = async function(id) { if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_trips', id)); }
+        window.cancelBusTrip = async function(id) { 
+            if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_trips', id)); }
+            else { localBusTrips = localBusTrips.filter(t => t.id !== id); window.renderBusTrips(localBusTrips); }
+        }
 
         // IT WYSIG AKSIES
         window.promptItStatusAuth = function(id, name, currentStatus, currentLocation) {
@@ -1782,23 +1843,87 @@
         window.addITTicket = async function(event) {
             event.preventDefault();
             const ticketData = { device: document.getElementById('it-device').value, desc: document.getElementById('it-desc').value, staff: document.getElementById('it-staff').value };
-            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), ticketData);
+            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), ticketData); }
+            else { localITTickets.push({ id: Math.random().toString(), ...ticketData }); window.renderITTickets(localITTickets); }
             window.logEvent(`Nuwe IT kaartjie`, 'IT'); document.getElementById('form-it').reset(); window.toggleModal('modal-it-ticket');
         }
 
-        window.resolveTicket = async function(id) { if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_tickets', id)); }
+        window.resolveTicket = async function(id) { 
+            if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_tickets', id)); }
+            else { localITTickets = localITTickets.filter(t => t.id !== id); window.renderITTickets(localITTickets); }
+        }
+
+        // SKAKEL
+        window.addAfkondiging = async function(event) {
+            event.preventDefault();
+            const doel = document.getElementById('afkondiging-doel').value;
+            const itemData = { doel, pouse: document.getElementById('afkondiging-pouse').value, inhoud: document.getElementById('afkondiging-inhoud').value, persoon: document.getElementById('afkondiging-persoon').value };
+            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), itemData); }
+            else { localAfkondigings.push({ id: Math.random().toString(), ...itemData }); window.renderAfkondigings(localAfkondigings); }
+            window.logEvent(`Afkondiging: ${doel}`, 'Skakel');
+            document.getElementById('form-afkondiging').reset(); window.toggleModal('modal-afkondiging');
+        }
+
+        window.deleteAfkondiging = async function(id, doel) {
+            if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'afkondigings', id)); }
+            else { localAfkondigings = localAfkondigings.filter(a => a.id !== id); window.renderAfkondigings(localAfkondigings); }
+        }
+        
+        window.uploadNuusbrief = async function(event) {
+            event.preventDefault();
+            const title = document.getElementById('upload-nuusbrief-titel').value; const filename = document.getElementById('upload-nuusbrief-file').files[0]?.name || "Dokument";
+            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), { title, filename, timestamp: Date.now() }); }
+            else { localNewsletters.push({ id: Math.random().toString(), title, filename, timestamp: Date.now() }); window.renderNewsletters(localNewsletters); }
+            window.logEvent(`Nuusbrief opgelaai: ${title}`, 'Skakel'); document.getElementById('form-nuusbrief').reset();
+        }
+
+        window.deleteNuusbrief = async function(id) { 
+            if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'newsletters', id)); }
+            else { localNewsletters = localNewsletters.filter(n => n.id !== id); window.renderNewsletters(localNewsletters); }
+        }
+
+        // BEMARKING
+        window.addBemarkingTaak = async function(event) {
+            event.preventDefault();
+            const taak = document.getElementById('bem-taak').value;
+            const bemData = { taak, datum: document.getElementById('bem-datum').value, status: document.getElementById('bem-status').value, verant: document.getElementById('bem-verant').value };
+            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), bemData); }
+            else { localBemarkingTake.push({ id: Math.random().toString(), ...bemData }); window.renderBemarkingTake(localBemarkingTake); }
+            window.logEvent(`Bemarkingstaak: ${taak}`, 'Bemarking'); document.getElementById('form-bemarking').reset(); window.toggleModal('modal-bemarking-taak');
+        }
+
+        window.completeBemarkingTaak = async function(id) { 
+            if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bemarking_take', id)); }
+            else { localBemarkingTake = localBemarkingTake.filter(b => b.id !== id); window.renderBemarkingTake(localBemarkingTake); }
+        }
 
         // SPORT & KALENDER
         window.promptCalendarAuth = function(dateStr = '') { document.getElementById('auth-calendar-date').value = dateStr; document.getElementById('calendar-password-input').value = ''; window.toggleModal('modal-calendar-password'); }
         window.verifyCalendarAuth = function(e) { e.preventDefault(); if (document.getElementById('calendar-password-input').value === "1603") { window.toggleModal('modal-calendar-password'); document.getElementById('form-beplan').reset(); document.getElementById('plan-date').value = document.getElementById('auth-calendar-date').value; window.toggleModal('modal-terrein-beplan'); } else { window.showToast("Geweier", "Verkeerde wagwoord."); } }
         
         window.openSportEventModal = function(deptId, deptName) { document.getElementById('form-sport-event').reset(); document.getElementById('sport-event-dept').value = deptId; document.getElementById('sport-event-title-display').innerText = `Skeduleer Geleentheid: ${deptName}`; window.toggleModal('modal-sport-event'); }
-        window.saveSportEvent = async function(e) { e.preventDefault(); const dept = document.getElementById('sport-event-dept').value; const title = document.getElementById('sport-event-title').value; const d = { dept: dept, title: title, date: document.getElementById('sport-event-date').value, location: document.getElementById('sport-event-location').value, desc: document.getElementById('sport-event-desc').value, timestamp: Date.now() }; if(db) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), d); window.logEvent(`Geleentheid: ${title}`, dept.toUpperCase()); window.toggleModal('modal-sport-event'); }
-        window.deleteSportEvent = async function(id) { if(db) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_events', id)); }
+        window.saveSportEvent = async function(e) { 
+            e.preventDefault(); const dept = document.getElementById('sport-event-dept').value; const title = document.getElementById('sport-event-title').value; const d = { dept: dept, title: title, date: document.getElementById('sport-event-date').value, location: document.getElementById('sport-event-location').value, desc: document.getElementById('sport-event-desc').value, timestamp: Date.now() }; 
+            if(db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), d); }
+            else { localSportEvents.push({ id: Math.random().toString(), ...d }); window.renderSportEvents(localSportEvents); }
+            window.logEvent(`Geleentheid: ${title}`, dept.toUpperCase()); window.toggleModal('modal-sport-event'); 
+        }
+        window.deleteSportEvent = async function(id) { 
+            if(db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_events', id)); }
+            else { localSportEvents = localSportEvents.filter(s => s.id !== id); window.renderSportEvents(localSportEvents); }
+        }
         
         window.openSportResultModal = function(deptId, deptName) { document.getElementById('form-sport-result').reset(); document.getElementById('sport-result-dept').value = deptId; document.getElementById('sport-result-title-display').innerText = `Laai Uitslag Op: ${deptName}`; window.toggleModal('modal-sport-result'); }
-        window.saveSportResult = async function(e) { e.preventDefault(); const dept = document.getElementById('sport-result-dept').value; const team = document.getElementById('sport-result-team').value; const d = { dept: dept, matchTitle: document.getElementById('sport-result-match').value, team: team, opponent: document.getElementById('sport-result-opponent').value, score: document.getElementById('sport-result-score').value, outcome: document.getElementById('sport-result-outcome').value, timestamp: Date.now() }; if(db) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), d); window.logEvent(`Uitslag gelaai: ${team}`, dept.toUpperCase()); window.toggleModal('modal-sport-result'); }
-        window.deleteSportResult = async function(id) { if(db) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_results', id)); }
+        window.saveSportResult = async function(e) { 
+            e.preventDefault(); const dept = document.getElementById('sport-result-dept').value; const team = document.getElementById('sport-result-team').value; const d = { dept: dept, matchTitle: document.getElementById('sport-result-match').value, team: team, opponent: document.getElementById('sport-result-opponent').value, score: document.getElementById('sport-result-score').value, outcome: document.getElementById('sport-result-outcome').value, timestamp: Date.now() }; 
+            if(db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), d); }
+            else { localSportResults.push({ id: Math.random().toString(), ...d }); window.renderSportResults(localSportResults); }
+            window.logEvent(`Uitslag gelaai: ${team}`, dept.toUpperCase()); window.toggleModal('modal-sport-result'); 
+        }
+        window.deleteSportResult = async function(id) { 
+            if(db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_results', id)); }
+            else { localSportResults = localSportResults.filter(s => s.id !== id); window.renderSportResults(localSportResults); }
+        }
 
         window.verifyAndClearLogs = async function(e) {
             e.preventDefault(); const pwdInput = document.getElementById('admin-password-input').value;
