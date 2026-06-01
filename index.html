@@ -223,58 +223,17 @@
                 <div class="flex items-center justify-between h-16">
                     <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="window.switchTab('dashboard')">
                         <div id="school-logo-container" class="w-12 h-14 flex items-center justify-center filter drop-shadow-md">
-                            <!-- Standaard SVG Logo -->
-                            <svg viewBox="0 0 200 240" class="w-full h-full">
-                                <path d="M 35,42 L 25,35 L 40,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path d="M 165,42 L 175,35 L 160,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path d="M 25,28 Q 100,10 175,28 L 170,45 Q 100,27 30,45 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path id="top-text-path" d="M 28,39 Q 100,21 172,39" fill="none" />
-                                <text font-family="'Arial', sans-serif" font-weight="900" font-size="14" letter-spacing="1">
-                                    <textPath href="#top-text-path" startOffset="50%" text-anchor="middle">UNIVERSITAS</textPath>
-                                </text>
-                                <path id="shield-base" d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="#E31837" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
-                                <clipPath id="shield-clip">
-                                    <path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" />
-                                </clipPath>
-                                <g clip-path="url(#shield-clip)">
-                                    <rect x="0" y="0" width="200" height="100" fill="#FFD100" />
-                                    <path d="M 33,95 Q 67.5,115 100,95 Q 132.5,115 167,95 L 167,125 Q 132.5,145 100,125 Q 67.5,145 33,125 Z" fill="#003366" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
-                                </g>
-                                <path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="round" />
-                                <g transform="translate(100, 72)">
-                                    <path d="M -28,-14 L 28,-14 L 25,12 L 0,18 L -25,12 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M -24,-11 L -3,-11 L -3,12 L -21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
-                                    <path d="M 24,-11 L 3,-11 L 3,12 L 21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
-                                    <path d="M -4,13 L 4,13 L 0,17 Z" fill="#E31837" stroke="#000000" stroke-width="2" stroke-linejoin="round" />
-                                </g>
-                                <g transform="translate(100, 160)">
-                                    <path d="M 0,-30 C 12,-10 12,10 4,15 L -4,15 C -12,10 -12,-10 0,-30 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M -2,5 C -25,-5 -35,20 -15,30 C -5,35 -5,15 -2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M 2,5 C 25,-5 35,20 15,30 C 5,35 5,15 2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M -5,15 C -20,25 -20,35 -10,35 C -5,35 -2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M 5,15 C 20,25 20,35 10,35 C 5,35 2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <path d="M -5,25 L 5,25 L 0,40 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                    <rect x="-14" y="15" width="28" height="6" rx="3" fill="#FFD100" stroke="#000000" stroke-width="3" />
-                                </g>
-                                <path d="M 38,206 L 28,198 L 33,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path d="M 162,206 L 172,198 L 167,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path d="M 25,200 Q 100,225 175,200 L 170,218 Q 100,243 30,218 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" />
-                                <path id="bottom-text-path" d="M 28,212 Q 100,237 172,212" fill="none" />
-                                <text font-family="'Arial', sans-serif" font-weight="900" font-size="13.5" letter-spacing="1"><textPath href="#bottom-text-path" startOffset="50%" text-anchor="middle">NET MY BESTE</textPath></text>
-                            </svg>
+                            <svg viewBox="0 0 200 240" class="w-full h-full"><path d="M 35,42 L 25,35 L 40,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 165,42 L 175,35 L 160,30 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 25,28 Q 100,10 175,28 L 170,45 Q 100,27 30,45 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path id="top-text-path" d="M 28,39 Q 100,21 172,39" fill="none" /><text font-family="'Arial', sans-serif" font-weight="900" font-size="14" letter-spacing="1"><textPath href="#top-text-path" startOffset="50%" text-anchor="middle">UNIVERSITAS</textPath></text><path id="shield-base" d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="#E31837" stroke="#000000" stroke-width="4" stroke-linejoin="round" /><clipPath id="shield-clip"><path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" /></clipPath><g clip-path="url(#shield-clip)"><rect x="0" y="0" width="200" height="100" fill="#FFD100" /><path d="M 33,95 Q 67.5,115 100,95 Q 132.5,115 167,95 L 167,125 Q 132.5,145 100,125 Q 67.5,145 33,125 Z" fill="#003366" stroke="#000000" stroke-width="4" stroke-linejoin="round" /></g><path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="none" stroke="#000000" stroke-width="4" stroke-linejoin="round" /><g transform="translate(100, 72)"><path d="M -28,-14 L 28,-14 L 25,12 L 0,18 L -25,12 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M -24,-11 L -3,-11 L -3,12 L -21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" /><path d="M 24,-11 L 3,-11 L 3,12 L 21,7 Z" fill="#FFFFFF" stroke="#000000" stroke-width="2" stroke-linejoin="round" /><path d="M -4,13 L 4,13 L 0,17 Z" fill="#E31837" stroke="#000000" stroke-width="2" stroke-linejoin="round" /></g><g transform="translate(100, 160)"><path d="M 0,-30 C 12,-10 12,10 4,15 L -4,15 C -12,10 -12,-10 0,-30 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M -2,5 C -25,-5 -35,20 -15,30 C -5,35 -5,15 -2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 2,5 C 25,-5 35,20 15,30 C 5,35 5,15 2,10 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M -5,15 C -20,25 -20,35 -10,35 C -5,35 -2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 5,15 C 20,25 20,35 10,35 C 5,35 2,25 0,20 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M -5,25 L 5,25 L 0,40 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><rect x="-14" y="15" width="28" height="6" rx="3" fill="#FFD100" stroke="#000000" stroke-width="3" /></g><path d="M 38,206 L 28,198 L 33,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 162,206 L 172,198 L 167,190 Z" fill="#E31837" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path d="M 25,200 Q 100,225 175,200 L 170,218 Q 100,243 30,218 Z" fill="#FFD100" stroke="#000000" stroke-width="3" stroke-linejoin="round" /><path id="bottom-text-path" d="M 28,212 Q 100,237 172,212" fill="none" /><text font-family="'Arial', sans-serif" font-weight="900" font-size="13.5" letter-spacing="1"><textPath href="#bottom-text-path" startOffset="50%" text-anchor="middle">NET MY BESTE</textPath></text></svg>
                         </div>
                         <div>
                             <h1 class="text-xl font-black tracking-tight text-white leading-none school-name-display">Tjokkies</h1>
                             <p class="text-[10px] text-tjokkieGold-400 font-bold tracking-wider uppercase mt-1">Administrasie & Bestuur</p>
                         </div>
                     </div>
-
-                    <!-- Right Side Controls -->
                     <div class="flex items-center space-x-6">
                         <div class="hidden md:flex flex-col text-right"><span id="live-date" class="text-xs text-slate-300 font-medium">Datum</span></div>
                         <div class="relative cursor-pointer hover:text-tjokkieGold-400 transition" onclick="window.showNotificationAlert()">
-                            <i class="fa-regular fa-bell text-xl"></i>
-                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                            <i class="fa-regular fa-bell text-xl"></i><span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">3</span>
                         </div>
                         <div class="flex items-center space-x-3 border-l border-tjokkieBlue-800 pl-4 cursor-pointer" onclick="window.handleLogout()" title="Teken Uit">
                             <div class="w-8 h-8 rounded-full bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
@@ -543,7 +502,10 @@
                             <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-bus"></i><span>Vlootbeheer & Skoolritte Skedulering</span></div>
                             <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Busvervoer</h2>
                         </div>
-                        <button onclick="window.toggleModal('modal-bus-rit')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Skeduleer Nuwe Rit</span></button>
+                        <div class="flex space-x-2">
+                            <button onclick="window.promptAddBusAuth()" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus-circle text-tjokkieBlue-500"></i><span class="hidden sm:inline">Voeg Bus By</span></button>
+                            <button onclick="window.openBusRitModal()" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Skeduleer Nuwe Rit</span></button>
+                        </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="bus-status-container"></div>
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
@@ -553,7 +515,14 @@
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
-                                    <tr class="border-b border-slate-200 bg-slate-50 text-slate-500 uppercase font-semibold"><th class="px-6 py-3">Bestemming / Doel</th><th class="px-6 py-3">Vertrek Tyd</th><th class="px-6 py-3">Bus Toegewys</th><th class="px-6 py-3">Bestuurder</th><th class="px-6 py-3">Aksie</th></tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50 text-slate-500 uppercase font-semibold">
+                                        <th class="px-6 py-3">Bestemming / Doel</th>
+                                        <th class="px-6 py-3">Vertrek Tyd</th>
+                                        <th class="px-6 py-3">Aantal Kinders</th>
+                                        <th class="px-6 py-3">Bus Toegewys</th>
+                                        <th class="px-6 py-3">Bestuurder</th>
+                                        <th class="px-6 py-3">Aksie</th>
+                                    </tr>
                                 </thead>
                                 <tbody id="bus-trip-rows" class="divide-y divide-slate-100"></tbody>
                             </table>
@@ -774,6 +743,28 @@
         </div>
     </div>
 
+    <!-- NUWE BUS BYVOEG MODALS -->
+    <div id="modal-add-bus-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[55] hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Bestuurder Wagwoord</h3><button onclick="window.toggleModal('modal-add-bus-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-add-bus-password" onsubmit="window.verifyAddBusAuth(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="add-bus-password-input" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-bus-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-add-bus" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Registreer Nuwe Bus</h3><button onclick="window.toggleModal('modal-add-bus')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-add-bus" onsubmit="window.saveNewBus(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Bus Naam (Bv. Bus E)</label><input type="text" id="new-bus-name" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Beskrywing (Bv. 65 Sitplek)</label><input type="text" id="new-bus-desc" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Aanvanklike Status</label><input type="text" id="new-bus-status" placeholder="bv. Gereed" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-bus')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Voeg By</button></div>
+            </form>
+        </div>
+    </div>
+
     <!-- Fasiliteit Wysig Modals -->
     <div id="modal-facility-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[55] hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
@@ -810,11 +801,16 @@
     </div>
     <div id="modal-bus-status-edit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm" id="edit-bus-title">Wysig Bus Status</h3><button onclick="window.toggleModal('modal-bus-status-edit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm" id="edit-bus-title">Wysig Bus Inligting</h3><button onclick="window.toggleModal('modal-bus-status-edit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
             <form id="form-bus-status-edit" onsubmit="window.saveBusStatusEdit(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-bus-id">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Bus Naam</label><input type="text" id="edit-bus-name-val" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Nuwe Bus Status</label><input type="text" id="edit-bus-status-val" placeholder="bv. In Depot / Aktief" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bus-status-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Stoor Status</button></div>
+                <div>
+                    <label class="block text-slate-500 font-bold uppercase mb-1">Laai Foto Op (Opsioneel)</label>
+                    <input type="file" id="edit-bus-img" accept="image/*" class="w-full text-xs border border-slate-200 rounded-lg p-2 focus:outline-none bg-white">
+                </div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bus-status-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Stoor Wysigings</button></div>
             </form>
         </div>
     </div>
@@ -914,8 +910,14 @@
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Skeduleer Nuwe Busrit</h3><button onclick="window.toggleModal('modal-bus-rit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
             <form id="form-bus" onsubmit="window.addBusTrip(event)" class="space-y-4 text-xs">
                 <div><label class="block font-bold mb-1">Bestemming / Doel</label><input type="text" id="bus-destination" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Vertrek Tyd</label><input type="text" id="bus-time" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Bus Toegewys</label><select id="bus-vehicle" class="w-full border p-2.5 rounded-lg"><option>Bus A</option><option>Bus B</option><option>Bus C</option><option>Bus D</option></select></div></div>
-                <div><label class="block font-bold mb-1">Bestuurder</label><input type="text" id="bus-driver" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block font-bold mb-1">Vertrek Tyd</label><input type="text" id="bus-time" required class="w-full border p-2.5 rounded-lg"></div>
+                    <div><label class="block font-bold mb-1">Aantal Kinders</label><input type="number" id="bus-passengers" required class="w-full border p-2.5 rounded-lg"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block font-bold mb-1">Bus Toegewys</label><select id="bus-vehicle" class="w-full border p-2.5 rounded-lg"></select></div>
+                    <div><label class="block font-bold mb-1">Bestuurder</label><input type="text" id="bus-driver" required class="w-full border p-2.5 rounded-lg"></div>
+                </div>
                 <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bus-rit')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Beplan</button></div>
             </form>
         </div>
@@ -1005,11 +1007,7 @@
             "pool": { name: "Skool Swembad", status: "7.2 (Optimaal)", subtext: "Chloorvlakke is perfek", icon: "fa-droplet", color: "sky" },
             "classrooms": { name: "Klaskamerblokke", status: "Aanlyn Monitor", subtext: "Vensterinspeksie aan die gang", icon: "fa-building", color: "amber" }
         };
-        let localItStatus = { 
-            "wifi": { name: "Skool WiFi Netwerk", status: "Aanlyn", icon: "fa-wifi" },
-            "server": { name: "Hoofbediener (Server)", status: "Aanlyn", icon: "fa-server" },
-            "fibre": { name: "Fibre Netwerk", status: "Aanlyn", icon: "fa-network-wired" }
-        };
+        let localItStatus = { "wifi": { name: "Skool WiFi Netwerk", status: "Aanlyn", icon: "fa-wifi" }, "server": { name: "Hoofbediener (Server)", status: "Aanlyn", icon: "fa-server" }, "fibre": { name: "Fibre Netwerk", status: "Aanlyn", icon: "fa-network-wired" } };
         let localBusStatus = { 
             "bus_a": { name: "Bus A", desc: "Crafter 23 Sitplek", status: "In Depot", icon: "fa-bus-simple", iconBg: "bg-amber-100 text-amber-700" },
             "bus_b": { name: "Bus B", desc: "Nissan 16 Sitplek", status: "Aktief", icon: "fa-van-shuttle", iconBg: "bg-blue-100 text-blue-700" },
@@ -1017,7 +1015,9 @@
             "bus_d": { name: "Bus D", desc: "Old Lady 14 Sitplek", status: "Instandhouding", icon: "fa-triangle-exclamation", iconBg: "bg-red-100 text-red-700" }
         };
         let localTerreinTasks = []; let currentTerreinTasks = [];
-        let localAfkondigings = []; let localBemarkingTake = []; let localNewsletters = []; let localBusTrips = []; let localITTickets = []; let localLogs = []; let localSportEvents = []; let localSportResults = [];
+        let localAfkondigings = []; let localBemarkingTake = []; let localNewsletters = []; 
+        let localBusTrips = [ { id: "1", dest: "Pretoria", time: "Vrydag 06:00", pax: "20", vehicle: "Bus A", driver: "Oom Johan" } ]; 
+        let localITTickets = []; let localLogs = []; let localSportEvents = []; let localSportResults = [];
         let calDate = new Date();
 
         window.runLocalFallback = function() {
@@ -1099,7 +1099,7 @@
                         window.hideLoadingScreen();
 
                         if (currentUser) {
-                            if (window.isRegistering) return; // Vermy foute tydens nuwe profiel-skep
+                            if (window.isRegistering) return;
 
                             document.getElementById('db-status-text').innerText = "Regstreeks gekoppel aan Wolk.";
                             document.getElementById('live-storage-badge').innerText = "Gekoppel";
@@ -1252,20 +1252,13 @@
                     window.showToast("Geregistreer", "Profiel is wagtend vir goedkeuring.");
                 } catch(error) { 
                     window.isRegistering = false;
-                    console.error("Firebase Reg Fout:", error);
                     if (error.code === 'auth/operation-not-allowed') {
                         window.showToast("Firebase Fout", "Gaan na Firebase Console -> Authentication en skakel 'Email/Password' aan!");
                     } else if (error.code === 'auth/email-already-in-use') {
                         window.showToast("Epos Bestaan", "Hierdie epos is reeds geregistreer. Teken asb in.");
-                    } else if (error.code === 'auth/weak-password') {
-                        window.showToast("Wagwoord Swak", "Wagwoord moet ten minste 6 karakters lank wees.");
-                    } else {
-                        window.showToast("Fout", "Kon nie registreer nie: " + error.message); 
-                    }
+                    } else { window.showToast("Fout", "Kon nie registreer nie: " + error.message); }
                 }
-            } else {
-                window.showToast("Vanlyn", "Die databasis is tans nie gekoppel nie.");
-            }
+            } else { window.showToast("Vanlyn", "Die databasis is tans nie gekoppel nie."); }
         }
 
         window.handleLogout = async function() { if(auth) await signOut(auth); location.reload(); }
@@ -1339,18 +1332,26 @@
             if(!container) return; container.innerHTML = '';
             for (const [id, item] of Object.entries(statusData)) {
                 let st = item.status.toLowerCase();
-                let col = (st.includes('aktief')||st.includes('gereed')) ? 'text-emerald-600' : (st.includes('instandhouding')) ? 'text-red-600' : 'text-tjokkieBlue-600';
+                let col = (st.includes('aktief')||st.includes('gereed')) ? 'text-emerald-600' : (st.includes('instandhouding')||st.includes('stukkend')) ? 'text-red-600' : 'text-tjokkieBlue-600';
+                
+                let mediaHtml = '';
+                if(item.imgBase64) {
+                    mediaHtml = `<div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-slate-200"><img src="${item.imgBase64}" class="w-full h-full object-cover" alt="Bus Foto"></div>`;
+                } else {
+                    mediaHtml = `<div class="w-12 h-12 rounded-lg ${item.iconBg || 'bg-slate-100 text-slate-500'} flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${item.icon || 'fa-bus'}"></i></div>`;
+                }
+
                 container.innerHTML += `
                     <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
                         <div class="flex items-center space-x-4">
-                            <div class="w-12 h-12 rounded-lg ${item.iconBg} flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${item.icon}"></i></div>
+                            ${mediaHtml}
                             <div>
                                 <h4 class="font-bold text-slate-900">${item.name}</h4>
                                 <p class="text-[10px] text-slate-500 font-bold uppercase">${item.desc}</p>
                                 <p class="text-xs text-slate-500 mt-1">Status: <span class="${col} font-bold">${item.status}</span></p>
                             </div>
                         </div>
-                        <button onclick="window.promptBusStatusAuth('${id}', '${item.name}', '${item.status}')" title="Wysig Bus Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
+                        <button onclick="window.promptBusStatusAuth('${id}')" title="Wysig Bus Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
                     </div>`;
@@ -1478,8 +1479,11 @@
             if(!tbody) return; tbody.innerHTML = '';
             trips.forEach(trip => {
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition duration-150">
-                    <td class="px-6 py-4 font-bold text-slate-900">${trip.dest}</td><td class="px-6 py-4">${trip.time}</td>
-                    <td class="px-6 py-4">${trip.vehicle}</td><td class="px-6 py-4 text-slate-500">${trip.driver}</td>
+                    <td class="px-6 py-4 font-bold text-slate-900">${trip.dest}</td>
+                    <td class="px-6 py-4">${trip.time}</td>
+                    <td class="px-6 py-4 font-semibold text-tjokkieBlue-700">${trip.pax || 0}</td>
+                    <td class="px-6 py-4">${trip.vehicle}</td>
+                    <td class="px-6 py-4 text-slate-500">${trip.driver}</td>
                     <td class="px-6 py-4"><button onclick="window.cancelBusTrip('${trip.id}')" class="bg-red-50 hover:bg-red-100 text-red-700 font-bold px-3 py-1.5 rounded transition">Kanselleer</button></td>
                 </tr>`;
             });
@@ -1613,12 +1617,47 @@
         }
 
         // BUSVERVOER AKSIES
-        window.promptBusStatusAuth = function(id, name, currentStatus) {
+        window.promptAddBusAuth = function() {
+            document.getElementById('add-bus-password-input').value = '';
+            window.toggleModal('modal-add-bus-password');
+        }
+        
+        window.verifyAddBusAuth = function(event) {
+            event.preventDefault();
+            if (document.getElementById('add-bus-password-input').value === "1603") {
+                window.toggleModal('modal-add-bus-password');
+                document.getElementById('form-add-bus').reset();
+                window.toggleModal('modal-add-bus');
+            } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
+        }
+
+        window.saveNewBus = async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('new-bus-name').value;
+            const desc = document.getElementById('new-bus-desc').value;
+            const status = document.getElementById('new-bus-status').value;
+            
+            const newBus = { name, desc, status, icon: "fa-van-shuttle", iconBg: "bg-slate-100 text-slate-700" };
+            const id = 'bus_' + Date.now();
+
+            if(db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_status', id), newBus); } 
+            else { localBusStatus[id] = newBus; window.renderBusStatus(localBusStatus); }
+            
+            window.logEvent(`Nuwe bus bygevoeg: ${name}`, 'Busvervoer');
+            window.showToast("Sukses", "Nuwe bus is geregistreer.");
+            window.toggleModal('modal-add-bus');
+        }
+
+        window.promptBusStatusAuth = function(id) {
+            const bus = localBusStatus[id];
+            if(!bus) return;
             document.getElementById('auth-bus-id').value = id;
             document.getElementById('bus-password-input').value = '';
             document.getElementById('edit-bus-id').value = id;
-            document.getElementById('edit-bus-title').innerText = `Wysig: ${name}`;
-            document.getElementById('edit-bus-status-val').value = currentStatus;
+            document.getElementById('edit-bus-title').innerText = `Wysig: ${bus.name}`;
+            document.getElementById('edit-bus-name-val').value = bus.name;
+            document.getElementById('edit-bus-status-val').value = bus.status;
+            document.getElementById('edit-bus-img').value = ''; 
             window.toggleModal('modal-bus-status-password');
         }
 
@@ -1627,28 +1666,65 @@
             if (document.getElementById('bus-password-input').value === "1603") {
                 window.toggleModal('modal-bus-status-password');
                 window.toggleModal('modal-bus-status-edit');
-            } else {
-                window.showToast("Geweier", "Verkeerde wagwoord.");
-            }
+            } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
         window.saveBusStatusEdit = async function(event) {
             event.preventDefault();
             const id = document.getElementById('edit-bus-id').value;
+            const name = document.getElementById('edit-bus-name-val').value;
             const status = document.getElementById('edit-bus-status-val').value;
+            const imgFile = document.getElementById('edit-bus-img').files[0];
+
+            let imgBase64 = localBusStatus[id].imgBase64 || null; 
+            if(imgFile) {
+                imgBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.readAsDataURL(imgFile);
+                });
+            }
+
+            const updates = { name, status };
+            if (imgBase64) updates.imgBase64 = imgBase64;
 
             if (db && user) {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_status', id), { status }, { merge: true });
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_status', id), updates, { merge: true });
             } else {
-                localBusStatus[id].status = status;
+                localBusStatus[id] = { ...localBusStatus[id], ...updates };
                 window.renderBusStatus(localBusStatus);
             }
-            window.logEvent(`Vloot status opgedateer`, 'Busvervoer');
-            window.showToast("Sukses!", "Die bus se status is gestoor.");
+            window.logEvent(`Bus opgedateer: ${name}`, 'Busvervoer');
+            window.showToast("Sukses!", "Die bus inligting is gestoor.");
             window.toggleModal('modal-bus-status-edit');
         }
 
-        // IT WYSIG AKSIES
+        window.openBusRitModal = function() {
+            document.getElementById('form-bus').reset();
+            const select = document.getElementById('bus-vehicle');
+            select.innerHTML = '';
+            Object.values(localBusStatus).forEach(bus => {
+                select.innerHTML += `<option value="${bus.name}">${bus.name} (${bus.desc})</option>`;
+            });
+            select.innerHTML += `<option value="Eksterne Toerbus">Eksterne Toerbus</option>`;
+            window.toggleModal('modal-bus-rit');
+        }
+
+        window.addBusTrip = async function(event) {
+            event.preventDefault(); const dest = document.getElementById('bus-destination').value;
+            const tripData = { 
+                dest, 
+                time: document.getElementById('bus-time').value, 
+                pax: document.getElementById('bus-passengers').value,
+                vehicle: document.getElementById('bus-vehicle').value, 
+                driver: document.getElementById('bus-driver').value 
+            };
+            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData);
+            else { localBusTrips.push({ id: Math.random().toString(), ...tripData }); window.renderBusTrips(localBusTrips); }
+            window.logEvent(`Rit na ${dest} (${tripData.pax} kinders)`, 'Busvervoer'); window.showToast("Rit Beplan!", `Geskeduleer vir ${tripData.pax} passasiers.`); window.toggleModal('modal-bus-rit');
+        }
+
+        window.cancelBusTrip = async function(id) { if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_trips', id)); }
+
+        // IT
         window.promptItStatusAuth = function(id, name, currentStatus) {
             document.getElementById('auth-it-id').value = id;
             document.getElementById('it-password-input').value = '';
@@ -1661,74 +1737,19 @@
         window.verifyItAuth = function(event) {
             event.preventDefault();
             if (document.getElementById('it-password-input').value === "1603") {
-                window.toggleModal('modal-it-password');
-                window.toggleModal('modal-it-status-edit');
-            } else {
-                window.showToast("Geweier", "Verkeerde wagwoord.");
-            }
+                window.toggleModal('modal-it-password'); window.toggleModal('modal-it-status-edit');
+            } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
         window.saveItStatusEdit = async function(event) {
             event.preventDefault();
             const id = document.getElementById('edit-it-id').value;
             const status = document.getElementById('edit-it-status-val').value;
-
-            if (db && user) {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_status', id), { status }, { merge: true });
-            } else {
-                localItStatus[id].status = status;
-                window.renderItStatus(localItStatus);
-            }
-            window.logEvent(`Netwerk status opgedateer`, 'IT');
-            window.showToast("Sukses!", "Die IT-stelsel se status is aangepas.");
-            window.toggleModal('modal-it-status-edit');
+            if (db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_status', id), { status }, { merge: true }); } 
+            else { localItStatus[id].status = status; window.renderItStatus(localItStatus); }
+            window.logEvent(`Netwerk status opgedateer`, 'IT'); window.showToast("Sukses!", "Die IT-stelsel se status is aangepas."); window.toggleModal('modal-it-status-edit');
         }
 
-        // SKAKEL
-        window.addAfkondiging = async function(event) {
-            event.preventDefault();
-            const doel = document.getElementById('afkondiging-doel').value;
-            const itemData = { doel, pouse: document.getElementById('afkondiging-pouse').value, inhoud: document.getElementById('afkondiging-inhoud').value, persoon: document.getElementById('afkondiging-persoon').value };
-            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), itemData);
-            window.logEvent(`Afkondiging: ${doel}`, 'Skakel');
-            document.getElementById('form-afkondiging').reset(); window.toggleModal('modal-afkondiging');
-        }
-
-        window.deleteAfkondiging = async function(id, doel) {
-            if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'afkondigings', id));
-        }
-        
-        window.uploadNuusbrief = async function(event) {
-            event.preventDefault();
-            const title = document.getElementById('upload-nuusbrief-titel').value; const filename = document.getElementById('upload-nuusbrief-file').files[0]?.name || "Dokument";
-            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), { title, filename, timestamp: Date.now() });
-            window.logEvent(`Nuusbrief opgelaai: ${title}`, 'Skakel'); document.getElementById('form-nuusbrief').reset();
-        }
-
-        window.deleteNuusbrief = async function(id) { if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'newsletters', id)); }
-
-        // BEMARKING
-        window.addBemarkingTaak = async function(event) {
-            event.preventDefault();
-            const taak = document.getElementById('bem-taak').value;
-            const bemData = { taak, datum: document.getElementById('bem-datum').value, status: document.getElementById('bem-status').value, verant: document.getElementById('bem-verant').value };
-            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), bemData);
-            window.logEvent(`Bemarkingstaak: ${taak}`, 'Bemarking'); document.getElementById('form-bemarking').reset(); window.toggleModal('modal-bemarking-taak');
-        }
-
-        window.completeBemarkingTaak = async function(id) { if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bemarking_take', id)); }
-
-        // BUSVERVOER RITTE
-        window.addBusTrip = async function(event) {
-            event.preventDefault(); const dest = document.getElementById('bus-destination').value;
-            const tripData = { dest, time: document.getElementById('bus-time').value, vehicle: document.getElementById('bus-vehicle').value, driver: document.getElementById('bus-driver').value };
-            if (db && user) await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData);
-            window.logEvent(`Rit na ${dest}`, 'Busvervoer'); document.getElementById('form-bus').reset(); window.toggleModal('modal-bus-rit');
-        }
-
-        window.cancelBusTrip = async function(id) { if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_trips', id)); }
-
-        // IT
         window.addITTicket = async function(event) {
             event.preventDefault();
             const ticketData = { device: document.getElementById('it-device').value, desc: document.getElementById('it-desc').value, staff: document.getElementById('it-staff').value };
