@@ -216,7 +216,6 @@
     <!-- AFDELING 4: HOOF APPLIKASIE (WRAPPER)                   -->
     <!-- ======================================================= -->
     <div id="app-wrapper" class="w-full h-full flex flex-col hidden">
-        
         <!-- HEADER / TOP NAVIGASIE -->
         <header class="bg-tjokkieBlue-900 text-white shadow-md border-b-4 border-tjokkieGold-500 shrink-0 z-30 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -541,7 +540,7 @@
                         </div>
                         <button onclick="window.toggleModal('modal-it-ticket')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Nuwe IT Kaartjie</span></button>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="it-status-container"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="it-status-container"></div>
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                         <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                             <h3 class="font-bold text-slate-900 text-sm">Oop IT Ondersteuningskaartjies</h3>
@@ -836,6 +835,9 @@
                         <option value="Aanlyn">Aanlyn</option><option value="Onstabiel">Onstabiel</option><option value="Van lyn af">Van lyn af</option>
                     </select>
                 </div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Geaffekteerde Area (Waar is dit af?)</label>
+                    <input type="text" id="edit-it-location-val" placeholder="Bv. Blok A, Klas 32" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none">
+                </div>
                 <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-it-status-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition">Stoor Status</button></div>
             </form>
         </div>
@@ -1007,7 +1009,12 @@
             "pool": { name: "Skool Swembad", status: "7.2 (Optimaal)", subtext: "Chloorvlakke is perfek", icon: "fa-droplet", color: "sky" },
             "classrooms": { name: "Klaskamerblokke", status: "Aanlyn Monitor", subtext: "Vensterinspeksie aan die gang", icon: "fa-building", color: "amber" }
         };
-        let localItStatus = { "wifi": { name: "Skool WiFi Netwerk", status: "Aanlyn", icon: "fa-wifi" }, "server": { name: "Hoofbediener (Server)", status: "Aanlyn", icon: "fa-server" }, "fibre": { name: "Fibre Netwerk", status: "Aanlyn", icon: "fa-network-wired" } };
+        let localItStatus = { 
+            "wifi": { name: "Skool WiFi Netwerk", status: "Aanlyn", location: "Hele Skool", icon: "fa-wifi" }, 
+            "server": { name: "Hoofbediener (Server)", status: "Aanlyn", location: "Bedienerkamer", icon: "fa-server" }, 
+            "fibre": { name: "Fibre Netwerk", status: "Aanlyn", location: "Hooflyn", icon: "fa-network-wired" },
+            "switch": { name: "Netwerk Switch", status: "Aanlyn", location: "Alle Blokke", icon: "fa-sitemap" }
+        };
         let localBusStatus = { 
             "bus_a": { name: "Bus A", desc: "Crafter 23 Sitplek", status: "In Depot", icon: "fa-bus-simple", iconBg: "bg-amber-100 text-amber-700" },
             "bus_b": { name: "Bus B", desc: "Nissan 16 Sitplek", status: "Aktief", icon: "fa-van-shuttle", iconBg: "bg-blue-100 text-blue-700" },
@@ -1274,7 +1281,7 @@
         window.verifyUpgradeAuth = function() { const pwd = document.getElementById('upgrade-password').value; if(pwd === "Elrico1603!!") { window.toggleModal('modal-upgrade'); window.showToast("Versoek", "Kontak asb. die stelsel argitek om hierdie te hardekodeer."); } else { window.showToast("Geweier", "Ongeldig."); } }
         window.switchDevTab = function(tab) {
             document.getElementById('dev-tab-theme').classList.add('hidden'); document.getElementById('dev-tab-users').classList.add('hidden');
-            document.getElementById('btn-dev-theme').className = "pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700"; document.getElementById('btn-dev-users').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600";
+            document.getElementById('btn-dev-theme').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600"; document.getElementById('btn-dev-users').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600";
             document.getElementById(`dev-tab-${tab}`).classList.remove('hidden'); document.getElementById(`btn-dev-${tab}`).className = "pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700";
         }
 
@@ -1367,9 +1374,13 @@
                     <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 rounded-full bg-tjokkieBlue-50 text-tjokkieBlue-600 flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${item.icon}"></i></div>
-                            <div><h4 class="font-bold text-slate-900">${item.name}</h4><span class="text-[10px] font-bold uppercase mt-1 inline-block ${sc}">${item.status}</span></div>
+                            <div>
+                                <h4 class="font-bold text-slate-900">${item.name}</h4>
+                                ${item.location ? `<p class="text-[10px] text-slate-500">${item.location}</p>` : ''}
+                                <span class="text-[10px] font-bold uppercase mt-1 inline-block ${sc}">${item.status}</span>
+                            </div>
                         </div>
-                        <button onclick="window.promptItStatusAuth('${id}', '${item.name}', '${item.status}')" title="Wysig Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
+                        <button onclick="window.promptItStatusAuth('${id}', '${item.name}', '${item.status}', '${item.location ? item.location.replace(/'/g, "\\'") : ''}')" title="Wysig Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
                             <i class="fa-solid fa-pen text-xs"></i>
                         </button>
                     </div>`;
@@ -1724,30 +1735,48 @@
 
         window.cancelBusTrip = async function(id) { if (db && user) await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_trips', id)); }
 
-        // IT
-        window.promptItStatusAuth = function(id, name, currentStatus) {
+        // IT WYSIG AKSIES
+        window.promptItStatusAuth = function(id, name, currentStatus, currentLocation) {
             document.getElementById('auth-it-id').value = id;
             document.getElementById('it-password-input').value = '';
             document.getElementById('edit-it-id').value = id;
             document.getElementById('edit-it-title').innerText = `Wysig: ${name}`;
             document.getElementById('edit-it-status-val').value = currentStatus;
+            
+            const locInput = document.getElementById('edit-it-location-val');
+            if(locInput) {
+                locInput.value = currentLocation && currentLocation !== 'undefined' ? currentLocation : '';
+            }
+
             window.toggleModal('modal-it-password');
         }
 
         window.verifyItAuth = function(event) {
             event.preventDefault();
             if (document.getElementById('it-password-input').value === "1603") {
-                window.toggleModal('modal-it-password'); window.toggleModal('modal-it-status-edit');
-            } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
+                window.toggleModal('modal-it-password');
+                window.toggleModal('modal-it-status-edit');
+            } else {
+                window.showToast("Geweier", "Verkeerde wagwoord.");
+            }
         }
 
         window.saveItStatusEdit = async function(event) {
             event.preventDefault();
             const id = document.getElementById('edit-it-id').value;
             const status = document.getElementById('edit-it-status-val').value;
-            if (db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_status', id), { status }, { merge: true }); } 
-            else { localItStatus[id].status = status; window.renderItStatus(localItStatus); }
-            window.logEvent(`Netwerk status opgedateer`, 'IT'); window.showToast("Sukses!", "Die IT-stelsel se status is aangepas."); window.toggleModal('modal-it-status-edit');
+            const location = document.getElementById('edit-it-location-val').value;
+
+            if (db && user) {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_status', id), { status, location }, { merge: true });
+            } else {
+                localItStatus[id].status = status;
+                localItStatus[id].location = location;
+                window.renderItStatus(localItStatus);
+            }
+            window.logEvent(`Netwerk status opgedateer`, 'IT');
+            window.showToast("Sukses!", "Die IT-stelsel se status is aangepas.");
+            window.toggleModal('modal-it-status-edit');
         }
 
         window.addITTicket = async function(event) {
