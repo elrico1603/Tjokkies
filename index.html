@@ -805,7 +805,11 @@
                 <input type="hidden" id="edit-facility-id">
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Status / Kondisie</label><input type="text" id="edit-facility-status" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Ekstra Inligting (Nota)</label><input type="text" id="edit-facility-subtext" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-facility-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Stoor</button></div>
+                <div class="flex space-x-2 pt-2">
+                    <button type="button" onclick="window.toggleModal('modal-facility-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
+                    <button type="button" onclick="window.deleteFacility()" class="w-12 bg-red-100 hover:bg-red-200 text-red-600 font-bold rounded-xl transition flex items-center justify-center text-lg" title="Vee fasiliteit uit"><i class="fa-solid fa-trash-can"></i></button>
+                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Stoor</button>
+                </div>
             </form>
         </div>
     </div>
@@ -1301,7 +1305,22 @@
             e.preventDefault(); const pwd = document.getElementById('dev-password-input').value;
             if (pwd === "Elrico1603!!") { window.toggleModal('modal-dev-auth'); if(devModeActive === 'module') { window.toggleModal('modal-upgrade'); } else { window.toggleModal('modal-dev-panel'); fetchAdminUsers(); } } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
-        window.verifyUpgradeAuth = function() { const pwd = document.getElementById('upgrade-password').value; if(pwd === "Elrico1603!!") { window.toggleModal('modal-upgrade'); window.showToast("Versoek", "Kontak asb. die stelsel argitek om hierdie te hardekodeer."); } else { window.showToast("Geweier", "Ongeldig."); } }
+        window.verifyUpgradeAuth = function() { 
+            const pwd = document.getElementById('upgrade-password').value; 
+            if(pwd === "Elrico1603!!") { 
+                window.toggleModal('modal-upgrade'); 
+                
+                const schoolName = document.querySelector('.school-name-display')?.innerText || "Onbekende Skool";
+                const email = "elrico@think-it.co.za";
+                const subject = encodeURIComponent(`Aansoek vir Ekstra Module - ${schoolName}`);
+                const body = encodeURIComponent(`Goeiedag Elrico,\n\nOns skool (${schoolName}) wil graag aansoek doen vir 'n bykomende Sport of Kultuur module op ons stelsel.\n\nOns verstaan die beraamde koste is R350 eenmalig.\n\nKontak ons asseblief om die reëlings te tref.\n\nGroete,\nBestuur: ${schoolName}`);
+                
+                window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+                window.showToast("Epos Oopgemaak", "Jou epos-toepassing is oopgemaak om die versoek te stuur."); 
+            } else { 
+                window.showToast("Geweier", "Ongeldige wagwoord."); 
+            } 
+        }
         window.switchDevTab = function(tab) {
             document.getElementById('dev-tab-theme').classList.add('hidden'); document.getElementById('dev-tab-users').classList.add('hidden');
             document.getElementById('btn-dev-theme').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600"; document.getElementById('btn-dev-users').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600";
@@ -1683,6 +1702,15 @@
             if (db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'facilities', id), { status, subtext }, { merge: true }); } 
             else { localFacilities[id] = { ...localFacilities[id], status, subtext }; window.renderFacilities(localFacilities); }
             window.logEvent(`Status opgedateer vir fasiliteit`, 'Terrein'); window.showToast("Sukses!", "Fasiliteit se status is opgedateer."); window.toggleModal('modal-facility-edit');
+        }
+
+        window.deleteFacility = async function() {
+            const id = document.getElementById('edit-facility-id').value;
+            if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'facilities', id)); } 
+            else { delete localFacilities[id]; window.renderFacilities(localFacilities); }
+            window.logEvent(`Fasiliteit is uitgevee`, 'Terrein'); 
+            window.showToast("Uitgevee", "Die fasiliteit is permanent verwyder."); 
+            window.toggleModal('modal-facility-edit');
         }
 
         // BUSVERVOER AKSIES
