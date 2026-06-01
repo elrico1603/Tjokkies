@@ -10,30 +10,15 @@
     <!-- ======================================================= -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            /* Dinamiese Temakleure verander via JS Developer Panel */
-            --school-pri-500: #0284c7;
-            --school-pri-800: #1e40af;
-            --school-pri-900: #172554;
-            --school-pri-950: #0f172a;
-        }
+        :root { --school-pri-500: #0284c7; --school-pri-800: #1e40af; --school-pri-900: #172554; --school-pri-950: #0f172a; }
     </style>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        tjokkieBlue: {
-                            500: 'var(--school-pri-500)', 
-                            800: 'var(--school-pri-800)', 
-                            900: 'var(--school-pri-900)', 
-                            950: 'var(--school-pri-950)', 
-                        },
-                        tjokkieGold: {
-                            400: '#fbbf24',
-                            500: '#f59e0b', 
-                            600: '#d97706',
-                        }
+                        tjokkieBlue: { 500: 'var(--school-pri-500)', 800: 'var(--school-pri-800)', 900: 'var(--school-pri-900)', 950: 'var(--school-pri-950)' },
+                        tjokkieGold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }
                     }
                 }
             }
@@ -46,17 +31,17 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
-        .loader { border-top-color: var(--school-pri-500); animation: spinner 1.5s linear infinite; }
-        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
-</head>
-<body class="h-full overflow-hidden text-slate-800 bg-slate-50 relative">
 
     <!-- ======================================================= -->
-    <!-- GLOBALE UI FUNKSIES & FAILSAFE                          -->
+    <!-- GLOBALE UI FUNKSIES & FAILSAFE (BO-AAN OM FOUTE TE KEER)-->
     <!-- ======================================================= -->
     <script>
         window.appInitialized = false;
+        window.isRegistering = false;
+        window.devAuthenticated = false;
+        window.isMasterAdmin = false;
+        window.pendingDevTab = '';
 
         window.hideLoadingScreen = function() {
             const loader = document.getElementById('loading-screen');
@@ -102,9 +87,7 @@
             }
         };
 
-        window.showNotificationAlert = function() { 
-            window.showToast("Kennisgewings", "Stelsel is gekoppel en aktief."); 
-        };
+        window.showNotificationAlert = function() { window.showToast("Kennisgewings", "Stelsel is gekoppel en aktief."); };
 
         window.updateDashboardCounters = function() {
             try {
@@ -130,11 +113,9 @@
             const login = document.getElementById('login-form'); 
             const reg = document.getElementById('register-form');
             if(login.classList.contains('hidden')) { 
-                login.classList.remove('hidden'); 
-                reg.classList.add('hidden'); 
+                login.classList.remove('hidden'); reg.classList.add('hidden'); 
             } else { 
-                login.classList.add('hidden'); 
-                reg.classList.remove('hidden'); 
+                login.classList.add('hidden'); reg.classList.remove('hidden'); 
             }
         };
 
@@ -144,36 +125,31 @@
                     console.warn("Netwerk timeout bereik. Forseer vanlyn-modus.");
                     window.hideLoadingScreen();
                     const appWrap = document.getElementById('app-wrapper');
-                    if (appWrap) {
-                        appWrap.classList.remove('hidden');
-                        appWrap.classList.add('flex');
-                    }
+                    if (appWrap) { appWrap.classList.remove('hidden'); appWrap.classList.add('flex'); }
+                    const authWrap = document.getElementById('auth-wrapper');
+                    if (authWrap) { authWrap.classList.add('hidden'); authWrap.classList.remove('flex'); }
                     if(typeof window.runLocalFallback === 'function') window.runLocalFallback();
                 }
             }, 3500);
         });
     </script>
+</head>
+<body class="h-full overflow-hidden text-slate-800 bg-slate-50 relative">
 
-    <!-- ======================================================= -->
-    <!-- DYNAMIC TOAST ALERT (GLOBAAL SIGBAAR OP ALLE SKERME)    -->
-    <!-- ======================================================= -->
+    <!-- DYNAMIC TOAST ALERT -->
     <div id="toast-notification" class="fixed top-4 right-4 bg-tjokkieBlue-900 border-l-4 border-tjokkieGold-500 text-white px-4 py-3 rounded-lg shadow-2xl z-[200] transform translate-x-80 transition duration-300 opacity-0 pointer-events-none">
         <div class="flex items-center space-x-3"><span class="text-tjokkieGold-400"><i class="fa-solid fa-circle-check text-xl"></i></span><div><p class="font-bold text-sm" id="toast-title">Kennisgewing</p><p class="text-xs text-slate-300" id="toast-msg">Stelsel opgedateer.</p></div></div>
     </div>
 
-    <!-- ======================================================= -->
-    <!-- AFDELING 2: LAADSKERM (LAAI PROSES)                     -->
-    <!-- ======================================================= -->
+    <!-- LAADSKERM -->
     <div id="loading-screen" class="w-full h-full flex flex-col items-center justify-center bg-slate-100 absolute inset-0 z-[100] transition-opacity duration-500">
         <div class="w-12 h-12 border-4 border-slate-300 border-t-tjokkieBlue-600 rounded-full animate-spin"></div>
         <p class="mt-5 text-slate-500 font-extrabold text-xs tracking-widest uppercase animate-pulse">Koppel aan Stelsel...</p>
     </div>
 
-    <!-- ======================================================= -->
-    <!-- AFDELING 3: TEKEN IN & REGISTREER SKERM                 -->
-    <!-- ======================================================= -->
+    <!-- TEKEN IN & REGISTREER SKERM -->
     <div id="auth-wrapper" class="w-full h-full flex flex-col items-center justify-center bg-slate-100 relative hidden">
-        <button onclick="window.promptDevSettingsAuth()" class="absolute top-6 right-6 text-slate-400 hover:text-tjokkieBlue-800 transition text-2xl" title="Developer / IT Settings">
+        <button onclick="window.promptDevSettingsAuth('settings')" class="absolute top-6 right-6 text-slate-400 hover:text-tjokkieBlue-800 transition text-2xl" title="Developer / IT Settings">
             <i class="fa-solid fa-gear"></i>
         </button>
         <div class="bg-white p-8 sm:p-10 rounded-3xl shadow-xl max-w-md w-full border border-slate-200">
@@ -212,11 +188,9 @@
         </div>
     </div>
 
-    <!-- ======================================================= -->
-    <!-- AFDELING 4: HOOF APPLIKASIE (WRAPPER)                   -->
-    <!-- ======================================================= -->
+    <!-- HOOF APPLIKASIE (WRAPPER) -->
     <div id="app-wrapper" class="w-full h-full flex flex-col hidden">
-        <!-- HEADER / TOP NAVIGASIE -->
+        <!-- HEADER -->
         <header class="bg-tjokkieBlue-900 text-white shadow-md border-b-4 border-tjokkieGold-500 shrink-0 z-30 transition-colors duration-300">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -243,15 +217,12 @@
             </div>
         </header>
 
-        <!-- SYBALK (NAVIGASIE) -->
         <div class="flex flex-1 overflow-hidden">
+            <!-- SYBALK -->
             <aside class="w-20 md:w-64 bg-tjokkieBlue-900 text-slate-300 flex flex-col shrink-0 shadow-lg border-r border-tjokkieBlue-800 z-10 relative transition-colors duration-300">
                 <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto custom-scrollbar">
-                    
                     <button onclick="window.switchTab('dashboard')" id="btn-dashboard" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group bg-tjokkieBlue-800 text-white font-semibold"><i class="fa-solid fa-chart-line text-lg w-6 text-center group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm">Dashboard Tuis</span></button>
-                    
                     <div class="pt-4 pb-2"><span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Departemente</span></div>
-                    
                     <button onclick="window.switchTab('terrein')" id="btn-terrein" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-hard-hat text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Terreinbestuur</span></button>
                     <button onclick="window.switchTab('skakel')" id="btn-skakel" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-bullhorn text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Skakelbeampte</span></button>
                     <button onclick="window.switchTab('bemarking')" id="btn-bemarking" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-lightbulb text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Bemarking</span></button>
@@ -259,7 +230,6 @@
                     <button onclick="window.switchTab('it')" id="btn-it" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-laptop-code text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">IT-Ondersteuning</span></button>
 
                     <div class="pt-4 pb-2"><span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Sport & Kultuur</span></div>
-                    
                     <button onclick="window.switchTab('rugby')" id="btn-rugby" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-football text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Rugbyhoof</span></button>
                     <button onclick="window.switchTab('netbal')" id="btn-netbal" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-basketball text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Netbalhoof</span></button>
                     <button onclick="window.switchTab('tennis')" id="btn-tennis" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-table-tennis-paddle-ball text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Tennishoof</span></button>
@@ -269,7 +239,7 @@
                     <button onclick="window.switchTab('voortrekkers')" id="btn-voortrekkers" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-campground text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Voortrekkers</span></button>
 
                     <div class="px-2 mt-4 pb-4">
-                        <button onclick="window.promptDevSettingsAuth('module')" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl transition border border-dashed border-tjokkieGold-500/50 text-tjokkieGold-400 hover:bg-tjokkieBlue-800/50">
+                        <button onclick="window.promptDevSettingsAuth('master_upgrade')" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl transition border border-dashed border-tjokkieGold-500/50 text-tjokkieGold-400 hover:bg-tjokkieBlue-800/50">
                             <i class="fa-solid fa-plus text-sm"></i><span class="hidden md:inline text-xs font-bold">Nuwe Module</span>
                         </button>
                     </div>
@@ -285,12 +255,10 @@
                 </div>
             </aside>
 
-            <!-- HOOF INHOUDS AREA -->
+            <!-- MAIN CONTENT -->
             <main class="flex-1 flex flex-col overflow-y-auto custom-scrollbar relative">
                 
-                <!-- ============================================== -->
-                <!-- AFDELING 5: TUISSKREEM (DASHBOARD)             -->
-                <!-- ============================================== -->
+                <!-- TUISSKREEM (DASHBOARD) -->
                 <section id="tab-dashboard" class="p-4 sm:p-6 lg:p-8 space-y-8">
                     <!-- Welkoms Banner -->
                     <div class="bg-gradient-to-r from-tjokkieBlue-900 to-tjokkieBlue-800 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden shadow-lg border border-tjokkieBlue-800 transition-colors duration-300">
@@ -308,35 +276,18 @@
                     <div>
                         <h3 class="text-base font-bold text-slate-500 uppercase tracking-widest mb-4">Administratiewe Hubs</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                            <!-- Kaartjies -->
-                            <div onclick="window.switchTab('terrein')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                                <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieGold-500"></div>
-                                <div><div class="w-10 h-10 rounded-xl bg-amber-50 text-tjokkieGold-500 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieGold-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-hard-hat"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Terreinbestuur</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Fokus op instandhouding van sportvelde en skoolgeboue.</p></div>
-                            </div>
-                            <div onclick="window.switchTab('skakel')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                                <div class="absolute top-0 left-0 w-2 h-full bg-tjokkieBlue-800"></div>
-                                <div><div class="w-10 h-10 rounded-xl bg-sky-50 text-tjokkieBlue-800 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieBlue-800 group-hover:text-white transition duration-300"><i class="fa-solid fa-bullhorn"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skakelbeampte</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Hanteer daaglikse skool-afkondigings en d6-nuusbriewe.</p></div>
-                            </div>
-                            <div onclick="window.switchTab('bemarking')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                                <div class="absolute top-0 left-0 w-2 h-full bg-rose-500"></div>
-                                <div><div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg mb-3 group-hover:bg-rose-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-lightbulb"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Bemarking</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Beplan bemarkingsveldtogte, opedae en toekomsbeplanning.</p></div>
-                            </div>
-                            <div onclick="window.switchTab('bus')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                                <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
-                                <div><div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-3 group-hover:bg-amber-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-bus"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Busvervoer</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Koördineer skoolbusse, sportritte en bestuurder roetes.</p></div>
-                            </div>
-                            <div onclick="window.switchTab('it')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                                <div class="absolute top-0 left-0 w-2 h-full bg-sky-500"></div>
-                                <div><div class="w-10 h-10 rounded-xl bg-blue-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-laptop-code"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">IT-Ondersteuning</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Moniteer skool-WiFi, bedieners en hanteer IT-kaartjies.</p></div>
-                            </div>
-                            <div onclick="window.switchTab('rugby')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                                <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
-                                <div><div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-3 group-hover:bg-blue-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-football"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Rugbyhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur rugby-oefeninge, wedstryde, spanlyste en toerusting.</p></div>
-                            </div>
-                            <div onclick="window.switchTab('netbal')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
-                                <div class="absolute top-0 left-0 w-2 h-full bg-sky-400"></div>
-                                <div><div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-basketball"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Netbalhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur netbal-oefeninge, toernooie, spanlyste en reëlings.</p></div>
-                            </div>
+                            <div onclick="window.switchTab('terrein')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-tjokkieGold-500"></div><div><div class="w-10 h-10 rounded-xl bg-amber-50 text-tjokkieGold-500 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieGold-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-hard-hat"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Terreinbestuur</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Fokus op instandhouding van sportvelde en skoolgeboue.</p></div></div>
+                            <div onclick="window.switchTab('skakel')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-tjokkieBlue-800"></div><div><div class="w-10 h-10 rounded-xl bg-sky-50 text-tjokkieBlue-800 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieBlue-800 group-hover:text-white transition duration-300"><i class="fa-solid fa-bullhorn"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skakelbeampte</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Hanteer daaglikse skool-afkondigings en d6-nuusbriewe.</p></div></div>
+                            <div onclick="window.switchTab('bemarking')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-rose-500"></div><div><div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg mb-3 group-hover:bg-rose-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-lightbulb"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Bemarking</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Beplan bemarkingsveldtogte, opedae en toekomsbeplanning.</p></div></div>
+                            <div onclick="window.switchTab('bus')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div><div><div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-3 group-hover:bg-amber-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-bus"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Busvervoer</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Koördineer skoolbusse, sportritte en bestuurder roetes.</p></div></div>
+                            <div onclick="window.switchTab('it')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-sky-500"></div><div><div class="w-10 h-10 rounded-xl bg-blue-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-laptop-code"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">IT-Ondersteuning</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Moniteer skool-WiFi, bedieners en hanteer IT-kaartjies.</p></div></div>
+                            <div onclick="window.switchTab('rugby')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div><div><div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-3 group-hover:bg-blue-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-football"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Rugbyhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur rugby-oefeninge, wedstryde, spanlyste en toerusting.</p></div></div>
+                            <div onclick="window.switchTab('netbal')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-sky-400"></div><div><div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-basketball"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Netbalhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur netbal-oefeninge, toernooie, spanlyste en reëlings.</p></div></div>
+                            <div onclick="window.switchTab('tennis')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-emerald-500"></div><div><div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center text-lg mb-3 group-hover:bg-emerald-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-table-tennis-paddle-ball"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Tennishoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur tennis-oefeninge, wedstryde en spanlyste.</p></div></div>
+                            <div onclick="window.switchTab('swem')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-cyan-500"></div><div><div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-500 flex items-center justify-center text-lg mb-3 group-hover:bg-cyan-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-person-swimming"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Swemhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur swemgalas, oefeninge en spanlyste.</p></div></div>
+                            <div onclick="window.switchTab('hokkie')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-orange-500"></div><div><div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center text-lg mb-3 group-hover:bg-orange-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-hockey-puck"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Hokkiehoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur hokkie-oefeninge, wedstryde en toerusting.</p></div></div>
+                            <div onclick="window.switchTab('skaak')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-slate-700"></div><div><div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center text-lg mb-3 group-hover:bg-slate-700 group-hover:text-white transition duration-300"><i class="fa-solid fa-chess-knight"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skaakhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur skaaktoernooie, oefeninge en ranglyste.</p></div></div>
+                            <div onclick="window.switchTab('voortrekkers')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-green-700"></div><div><div class="w-10 h-10 rounded-xl bg-green-50 text-green-700 flex items-center justify-center text-lg mb-3 group-hover:bg-green-700 group-hover:text-white transition duration-300"><i class="fa-solid fa-campground"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Voortrekkers</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur kampe, byeenkomste en toekennings.</p></div></div>
                         </div>
                     </div>
 
@@ -378,26 +329,17 @@
                     </div>
                 </section>
 
-                <!-- ============================================== -->
-                <!-- AFDELING 6: TERREINBESTUUR                     -->
-                <!-- ============================================== -->
+                <!-- TERREINBESTUUR -->
                 <section id="tab-terrein" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div>
-                            <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-hard-hat"></i><span>Terreinbestuur & Instandhouding</span></div>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Terreinbestuurder</h2>
-                        </div>
+                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-hard-hat"></i><span>Terreinbestuur & Instandhouding</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Terreinbestuurder</h2></div>
                         <div class="flex space-x-2">
                             <button onclick="window.promptAddFacilityAuth()" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus-circle text-tjokkieBlue-500"></i><span class="hidden sm:inline">Voeg Terrein By</span></button>
                             <button onclick="window.toggleModal('modal-terrein-taak')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-triangle-exclamation text-red-500"></i><span class="hidden sm:inline">Rapporteer Probleem</span></button>
                             <button onclick="window.promptCalendarAuth('')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieGold-400"></i><span>Beplan Instandhouding</span></button>
                         </div>
                     </div>
-
-                    <!-- Live Velde Inligtingsblokke -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="facilities-container"></div>
-
-                    <!-- Instandhoudingskalender -->
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 overflow-hidden">
                         <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
                             <h3 class="font-bold text-slate-900 text-sm"><i class="fa-regular fa-calendar-days text-tjokkieBlue-500 mr-2"></i>Instandhoudingskalender</h3>
@@ -412,8 +354,6 @@
                         </div>
                         <div id="calendar-grid" class="grid grid-cols-7 gap-2"></div>
                     </div>
-
-                    <!-- Taak Lys -->
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                         <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <h3 class="font-bold text-slate-900 text-sm">Lys van Aktiewe Terrein-take</h3>
@@ -433,15 +373,10 @@
                     </div>
                 </section>
 
-                <!-- ============================================== -->
-                <!-- AFDELING 7: SKAKELBEAMPTE                     -->
-                <!-- ============================================== -->
+                <!-- SKAKELBEAMPTE -->
                 <section id="tab-skakel" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div>
-                            <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-bullhorn"></i><span>Kommunikasie & Inligting</span></div>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skakelbeampte</h2>
-                        </div>
+                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-bullhorn"></i><span>Kommunikasie & Inligting</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skakelbeampte</h2></div>
                         <button onclick="window.toggleModal('modal-afkondiging')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Plaas Afkondiging</span></button>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -467,21 +402,14 @@
                     </div>
                 </section>
 
-                <!-- ============================================== -->
-                <!-- AFDELING 8: BEMARKING                         -->
-                <!-- ============================================== -->
+                <!-- BEMARKING -->
                 <section id="tab-bemarking" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div>
-                            <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-lightbulb"></i><span>Bemarkingstrategie & Geleenthede</span></div>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Bemarking Veldtogte</h2>
-                        </div>
+                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-lightbulb"></i><span>Bemarkingstrategie & Geleenthede</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Bemarking Veldtogte</h2></div>
                         <button onclick="window.toggleModal('modal-bemarking-taak')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Beplan Nuwe Veldtog / Taak</span></button>
                     </div>
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <div><h3 class="font-bold text-slate-900 text-sm">Skeduleer Bemarking Aksies</h3></div>
-                        </div>
+                        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"><div><h3 class="font-bold text-slate-900 text-sm">Skeduleer Bemarking Aksies</h3></div></div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
@@ -493,15 +421,10 @@
                     </div>
                 </section>
 
-                <!-- ============================================== -->
-                <!-- AFDELING 9: BUSVERVOER                        -->
-                <!-- ============================================== -->
+                <!-- BUSVERVOER -->
                 <section id="tab-bus" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div>
-                            <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-bus"></i><span>Vlootbeheer & Skoolritte Skedulering</span></div>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Busvervoer</h2>
-                        </div>
+                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-bus"></i><span>Vlootbeheer & Skoolritte Skedulering</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Busvervoer</h2></div>
                         <div class="flex space-x-2">
                             <button onclick="window.promptAddBusAuth()" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus-circle text-tjokkieBlue-500"></i><span class="hidden sm:inline">Voeg Bus By</span></button>
                             <button onclick="window.openBusRitModal()" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Skeduleer Nuwe Rit</span></button>
@@ -509,20 +432,11 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="bus-status-container"></div>
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <h3 class="font-bold text-slate-900 text-sm">Aktiewe & Geskeduleerde Skoolritte</h3>
-                        </div>
+                        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"><h3 class="font-bold text-slate-900 text-sm">Aktiewe & Geskeduleerde Skoolritte</h3></div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
-                                    <tr class="border-b border-slate-200 bg-slate-50 text-slate-500 uppercase font-semibold">
-                                        <th class="px-6 py-3">Bestemming / Doel</th>
-                                        <th class="px-6 py-3">Vertrek Tyd</th>
-                                        <th class="px-6 py-3">Aantal Kinders</th>
-                                        <th class="px-6 py-3">Bus Toegewys</th>
-                                        <th class="px-6 py-3">Bestuurder</th>
-                                        <th class="px-6 py-3">Aksie</th>
-                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50 text-slate-500 uppercase font-semibold"><th class="px-6 py-3">Bestemming / Doel</th><th class="px-6 py-3">Vertrek Tyd</th><th class="px-6 py-3">Aantal Kinders</th><th class="px-6 py-3">Bus Toegewys</th><th class="px-6 py-3">Bestuurder</th><th class="px-6 py-3">Aksie</th></tr>
                                 </thead>
                                 <tbody id="bus-trip-rows" class="divide-y divide-slate-100"></tbody>
                             </table>
@@ -530,23 +444,15 @@
                     </div>
                 </section>
 
-                <!-- ============================================== -->
-                <!-- AFDELING 10: IT-ONDERSTEUNING                 -->
-                <!-- ============================================== -->
+                <!-- IT-ONDERSTEUNING -->
                 <section id="tab-it" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div>
-                            <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-laptop-code"></i><span>Skool WiFi, Smartboards & Chromebooks</span></div>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">IT-Ondersteuning</h2>
-                        </div>
+                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-laptop-code"></i><span>Skool WiFi, Smartboards & Chromebooks</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">IT-Ondersteuning</h2></div>
                         <button onclick="window.toggleModal('modal-it-ticket')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-plus text-tjokkieGold-400"></i><span>Nuwe IT Kaartjie</span></button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="it-status-container"></div>
                     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                            <h3 class="font-bold text-slate-900 text-sm">Oop IT Ondersteuningskaartjies</h3>
-                            <span class="text-xs bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded-full" id="it-ticket-count">0 Take</span>
-                        </div>
+                        <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between"><h3 class="font-bold text-slate-900 text-sm">Oop IT Ondersteuningskaartjies</h3><span class="text-xs bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded-full" id="it-ticket-count">0 Take</span></div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
@@ -558,29 +464,17 @@
                     </div>
                 </section>
 
-                <!-- ============================================== -->
-                <!-- AFDELING 11: SPORT TABS                        -->
-                <!-- ============================================== -->
-                
-                <!-- RUGBY -->
+                <!-- SPORT & KULTUUR -->
                 <section id="tab-rugby" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div>
-                            <div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-football"></i><span>Sportbestuur</span></div>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Rugbyhoof</h2>
-                        </div>
-                        <div class="flex space-x-2">
-                            <button onclick="window.openSportEventModal('rugby', 'Rugby')" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer Geleentheid</span></button>
-                            <button onclick="window.openSportResultModal('rugby', 'Rugby')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button>
-                        </div>
+                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-football"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Rugbyhoof</h2></div>
+                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('rugby', 'Rugby')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('rugby', 'Rugby')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
                     </div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><div class="flex items-center justify-between border-b border-slate-100 pb-3"><h3 class="font-bold text-slate-900 text-sm">Komende Geleenthede & Skedule</h3></div><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-events-list"></div></div>
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><div class="flex items-center justify-between border-b border-slate-100 pb-3"><h3 class="font-bold text-slate-900 text-sm">Uitslae & Prestasies</h3></div><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-results-list"></div></div>
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-events-list"></div></div>
+                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-results-list"></div></div>
                     </div>
                 </section>
-
-                <!-- NETBAL -->
                 <section id="tab-netbal" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-basketball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Netbalhoof</h2></div>
@@ -591,8 +485,6 @@
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-results-list"></div></div>
                     </div>
                 </section>
-
-                <!-- TENNIS -->
                 <section id="tab-tennis" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-table-tennis-paddle-ball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Tennishoof</h2></div>
@@ -603,8 +495,6 @@
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-results-list"></div></div>
                     </div>
                 </section>
-
-                <!-- SWEM -->
                 <section id="tab-swem" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-person-swimming"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Swemhoof</h2></div>
@@ -615,8 +505,6 @@
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="swem-results-list"></div></div>
                     </div>
                 </section>
-
-                <!-- HOKKIE -->
                 <section id="tab-hokkie" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-hockey-puck"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Hokkiehoof</h2></div>
@@ -627,8 +515,6 @@
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-results-list"></div></div>
                     </div>
                 </section>
-
-                <!-- SKAAK -->
                 <section id="tab-skaak" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-chess-knight"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skaakhoof</h2></div>
@@ -639,8 +525,6 @@
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-results-list"></div></div>
                     </div>
                 </section>
-
-                <!-- VOORTREKKERS -->
                 <section id="tab-voortrekkers" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
                         <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-campground"></i><span>Kultuur & Jeug</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Voortrekkershoof</h2></div>
@@ -651,7 +535,6 @@
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Prestasies & Toekennings</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-results-list"></div></div>
                     </div>
                 </section>
-
             </main>
         </div>
         
@@ -669,18 +552,12 @@
     <div id="modal-dev-auth" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-[60] hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
-                <h3 class="font-extrabold text-slate-900 text-sm">Stelsel Administrateur</h3>
+                <h3 class="font-extrabold text-slate-900 text-sm" id="dev-auth-title">Stelsel Administrateur</h3>
                 <button onclick="window.toggleModal('modal-dev-auth')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button>
             </div>
             <form onsubmit="window.verifyDevAuth(event)" class="space-y-4 text-xs">
-                <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Meester Wagwoord</label>
-                    <input type="password" id="dev-password-input" placeholder="••••••••" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none">
-                </div>
-                <div class="flex space-x-2 pt-2">
-                    <button type="button" onclick="window.toggleModal('modal-dev-auth')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button>
-                    <button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Ontsluit Stelsel</button>
-                </div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Wagwoord</label><input type="password" id="dev-password-input" placeholder="••••••••" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:ring-1 focus:ring-tjokkieBlue-500 focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-dev-auth')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Ontsluit Stelsel</button></div>
             </form>
         </div>
     </div>
@@ -692,39 +569,51 @@
                 <h3 class="font-extrabold text-slate-900 text-lg"><i class="fa-solid fa-wrench text-tjokkieGold-500 mr-2"></i>Ontwikkelaar Paneel</h3>
                 <button onclick="window.toggleModal('modal-dev-panel')" class="text-slate-400 hover:text-red-500 transition text-xl"><i class="fa-solid fa-times"></i></button>
             </div>
-            
-            <div class="flex space-x-4 mb-4 border-b border-slate-100 shrink-0">
-                <button type="button" onclick="window.switchDevTab('theme')" id="btn-dev-theme" class="pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700">Voorkoms & Logo</button>
-                <button type="button" onclick="window.switchDevTab('users')" id="btn-dev-users" class="pb-2 text-sm font-bold text-slate-400 hover:text-slate-600">Gebruikers (Onderwysers)</button>
+            <div class="flex space-x-4 mb-4 border-b border-slate-100 shrink-0 overflow-x-auto custom-scrollbar">
+                <button type="button" onclick="window.switchDevTab('users')" id="btn-dev-users" class="pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700 whitespace-nowrap">Gebruikers (Onderwysers)</button>
+                <button type="button" onclick="window.switchDevTab('theme')" id="btn-dev-theme" class="pb-2 text-sm font-bold text-slate-400 hover:text-slate-600 whitespace-nowrap"><i class="fa-solid fa-lock text-[10px] mr-1"></i>Voorkoms & Logo</button>
+                <button type="button" onclick="window.switchDevTab('generator')" id="btn-dev-generator" class="pb-2 text-sm font-bold text-slate-400 hover:text-slate-600 whitespace-nowrap"><i class="fa-solid fa-lock text-[10px] mr-1"></i>Wagwoord Generator</button>
+            </div>
+
+            <!-- Tab: Gebruikers -->
+            <div id="dev-tab-users" class="flex-1 overflow-y-auto custom-scrollbar">
+                <p class="text-xs text-slate-500 mb-3">Keur nuwe onderwysers goed sodat hulle kan inteken, of vee hulle profiele uit om toegang te weier.</p>
+                <div id="admin-users-list" class="space-y-3"><div class="text-center py-6 text-sm text-slate-400">Geen gebruikers gevind nie.</div></div>
             </div>
 
             <!-- Tab: Kleure & Logo -->
-            <div id="dev-tab-theme" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 text-sm pr-2">
+            <div id="dev-tab-theme" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 text-sm pr-2 hidden">
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <label class="block font-bold text-slate-700 mb-2">Skoolnaam</label>
                     <input type="text" id="dev-school-name" placeholder="Bv. Tjokkies" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none">
                 </div>
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <label class="block font-bold text-slate-700 mb-2">Skool Admin Wagwoord</label>
+                    <input type="text" id="dev-school-password" placeholder="Bv. 1603" class="w-full border border-slate-300 p-2.5 rounded-lg focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none">
+                    <p class="text-[10px] text-slate-400 mt-2">Die skool se eie wagwoord vir redigering van modules (vervang die standaard '1603').</p>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <label class="block font-bold text-slate-700 mb-2">Hoofkleur (Hexkode)</label>
-                    <div class="flex space-x-3">
-                        <input type="color" id="dev-primary-color" class="h-10 w-14 rounded cursor-pointer">
-                        <p class="text-xs text-slate-500 self-center">Hierdie kleur verander al die donkerblou elemente in die hele portaal na die skool se unieke kleur.</p>
-                    </div>
+                    <div class="flex space-x-3"><input type="color" id="dev-primary-color" class="h-10 w-14 rounded cursor-pointer"><p class="text-xs text-slate-500 self-center">Hierdie kleur verander al die donkerblou elemente in die hele portaal na die skool se unieke kleur.</p></div>
                 </div>
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <label class="block font-bold text-slate-700 mb-2">Skoolwapen / Logo Oplaai</label>
                     <input type="file" id="dev-logo-upload" accept="image/*" class="w-full text-xs border border-slate-300 rounded-lg p-2 focus:outline-none bg-white">
-                    <p class="text-[10px] text-slate-400 mt-2">Laai 'n .PNG of .JPG op (Base64 kodering word outomaties gedoen). As oopgelaat, gebruik die stelsel die standaard SVG.</p>
+                    <p class="text-[10px] text-slate-400 mt-2">Laai 'n .PNG of .JPG op. As oopgelaat, gebruik die stelsel die standaard SVG.</p>
                 </div>
-                <button onclick="window.saveDeveloperSettings()" class="w-full py-3 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition shadow-md">
-                    Stoor Voorkoms Veranderinge
-                </button>
+                <button onclick="window.saveDeveloperSettings()" class="w-full py-3 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition shadow-md">Stoor Voorkoms Veranderinge</button>
             </div>
 
-            <!-- Tab: Gebruikers -->
-            <div id="dev-tab-users" class="flex-1 overflow-y-auto custom-scrollbar hidden">
-                <p class="text-xs text-slate-500 mb-3">Keur nuwe onderwysers goed sodat hulle kan inteken, of vee hulle profiele uit om toegang te weier.</p>
-                <div id="admin-users-list" class="space-y-3"><div class="text-center py-6 text-sm text-slate-400">Geen gebruikers gevind nie.</div></div>
+            <!-- Tab: Password Generator -->
+            <div id="dev-tab-generator" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 text-sm pr-2 hidden">
+                <p class="text-xs text-slate-500 mb-3">Genereer veilige ewekansige wagwoorde vir nuwe gebruikers of stelseltoegang.</p>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <input type="text" id="generated-password" readonly class="flex-1 border border-slate-300 p-2.5 rounded-lg focus:outline-none bg-white font-mono text-center text-lg tracking-wider text-tjokkieBlue-900" placeholder="••••••••">
+                        <button type="button" onclick="window.generateRandomPassword()" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white px-4 py-2.5 rounded-lg font-bold transition shadow-sm"><i class="fa-solid fa-rotate mr-2"></i> Genereer</button>
+                    </div>
+                    <button type="button" onclick="window.copyGeneratedPassword()" class="w-full py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg transition"><i class="fa-regular fa-copy mr-2"></i> Kopieer Wagwoord</button>
+                </div>
             </div>
         </div>
     </div>
@@ -765,28 +654,6 @@
         </div>
     </div>
 
-    <!-- NUWE BUS BYVOEG MODALS -->
-    <div id="modal-add-bus-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[55] hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Bestuurder Wagwoord</h3><button onclick="window.toggleModal('modal-add-bus-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-add-bus-password" onsubmit="window.verifyAddBusAuth(event)" class="space-y-4 text-xs">
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="add-bus-password-input" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-bus-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
-            </form>
-        </div>
-    </div>
-    <div id="modal-add-bus" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Registreer Nuwe Bus</h3><button onclick="window.toggleModal('modal-add-bus')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-add-bus" onsubmit="window.saveNewBus(event)" class="space-y-4 text-xs">
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Bus Naam (Bv. Bus E)</label><input type="text" id="new-bus-name" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Beskrywing (Bv. 65 Sitplek)</label><input type="text" id="new-bus-desc" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Aanvanklike Status</label><input type="text" id="new-bus-status" placeholder="bv. Gereed" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-bus')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Voeg By</button></div>
-            </form>
-        </div>
-    </div>
-
     <!-- Fasiliteit Wysig Modals -->
     <div id="modal-facility-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[55] hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
@@ -815,6 +682,26 @@
     </div>
 
     <!-- BUS STATUS WYSIG MODALS -->
+    <div id="modal-add-bus-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[55] hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Bestuurder Wagwoord</h3><button onclick="window.toggleModal('modal-add-bus-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-add-bus-password" onsubmit="window.verifyAddBusAuth(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="add-bus-password-input" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-bus-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-add-bus" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Registreer Nuwe Bus</h3><button onclick="window.toggleModal('modal-add-bus')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-add-bus" onsubmit="window.saveNewBus(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Bus Naam (Bv. Bus E)</label><input type="text" id="new-bus-name" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Beskrywing (Bv. 65 Sitplek)</label><input type="text" id="new-bus-desc" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Aanvanklike Status</label><input type="text" id="new-bus-status" placeholder="bv. Gereed" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-bus')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Voeg By</button></div>
+            </form>
+        </div>
+    </div>
     <div id="modal-bus-status-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[55] hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Bus Wagwoord Vereis</h3><button onclick="window.toggleModal('modal-bus-status-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
@@ -832,11 +719,27 @@
                 <input type="hidden" id="edit-bus-id">
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Bus Naam</label><input type="text" id="edit-bus-name-val" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Nuwe Bus Status</label><input type="text" id="edit-bus-status-val" placeholder="bv. In Depot / Aktief" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div>
-                    <label class="block text-slate-500 font-bold uppercase mb-1">Laai Foto Op (Opsioneel)</label>
-                    <input type="file" id="edit-bus-img" accept="image/*" class="w-full text-xs border border-slate-200 rounded-lg p-2 focus:outline-none bg-white">
-                </div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Laai Foto Op (Opsioneel)</label><input type="file" id="edit-bus-img" accept="image/*" class="w-full text-xs border border-slate-200 rounded-lg p-2 focus:outline-none bg-white"></div>
                 <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bus-status-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Stoor Wysigings</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- BUSVERVOER RIT MODAL -->
+    <div id="modal-bus-rit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Skeduleer Nuwe Busrit</h3><button onclick="window.toggleModal('modal-bus-rit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-bus" onsubmit="window.addBusTrip(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1">Bestemming / Doel</label><input type="text" id="bus-destination" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block font-bold mb-1">Vertrek Tyd</label><input type="text" id="bus-time" required class="w-full border p-2.5 rounded-lg"></div>
+                    <div><label class="block font-bold mb-1">Aantal Kinders</label><input type="number" id="bus-passengers" required class="w-full border p-2.5 rounded-lg"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block font-bold mb-1">Bus Toegewys</label><select id="bus-vehicle" class="w-full border p-2.5 rounded-lg"></select></div>
+                    <div><label class="block font-bold mb-1">Bestuurder</label><input type="text" id="bus-driver" required class="w-full border p-2.5 rounded-lg"></div>
+                </div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bus-rit')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Beplan</button></div>
             </form>
         </div>
     </div>
@@ -857,102 +760,12 @@
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm" id="edit-it-title">Wysig IT Status</h3><button onclick="window.toggleModal('modal-it-status-edit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
             <form id="form-it-status-edit" onsubmit="window.saveItStatusEdit(event)" class="space-y-4 text-xs">
                 <input type="hidden" id="edit-it-id">
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Nuwe Netwerk Status</label>
-                    <select id="edit-it-status-val" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none">
-                        <option value="Aanlyn">Aanlyn</option><option value="Onstabiel">Onstabiel</option><option value="Van lyn af">Van lyn af</option>
-                    </select>
-                </div>
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Geaffekteerde Area (Waar is dit af?)</label>
-                    <input type="text" id="edit-it-location-val" placeholder="Bv. Blok A, Klas 32" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none">
-                </div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Nuwe Netwerk Status</label><select id="edit-it-status-val" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"><option value="Aanlyn">Aanlyn</option><option value="Onstabiel">Onstabiel</option><option value="Van lyn af">Van lyn af</option></select></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Geaffekteerde Area (Waar is dit af?)</label><input type="text" id="edit-it-location-val" placeholder="Bv. Blok A, Klas 32" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
                 <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-it-status-edit')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl transition">Stoor Status</button></div>
             </form>
         </div>
     </div>
-
-    <!-- TERREIN TAAK MODALS -->
-    <div id="modal-terrein-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Rapporteer Terreinprobleem</h3><button onclick="window.toggleModal('modal-terrein-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-terrein" onsubmit="window.addTerreinTask(event)" class="space-y-4 text-xs">
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Fasiliteit / Area</label><input type="text" id="terrein-area" required class="w-full border border-slate-200 p-2.5 rounded-lg"></div>
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Datum (Opsioneel)</label><input type="date" id="terrein-date" class="w-full border border-slate-200 p-2.5 rounded-lg"></div>
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Probleem</label><textarea id="terrein-desc" rows="3" required class="w-full border border-slate-200 p-2.5 rounded-lg"></textarea></div>
-                <div class="grid grid-cols-2 gap-4"><div><label class="block text-slate-500 font-bold uppercase mb-1">Prioriteit</label><select id="terrein-priority" class="w-full border border-slate-200 p-2.5 rounded-lg"><option value="Normal">Normaal</option><option value="Urgent">Dringend</option></select></div><div><label class="block text-slate-500 font-bold uppercase mb-1">Aangemeld Deur</label><input type="text" id="terrein-reported" required class="w-full border border-slate-200 p-2.5 rounded-lg"></div></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-terrein-taak')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Stuur In</button></div>
-            </form>
-        </div>
-    </div>
-    <div id="modal-terrein-beplan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-sm">Beplan Instandhouding</h3><button onclick="window.toggleModal('modal-terrein-beplan')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-beplan" onsubmit="window.addPlannedTask(event)" class="space-y-4 text-xs">
-                <div><label class="block font-bold mb-1">Fasiliteit / Area</label><input type="text" id="plan-area" required class="w-full border p-2.5 rounded-lg"></div>
-                <div><label class="block font-bold mb-1">Datum</label><input type="date" id="plan-date" required class="w-full border p-2.5 rounded-lg"></div>
-                <div><label class="block font-bold mb-1">Beskrywing</label><textarea id="plan-desc" rows="3" required class="w-full border p-2.5 rounded-lg"></textarea></div>
-                <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Prioriteit</label><select id="plan-priority" class="w-full border p-2.5 rounded-lg"><option>Normaal</option><option>Dringend</option></select></div><div><label class="block font-bold mb-1">Toegewys</label><input type="text" id="plan-reported" required class="w-full border p-2.5 rounded-lg"></div></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-terrein-beplan')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl">Stoor Skedule</button></div>
-            </form>
-        </div>
-    </div>
-    <div id="modal-calendar-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Wagwoord Vereis</h3><button onclick="window.toggleModal('modal-calendar-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-calendar-password" onsubmit="window.verifyCalendarAuth(event)" class="space-y-4 text-xs">
-                <input type="hidden" id="auth-calendar-date">
-                <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="calendar-password-input" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-calendar-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- SKAKELBEAMPTE MODALS -->
-    <div id="modal-afkondiging" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Plaas Afkondiging</h3><button onclick="window.toggleModal('modal-afkondiging')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-afkondiging" onsubmit="window.addAfkondiging(event)" class="space-y-4 text-xs">
-                <div><label class="block font-bold mb-1">Geleentheid/Doel?</label><input type="text" id="afkondiging-doel" required class="w-full border p-2.5 rounded-lg"></div>
-                <div><label class="block font-bold mb-1">Kies Tyd/Pouse</label><select id="afkondiging-pouse" class="w-full border p-2.5 rounded-lg"><option>Eerste Pouse</option><option>Tweede Pouse</option><option>Aan die einde van die dag</option><option>Algemeen / Heeldag</option></select></div>
-                <div><label class="block font-bold mb-1">Inhoud</label><textarea id="afkondiging-inhoud" rows="4" required class="w-full border p-2.5 rounded-lg"></textarea></div>
-                <div><label class="block font-bold mb-1">Wie plaas afkondiging?</label><input type="text" id="afkondiging-persoon" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-afkondiging')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Voeg By</button></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- BEMARKING MODALS -->
-    <div id="modal-bemarking-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Beplan Nuwe Bemarkingstaak</h3><button onclick="window.toggleModal('modal-bemarking-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-bemarking" onsubmit="window.addBemarkingTaak(event)" class="space-y-4 text-xs">
-                <div><label class="block font-bold mb-1">Veldtog</label><input type="text" id="bem-taak" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Sperdatum</label><input type="date" id="bem-datum" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Status</label><select id="bem-status" class="w-full border p-2.5 rounded-lg"><option>Beplan</option><option>Besig</option></select></div></div>
-                <div><label class="block font-bold mb-1">Verantwoordelike Persoon</label><input type="text" id="bem-verant" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bemarking-taak')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-rose-600 text-white rounded-xl font-bold">Stoor</button></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- BUSVERVOER MODALS -->
-    <div id="modal-bus-rit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Skeduleer Nuwe Busrit</h3><button onclick="window.toggleModal('modal-bus-rit')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-bus" onsubmit="window.addBusTrip(event)" class="space-y-4 text-xs">
-                <div><label class="block font-bold mb-1">Bestemming / Doel</label><input type="text" id="bus-destination" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block font-bold mb-1">Vertrek Tyd</label><input type="text" id="bus-time" required class="w-full border p-2.5 rounded-lg"></div>
-                    <div><label class="block font-bold mb-1">Aantal Kinders</label><input type="number" id="bus-passengers" required class="w-full border p-2.5 rounded-lg"></div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block font-bold mb-1">Bus Toegewys</label><select id="bus-vehicle" class="w-full border p-2.5 rounded-lg"></select></div>
-                    <div><label class="block font-bold mb-1">Bestuurder</label><input type="text" id="bus-driver" required class="w-full border p-2.5 rounded-lg"></div>
-                </div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bus-rit')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Beplan</button></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- IT ONDERSTEUNING MODALS -->
     <div id="modal-it-ticket" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100"><div class="flex items-center justify-between border-b pb-3 mb-4"><h3 class="font-extrabold text-sm">Skep IT Kaartjie</h3><button onclick="window.toggleModal('modal-it-ticket')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
             <form id="form-it" onsubmit="window.addITTicket(event)" class="space-y-4 text-xs">
@@ -963,6 +776,7 @@
             </form>
         </div>
     </div>
+    
     <div id="modal-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
@@ -1008,7 +822,7 @@
     <!-- ======================================================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, addDoc, deleteDoc, updateDoc, collection, onSnapshot, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -1021,13 +835,10 @@
             measurementId: "G-F7NNLDW2TH"
         };
 
-        let db = null;
-        let auth = null;
-        let appId = "tjokkies-app";
-        let user = null;
-        let devModeActive = false;
+        let db = null; let auth = null; let appId = "tjokkies-app"; let user = null;
+        window.currentSchoolPassword = "1603";
 
-        // JS-AFDELING 1.1: VANLYN DATA (PLAASLIKE GEHEUE)
+        // JS-AFDELING 1.1: VANLYN DATA
         let localFacilities = { 
             "rugby_a": { name: "A-Rugbyveld", status: "Uitstekend", subtext: "Sny en lyne geskeduleer", icon: "fa-football", color: "blue" }, 
             "rugby_b": { name: "B-Rugbyveld", status: "Goeie Kondisie", subtext: "Gereed vir oefening", icon: "fa-football", color: "blue" },
@@ -1057,60 +868,26 @@
         window.runLocalFallback = function() {
             document.getElementById('db-status-text').innerText = "Gekoppel aan plaaslike geheue.";
             currentTerreinTasks = localTerreinTasks;
-            window.renderFacilities(localFacilities);
-            window.renderItStatus(localItStatus);
-            window.renderBusStatus(localBusStatus);
-            window.renderTerreinTasks(localTerreinTasks);
-            window.renderAfkondigings(localAfkondigings);
-            window.renderBemarkingTake(localBemarkingTake);
-            window.renderNewsletters(localNewsletters);
-            window.renderBusTrips(localBusTrips);
-            window.renderITTickets(localITTickets);
-            window.renderActivityLogs(localLogs);
-            window.renderSportEvents(localSportEvents);
-            window.renderSportResults(localSportResults);
+            window.renderFacilities(localFacilities); window.renderItStatus(localItStatus); window.renderBusStatus(localBusStatus);
+            window.renderTerreinTasks(localTerreinTasks); window.renderAfkondigings(localAfkondigings); window.renderBemarkingTake(localBemarkingTake);
+            window.renderNewsletters(localNewsletters); window.renderBusTrips(localBusTrips); window.renderITTickets(localITTickets);
+            window.renderActivityLogs(localLogs); window.renderSportEvents(localSportEvents); window.renderSportResults(localSportResults);
         }
 
         function setupRealtimeListeners() {
             if (!db || !user) return;
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'facilities'), (snap) => {
-                let f = { ...localFacilities }; snap.forEach(doc => { f[doc.id] = { ...f[doc.id], ...doc.data() }; }); window.renderFacilities(f);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_status'), (snap) => {
-                let i = { ...localItStatus }; snap.forEach(doc => { i[doc.id] = { ...i[doc.id], ...doc.data() }; }); window.renderItStatus(i);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_status'), (snap) => {
-                let b = { ...localBusStatus }; snap.forEach(doc => { b[doc.id] = { ...b[doc.id], ...doc.data() }; }); window.renderBusStatus(b);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), (snap) => {
-                let t = []; snap.forEach(doc => { t.push({ id: doc.id, ...doc.data() }); }); currentTerreinTasks = t; window.renderTerreinTasks(t);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), (snap) => {
-                let a = []; snap.forEach(doc => { a.push({ id: doc.id, ...doc.data() }); }); window.renderAfkondigings(a);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), (snap) => {
-                let b = []; snap.forEach(doc => { b.push({ id: doc.id, ...doc.data() }); }); window.renderBemarkingTake(b);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), (snap) => {
-                let n = []; snap.forEach(doc => { n.push({ id: doc.id, ...doc.data() }); }); 
-                n.sort((a,b) => b.timestamp - a.timestamp); window.renderNewsletters(n);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), (snap) => {
-                let bt = []; snap.forEach(doc => { bt.push({ id: doc.id, ...doc.data() }); }); window.renderBusTrips(bt);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), (snap) => {
-                let it = []; snap.forEach(doc => { it.push({ id: doc.id, ...doc.data() }); }); window.renderITTickets(it);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), (snap) => {
-                let logs = []; snap.forEach(doc => { logs.push({ id: doc.id, ...doc.data() }); });
-                logs.sort((a,b) => b.timestamp - a.timestamp); window.renderActivityLogs(logs);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), (snap) => {
-                let se = []; snap.forEach(doc => { se.push({ id: doc.id, ...doc.data() }); }); window.renderSportEvents(se);
-            });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), (snap) => {
-                let sr = []; snap.forEach(doc => { sr.push({ id: doc.id, ...doc.data() }); }); window.renderSportResults(sr);
-            });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'facilities'), (snap) => { let f = { ...localFacilities }; snap.forEach(doc => { f[doc.id] = { ...f[doc.id], ...doc.data() }; }); window.renderFacilities(f); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_status'), (snap) => { let i = { ...localItStatus }; snap.forEach(doc => { i[doc.id] = { ...i[doc.id], ...doc.data() }; }); window.renderItStatus(i); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_status'), (snap) => { let b = { ...localBusStatus }; snap.forEach(doc => { b[doc.id] = { ...b[doc.id], ...doc.data() }; }); window.renderBusStatus(b); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), (snap) => { let t = []; snap.forEach(doc => { t.push({ id: doc.id, ...doc.data() }); }); currentTerreinTasks = t; window.renderTerreinTasks(t); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), (snap) => { let a = []; snap.forEach(doc => { a.push({ id: doc.id, ...doc.data() }); }); window.renderAfkondigings(a); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), (snap) => { let b = []; snap.forEach(doc => { b.push({ id: doc.id, ...doc.data() }); }); window.renderBemarkingTake(b); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), (snap) => { let n = []; snap.forEach(doc => { n.push({ id: doc.id, ...doc.data() }); }); n.sort((a,b) => b.timestamp - a.timestamp); window.renderNewsletters(n); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), (snap) => { let bt = []; snap.forEach(doc => { bt.push({ id: doc.id, ...doc.data() }); }); window.renderBusTrips(bt); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), (snap) => { let it = []; snap.forEach(doc => { it.push({ id: doc.id, ...doc.data() }); }); window.renderITTickets(it); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), (snap) => { let logs = []; snap.forEach(doc => { logs.push({ id: doc.id, ...doc.data() }); }); logs.sort((a,b) => b.timestamp - a.timestamp); window.renderActivityLogs(logs); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), (snap) => { let se = []; snap.forEach(doc => { se.push({ id: doc.id, ...doc.data() }); }); window.renderSportEvents(se); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), (snap) => { let sr = []; snap.forEach(doc => { sr.push({ id: doc.id, ...doc.data() }); }); window.renderSportResults(sr); });
         }
 
         // JS-AFDELING 1.2: LAAI PROSES (INIT)
@@ -1128,9 +905,7 @@
             if (configActive && auth && db) {
                 try {
                     onAuthStateChanged(auth, async (currentUser) => {
-                        user = currentUser;
-                        window.appInitialized = true;
-                        window.hideLoadingScreen();
+                        user = currentUser; window.appInitialized = true; window.hideLoadingScreen();
 
                         if (currentUser) {
                             if (window.isRegistering) return;
@@ -1146,54 +921,38 @@
                                 if (profileSnap.exists()) {
                                     if (profileSnap.data().status === 'approved') isApproved = true;
                                 } else { isApproved = true; } // Fallback vir admins
-                            } catch(err) {
-                                isApproved = true;
-                            }
+                            } catch(err) { isApproved = true; }
 
                             if(isApproved) {
-                                document.getElementById('auth-wrapper').classList.add('hidden');
-                                document.getElementById('auth-wrapper').classList.remove('flex');
-                                document.getElementById('pending-wrapper').classList.add('hidden');
-                                document.getElementById('pending-wrapper').classList.remove('flex');
-                                document.getElementById('app-wrapper').classList.remove('hidden');
-                                document.getElementById('app-wrapper').classList.add('flex');
-                                loadGlobalSettings();
-                                setupRealtimeListeners();
+                                document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('auth-wrapper').classList.remove('flex');
+                                document.getElementById('pending-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.remove('flex');
+                                document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex');
+                                loadGlobalSettings(); setupRealtimeListeners();
                             } else { 
-                                document.getElementById('auth-wrapper').classList.add('hidden');
-                                document.getElementById('auth-wrapper').classList.remove('flex');
+                                document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('auth-wrapper').classList.remove('flex');
                                 document.getElementById('app-wrapper').classList.add('hidden');
-                                document.getElementById('pending-wrapper').classList.remove('hidden');
-                                document.getElementById('pending-wrapper').classList.add('flex');
+                                document.getElementById('pending-wrapper').classList.remove('hidden'); document.getElementById('pending-wrapper').classList.add('flex');
                             }
                         } else { 
-                            document.getElementById('app-wrapper').classList.add('hidden');
-                            document.getElementById('pending-wrapper').classList.add('hidden');
-                            document.getElementById('auth-wrapper').classList.remove('hidden');
-                            document.getElementById('auth-wrapper').classList.add('flex');
+                            document.getElementById('app-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.add('hidden');
+                            document.getElementById('auth-wrapper').classList.remove('hidden'); document.getElementById('auth-wrapper').classList.add('flex');
                         }
                     }, (error) => {
                         window.appInitialized = true; window.hideLoadingScreen(); 
-                        document.getElementById('auth-wrapper').classList.add('hidden');
-                        document.getElementById('pending-wrapper').classList.add('hidden');
-                        document.getElementById('app-wrapper').classList.remove('hidden');
-                        document.getElementById('app-wrapper').classList.add('flex');
+                        document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.add('hidden');
+                        document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex');
                         window.runLocalFallback();
                     });
                 } catch(catchErr) {
                     window.appInitialized = true; window.hideLoadingScreen(); 
-                    document.getElementById('auth-wrapper').classList.add('hidden');
-                    document.getElementById('pending-wrapper').classList.add('hidden');
-                    document.getElementById('app-wrapper').classList.remove('hidden');
-                    document.getElementById('app-wrapper').classList.add('flex');
+                    document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.add('hidden');
+                    document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex');
                     window.runLocalFallback();
                 }
             } else {
                 window.appInitialized = true; window.hideLoadingScreen(); 
-                document.getElementById('auth-wrapper').classList.add('hidden');
-                document.getElementById('pending-wrapper').classList.add('hidden');
-                document.getElementById('app-wrapper').classList.remove('hidden');
-                document.getElementById('app-wrapper').classList.add('flex');
+                document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.add('hidden');
+                document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex');
                 window.runLocalFallback();
             }
         };
@@ -1213,15 +972,22 @@
         }
 
         window.applyThemeVariables = function(settings) {
+            if(settings.schoolPassword) {
+                window.currentSchoolPassword = settings.schoolPassword;
+                const pwdInput = document.getElementById('dev-school-password');
+                if(pwdInput) pwdInput.value = settings.schoolPassword;
+            } else {
+                window.currentSchoolPassword = "1603";
+                const pwdInput = document.getElementById('dev-school-password');
+                if(pwdInput) pwdInput.value = "1603";
+            }
             if(settings.primaryColor) {
                 document.documentElement.style.setProperty('--school-pri-500', settings.primaryColor);
                 document.documentElement.style.setProperty('--school-pri-800', settings.primaryColor);
                 document.documentElement.style.setProperty('--school-pri-900', settings.primaryColor);
                 document.documentElement.style.setProperty('--school-pri-950', settings.primaryColor);
             }
-            if(settings.schoolName) {
-                document.querySelectorAll('.school-name-display').forEach(el => { el.innerText = settings.schoolName; });
-            }
+            if(settings.schoolName) { document.querySelectorAll('.school-name-display').forEach(el => { el.innerText = settings.schoolName; }); }
             if(settings.logoBase64) {
                 const logoContainer = document.getElementById('school-logo-container');
                 if(logoContainer) logoContainer.innerHTML = `<img src="${settings.logoBase64}" class="max-h-full object-contain filter drop-shadow-md" />`;
@@ -1231,24 +997,22 @@
         window.saveDeveloperSettings = async function() {
             const schoolName = document.getElementById('dev-school-name').value;
             const primaryColor = document.getElementById('dev-primary-color').value;
+            const schoolPassword = document.getElementById('dev-school-password').value;
             const logoFile = document.getElementById('dev-logo-upload').files[0];
-
             let logoBase64 = null;
             if(logoFile) {
                 logoBase64 = await new Promise((resolve) => {
                     const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.readAsDataURL(logoFile);
                 });
             }
-
             const newSettings = {};
             if(schoolName) newSettings.schoolName = schoolName;
             if(primaryColor && primaryColor !== '#000000') newSettings.primaryColor = primaryColor;
+            if(schoolPassword) { newSettings.schoolPassword = schoolPassword; window.currentSchoolPassword = schoolPassword; }
             if(logoBase64) newSettings.logoBase64 = logoBase64;
-
             if(db && Object.keys(newSettings).length > 0) {
                 await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'), newSettings, { merge: true });
-                window.applyThemeVariables(newSettings);
-                window.showToast("Gestoor", "Die skool se wolk-voorkoms is opgedateer.");
+                window.applyThemeVariables(newSettings); window.showToast("Gestoor", "Die skool se wolk-voorkoms is opgedateer.");
             }
             window.toggleModal('modal-dev-panel');
         }
@@ -1257,13 +1021,10 @@
         // JS-AFDELING 3: TEKEN-IN (AUTH LOGIC)                    //
         // ======================================================= //
         window.handleLogin = async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value; const pwd = document.getElementById('login-password').value;
+            e.preventDefault(); const email = document.getElementById('login-email').value; const pwd = document.getElementById('login-password').value;
             if(auth) {
-                try {
-                    window.showToast("Inligting", "Besig om in te teken...");
-                    await signInWithEmailAndPassword(auth, email, pwd);
-                } catch(error) { window.showToast("Fout", "Teken in het gefaal. Verkeerde wagwoord of epos."); }
+                try { window.showToast("Inligting", "Besig om in te teken..."); await signInWithEmailAndPassword(auth, email, pwd); } 
+                catch(error) { window.showToast("Fout", "Teken in het gefaal. Verkeerde wagwoord of epos."); }
             }
         }
 
@@ -1272,25 +1033,20 @@
             const naam = document.getElementById('reg-name').value; const email = document.getElementById('reg-email').value; const pwd = document.getElementById('reg-password').value;
             if(auth && db) {
                 try {
-                    window.showToast("Koppel...", "Besig om profiel te skep");
-                    window.isRegistering = true;
+                    window.showToast("Koppel...", "Besig om profiel te skep"); window.isRegistering = true;
                     const cred = await createUserWithEmailAndPassword(auth, email, pwd);
                     await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', cred.user.uid), { name: naam, email: email, status: 'pending', role: 'teacher' });
                     window.isRegistering = false;
                     
-                    document.getElementById('auth-wrapper').classList.add('hidden');
-                    document.getElementById('auth-wrapper').classList.remove('flex');
+                    document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('auth-wrapper').classList.remove('flex');
                     document.getElementById('app-wrapper').classList.add('hidden');
-                    document.getElementById('pending-wrapper').classList.remove('hidden');
-                    document.getElementById('pending-wrapper').classList.add('flex');
+                    document.getElementById('pending-wrapper').classList.remove('hidden'); document.getElementById('pending-wrapper').classList.add('flex');
                     window.showToast("Geregistreer", "Profiel is wagtend vir goedkeuring.");
                 } catch(error) { 
                     window.isRegistering = false;
-                    if (error.code === 'auth/operation-not-allowed') {
-                        window.showToast("Firebase Fout", "Gaan na Firebase Console -> Authentication en skakel 'Email/Password' aan!");
-                    } else if (error.code === 'auth/email-already-in-use') {
-                        window.showToast("Epos Bestaan", "Hierdie epos is reeds geregistreer. Teken asb in.");
-                    } else { window.showToast("Fout", "Kon nie registreer nie: " + error.message); }
+                    if (error.code === 'auth/operation-not-allowed') { window.showToast("Firebase Fout", "Gaan na Firebase Console -> Authentication en skakel 'Email/Password' aan!"); } 
+                    else if (error.code === 'auth/email-already-in-use') { window.showToast("Epos Bestaan", "Hierdie epos is reeds geregistreer. Teken asb in."); } 
+                    else { window.showToast("Fout", "Kon nie registreer nie: " + error.message); }
                 }
             } else { window.showToast("Vanlyn", "Die databasis is tans nie gekoppel nie."); }
         }
@@ -1300,34 +1056,81 @@
         // ======================================================= //
         // JS-AFDELING 4: GEBRUIKER BESTUUR (ADMIN)                //
         // ======================================================= //
-        window.promptDevSettingsAuth = function(intent = 'settings') { devModeActive = intent; document.getElementById('dev-password-input').value = ''; window.toggleModal('modal-dev-auth'); }
-        window.verifyDevAuth = function(e) {
-            e.preventDefault(); const pwd = document.getElementById('dev-password-input').value;
-            if (pwd === "Elrico1603!!") { window.toggleModal('modal-dev-auth'); if(devModeActive === 'module') { window.toggleModal('modal-upgrade'); } else { window.toggleModal('modal-dev-panel'); fetchAdminUsers(); } } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
+        window.promptDevSettingsAuth = function(intent = 'settings') { 
+            window.pendingDevTab = intent; 
+            document.getElementById('dev-password-input').value = ''; 
+            const titleEl = document.getElementById('dev-auth-title');
+            if (titleEl) { titleEl.innerText = intent.startsWith('master_') ? "Meester Wagwoord Vereis" : "Admin Wagwoord"; }
+            window.toggleModal('modal-dev-auth'); 
         }
+
+        window.verifyDevAuth = function(e) {
+            e.preventDefault(); 
+            const pwd = document.getElementById('dev-password-input').value;
+            const isMaster = (pwd === "Elrico1603!!");
+            const isSchoolAdmin = (pwd === window.currentSchoolPassword);
+
+            if (isMaster || isSchoolAdmin) { 
+                if (window.pendingDevTab.startsWith('master_') && !isMaster) {
+                    window.showToast("Geweier", "Hierdie funksie vereis die Elrico Meesterwagwoord.");
+                    return;
+                }
+                
+                window.toggleModal('modal-dev-auth'); 
+                if (isMaster) window.isMasterAdmin = true;
+
+                if(window.pendingDevTab === 'master_upgrade') { 
+                    window.toggleModal('modal-upgrade'); 
+                } 
+                else if (window.pendingDevTab === 'master_theme') {
+                    window.switchDevTab('theme');
+                }
+                else if (window.pendingDevTab === 'master_generator') {
+                    window.switchDevTab('generator');
+                }
+                else { 
+                    window.devAuthenticated = true; 
+                    window.toggleModal('modal-dev-panel'); 
+                    window.switchDevTab(window.pendingDevTab === 'settings' ? 'users' : window.pendingDevTab); 
+                    window.fetchAdminUsers(); 
+                } 
+            } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
+        }
+
         window.verifyUpgradeAuth = function() { 
             const pwd = document.getElementById('upgrade-password').value; 
             if(pwd === "Elrico1603!!") { 
                 window.toggleModal('modal-upgrade'); 
-                
-                const schoolName = document.querySelector('.school-name-display')?.innerText || "Onbekende Skool";
-                const email = "elrico@think-it.co.za";
+                const schoolName = document.querySelector('.school-name-display')?.innerText || "Onbekende Skool"; const email = "elrico@think-it.co.za";
                 const subject = encodeURIComponent(`Aansoek vir Ekstra Module - ${schoolName}`);
                 const body = encodeURIComponent(`Goeiedag Elrico,\n\nOns skool (${schoolName}) wil graag aansoek doen vir 'n bykomende Sport of Kultuur module op ons stelsel.\n\nOns verstaan die beraamde koste is R350 eenmalig.\n\nKontak ons asseblief om die reëlings te tref.\n\nGroete,\nBestuur: ${schoolName}`);
-                
-                window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-                window.showToast("Epos Oopgemaak", "Jou epos-toepassing is oopgemaak om die versoek te stuur."); 
-            } else { 
-                window.showToast("Geweier", "Ongeldige wagwoord."); 
-            } 
-        }
-        window.switchDevTab = function(tab) {
-            document.getElementById('dev-tab-theme').classList.add('hidden'); document.getElementById('dev-tab-users').classList.add('hidden');
-            document.getElementById('btn-dev-theme').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600"; document.getElementById('btn-dev-users').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600";
-            document.getElementById(`dev-tab-${tab}`).classList.remove('hidden'); document.getElementById(`btn-dev-${tab}`).className = "pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700";
+                window.location.href = `mailto:${email}?subject=${subject}&body=${body}`; window.showToast("Epos Oopgemaak", "Jou epos-toepassing is oopgemaak om die versoek te stuur."); 
+            } else { window.showToast("Geweier", "Ongeldige wagwoord."); } 
         }
 
-        async function fetchAdminUsers() {
+        window.switchDevTab = function(tab) {
+            if ((tab === 'theme' || tab === 'generator') && !window.isMasterAdmin) { 
+                window.promptDevSettingsAuth('master_' + tab); 
+                return; 
+            }
+            document.getElementById('dev-tab-theme').classList.add('hidden'); document.getElementById('dev-tab-users').classList.add('hidden'); if(document.getElementById('dev-tab-generator')) document.getElementById('dev-tab-generator').classList.add('hidden');
+            document.getElementById('btn-dev-theme').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600 whitespace-nowrap"; document.getElementById('btn-dev-users').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600 whitespace-nowrap";
+            if(document.getElementById('btn-dev-generator')) document.getElementById('btn-dev-generator').className = "pb-2 text-sm font-bold text-slate-400 hover:text-slate-600 whitespace-nowrap";
+            document.getElementById(`dev-tab-${tab}`).classList.remove('hidden'); document.getElementById(`btn-dev-${tab}`).className = "pb-2 text-sm font-bold text-tjokkieBlue-700 border-b-2 border-tjokkieBlue-700 whitespace-nowrap";
+        }
+
+        window.generateRandomPassword = function() {
+            const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*"; let pwd = "";
+            for(let i=0; i<10; i++) { pwd += chars.charAt(Math.floor(Math.random() * chars.length)); }
+            document.getElementById('generated-password').value = pwd;
+        }
+
+        window.copyGeneratedPassword = function() {
+            const pwdInput = document.getElementById('generated-password'); if(!pwdInput.value) return;
+            pwdInput.select(); document.execCommand("copy"); window.showToast("Gekopieer", "Wagwoord is na knipbord gekopieer.");
+        }
+
+        window.fetchAdminUsers = async function() {
             if(!db) return;
             try {
                 const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'user_profiles'));
@@ -1347,8 +1150,8 @@
                 if(snap.empty) list.innerHTML = '<div class="text-center py-6 text-sm text-slate-400">Geen gebruikers in databasis.</div>';
             } catch(e) {}
         }
-        window.approveUser = async function(uid) { if(db) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid), { status: 'approved' }); fetchAdminUsers(); window.showToast("Goedgekeur", "Die gebruiker het nou toegang."); } }
-        window.deleteUserProfile = async function(uid) { if(db) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid)); fetchAdminUsers(); window.showToast("Uitgevee", "Profiel toegang verwyder."); } }
+        window.approveUser = async function(uid) { if(db) { await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid), { status: 'approved' }); window.fetchAdminUsers(); window.showToast("Goedgekeur", "Die gebruiker het nou toegang."); } }
+        window.deleteUserProfile = async function(uid) { if(db) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid)); window.fetchAdminUsers(); window.showToast("Uitgevee", "Profiel toegang verwyder."); } }
 
         // ======================================================= //
         // JS-AFDELING 6: DATA VERTREK (RENDERING ENGINE)          //
@@ -1363,15 +1166,9 @@
                     <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 rounded-lg ${iconColor} flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${fac.icon}"></i></div>
-                            <div>
-                                <h4 class="font-bold text-slate-900">${fac.name}</h4>
-                                <p class="text-xs text-slate-500">Kondisie: <span class="${statusColor} font-bold">${fac.status}</span></p>
-                                <p class="text-[10px] text-slate-400 mt-1">${fac.subtext}</p>
-                            </div>
+                            <div><h4 class="font-bold text-slate-900">${fac.name}</h4><p class="text-xs text-slate-500">Kondisie: <span class="${statusColor} font-bold">${fac.status}</span></p><p class="text-[10px] text-slate-400 mt-1">${fac.subtext}</p></div>
                         </div>
-                        <button onclick="window.promptFacilityEdit('${id}', '${fac.name}', '${fac.status}', '${fac.subtext}')" title="Wysig Fasiliteit" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
-                            <i class="fa-solid fa-pen text-xs"></i>
-                        </button>
+                        <button onclick="window.promptFacilityEdit('${id}', '${fac.name}', '${fac.status}', '${fac.subtext}')" title="Wysig Fasiliteit" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm"><i class="fa-solid fa-pen text-xs"></i></button>
                     </div>`;
             }
         }
@@ -1382,27 +1179,14 @@
             for (const [id, item] of Object.entries(statusData)) {
                 let st = item.status.toLowerCase();
                 let col = (st.includes('aktief')||st.includes('gereed')) ? 'text-emerald-600' : (st.includes('instandhouding')||st.includes('stukkend')) ? 'text-red-600' : 'text-tjokkieBlue-600';
-                
-                let mediaHtml = '';
-                if(item.imgBase64) {
-                    mediaHtml = `<div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-slate-200"><img src="${item.imgBase64}" class="w-full h-full object-cover" alt="Bus Foto"></div>`;
-                } else {
-                    mediaHtml = `<div class="w-12 h-12 rounded-lg ${item.iconBg || 'bg-slate-100 text-slate-500'} flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${item.icon || 'fa-bus'}"></i></div>`;
-                }
-
+                let mediaHtml = item.imgBase64 ? `<div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-slate-200"><img src="${item.imgBase64}" class="w-full h-full object-cover" alt="Bus Foto"></div>` : `<div class="w-12 h-12 rounded-lg ${item.iconBg || 'bg-slate-100 text-slate-500'} flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${item.icon || 'fa-bus'}"></i></div>`;
                 container.innerHTML += `
                     <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex items-center justify-between relative group hover:border-tjokkieGold-400 transition-colors">
                         <div class="flex items-center space-x-4">
                             ${mediaHtml}
-                            <div>
-                                <h4 class="font-bold text-slate-900">${item.name}</h4>
-                                <p class="text-[10px] text-slate-500 font-bold uppercase">${item.desc}</p>
-                                <p class="text-xs text-slate-500 mt-1">Status: <span class="${col} font-bold">${item.status}</span></p>
-                            </div>
+                            <div><h4 class="font-bold text-slate-900">${item.name}</h4><p class="text-[10px] text-slate-500 font-bold uppercase">${item.desc}</p><p class="text-xs text-slate-500 mt-1">Status: <span class="${col} font-bold">${item.status}</span></p></div>
                         </div>
-                        <button onclick="window.promptBusStatusAuth('${id}')" title="Wysig Bus Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
-                            <i class="fa-solid fa-pen text-xs"></i>
-                        </button>
+                        <button onclick="window.promptBusStatusAuth('${id}')" title="Wysig Bus Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm"><i class="fa-solid fa-pen text-xs"></i></button>
                     </div>`;
             }
         }
@@ -1422,19 +1206,12 @@
                                 <span class="text-[10px] font-bold uppercase mt-1 inline-block ${sc}">${item.status}</span>
                             </div>
                         </div>
-                        <button onclick="window.promptItStatusAuth('${id}', '${item.name}', '${item.status}', '${item.location ? item.location.replace(/'/g, "\\'") : ''}')" title="Wysig Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm">
-                            <i class="fa-solid fa-pen text-xs"></i>
-                        </button>
+                        <button onclick="window.promptItStatusAuth('${id}', '${item.name}', '${item.status}', '${item.location ? item.location.replace(/'/g, "\\'") : ''}')" title="Wysig Status" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 text-slate-400 hover:bg-tjokkieGold-500 hover:text-white flex items-center justify-center transition opacity-0 group-hover:opacity-100 shadow-sm"><i class="fa-solid fa-pen text-xs"></i></button>
                     </div>`;
             }
             if (statusData['wifi']) {
-                const wifiStat = statusData['wifi'].status;
-                const dashWifi = document.getElementById('stat-wifi-status');
-                if (dashWifi) {
-                    dashWifi.innerText = '';
-                    let bgClass = (wifiStat === 'Aanlyn') ? 'bg-emerald-500' : (wifiStat === 'Onstabiel') ? 'bg-amber-500' : 'bg-red-500';
-                    dashWifi.className = `w-5 h-5 rounded-full mx-auto mb-1 shadow-sm transition-colors duration-300 ${bgClass}`;
-                }
+                const wifiStat = statusData['wifi'].status; const dashWifi = document.getElementById('stat-wifi-status');
+                if (dashWifi) { dashWifi.innerText = ''; let bgClass = (wifiStat === 'Aanlyn') ? 'bg-emerald-500' : (wifiStat === 'Onstabiel') ? 'bg-amber-500' : 'bg-red-500'; dashWifi.className = `w-5 h-5 rounded-full mx-auto mb-1 shadow-sm transition-colors duration-300 ${bgClass}`; }
             }
         }
 
@@ -1443,8 +1220,7 @@
         window.renderCalendar = function(tasks) {
             const grid = document.getElementById('calendar-grid'); const monthLabel = document.getElementById('calendar-month');
             if(!grid || !monthLabel) return; grid.innerHTML = '';
-            const year = calDate.getFullYear(); const month = calDate.getMonth();
-            const monthNames = ["Januarie", "Februarie", "Maart", "April", "Mei", "Junie", "Julie", "Augustus", "September", "Oktober", "November", "Desember"];
+            const year = calDate.getFullYear(); const month = calDate.getMonth(); const monthNames = ["Januarie", "Februarie", "Maart", "April", "Mei", "Junie", "Julie", "Augustus", "September", "Oktober", "November", "Desember"];
             monthLabel.innerText = `${monthNames[month]} ${year}`;
             
             const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -1457,10 +1233,7 @@
 
                 grid.innerHTML += `
                     <div class="p-2 border ${highlightClass} rounded-lg min-h-[90px] flex flex-col transition-all cursor-pointer group relative" onclick="window.promptCalendarAuth('${dateStr}')">
-                        <div class="flex justify-between items-start mb-1">
-                            <span class="text-xs font-black ${dayTasks.length > 0 ? 'text-tjokkieBlue-800' : 'text-slate-500'}">${day}</span>
-                            <div class="w-5 h-5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm"><i class="fa-solid fa-plus text-[10px]"></i></div>
-                        </div>
+                        <div class="flex justify-between items-start mb-1"><span class="text-xs font-black ${dayTasks.length > 0 ? 'text-tjokkieBlue-800' : 'text-slate-500'}">${day}</span><div class="w-5 h-5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm"><i class="fa-solid fa-plus text-[10px]"></i></div></div>
                         <div class="flex-1 overflow-y-auto custom-scrollbar space-y-1.5">${taskHtml}</div>
                     </div>`;
             }
@@ -1532,11 +1305,8 @@
             if(!tbody) return; tbody.innerHTML = '';
             trips.forEach(trip => {
                 tbody.innerHTML += `<tr class="hover:bg-slate-50 transition duration-150">
-                    <td class="px-6 py-4 font-bold text-slate-900">${trip.dest}</td>
-                    <td class="px-6 py-4">${trip.time}</td>
-                    <td class="px-6 py-4 font-semibold text-tjokkieBlue-700">${trip.pax || 0}</td>
-                    <td class="px-6 py-4">${trip.vehicle}</td>
-                    <td class="px-6 py-4 text-slate-500">${trip.driver}</td>
+                    <td class="px-6 py-4 font-bold text-slate-900">${trip.dest}</td><td class="px-6 py-4">${trip.time}</td><td class="px-6 py-4 font-semibold text-tjokkieBlue-700">${trip.pax || 0}</td>
+                    <td class="px-6 py-4">${trip.vehicle}</td><td class="px-6 py-4 text-slate-500">${trip.driver}</td>
                     <td class="px-6 py-4"><button onclick="window.cancelBusTrip('${trip.id}')" class="bg-red-50 hover:bg-red-100 text-red-700 font-bold px-3 py-1.5 rounded transition">Kanselleer</button></td>
                 </tr>`;
             });
@@ -1629,48 +1399,36 @@
         
         window.verifyAddFacilityAuth = function(event) {
             event.preventDefault();
-            if (document.getElementById('add-facility-password-input').value === "1603") {
-                window.toggleModal('modal-add-facility-password');
-                document.getElementById('form-add-facility').reset();
-                window.toggleModal('modal-add-facility');
+            if (document.getElementById('add-facility-password-input').value === window.currentSchoolPassword) {
+                window.toggleModal('modal-add-facility-password'); document.getElementById('form-add-facility').reset(); window.toggleModal('modal-add-facility');
             } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
         window.saveNewFacility = async function(event) {
             event.preventDefault();
-            const name = document.getElementById('new-facility-name').value;
-            const status = document.getElementById('new-facility-status').value;
-            const subtext = document.getElementById('new-facility-subtext').value;
-            
-            const newFacility = { name, status, subtext, icon: "fa-building", color: "amber" };
-            const id = 'fac_' + Date.now();
+            const name = document.getElementById('new-facility-name').value; const status = document.getElementById('new-facility-status').value; const subtext = document.getElementById('new-facility-subtext').value;
+            const newFacility = { name, status, subtext, icon: "fa-building", color: "amber" }; const id = 'fac_' + Date.now();
 
             if(db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'facilities', id), newFacility); } 
             else { localFacilities[id] = newFacility; window.renderFacilities(localFacilities); }
             
-            window.logEvent(`Nuwe terrein bygevoeg: ${name}`, 'Terrein');
-            window.showToast("Sukses", "Nuwe terrein is geregistreer.");
-            window.toggleModal('modal-add-facility');
+            window.logEvent(`Nuwe terrein bygevoeg: ${name}`, 'Terrein'); window.showToast("Sukses", "Nuwe terrein is geregistreer."); window.toggleModal('modal-add-facility');
         }
 
         window.addTerreinTask = async function(event) {
-            event.preventDefault();
-            const area = document.getElementById('terrein-area').value;
+            event.preventDefault(); const area = document.getElementById('terrein-area').value;
             const taskData = { area, date: document.getElementById('terrein-date').value, desc: document.getElementById('terrein-desc').value, priority: document.getElementById('terrein-priority').value, reported: document.getElementById('terrein-reported').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData); }
             else { localTerreinTasks.push({ id: Math.random().toString(), ...taskData }); window.renderTerreinTasks(localTerreinTasks); }
-            window.logEvent(`Nuwe probleem: ${area}`, 'Terrein');
-            document.getElementById('form-terrein').reset(); window.toggleModal('modal-terrein-taak');
+            window.logEvent(`Nuwe probleem: ${area}`, 'Terrein'); document.getElementById('form-terrein').reset(); window.toggleModal('modal-terrein-taak');
         }
 
         window.addPlannedTask = async function(event) {
-            event.preventDefault();
-            const area = document.getElementById('plan-area').value;
+            event.preventDefault(); const area = document.getElementById('plan-area').value;
             const taskData = { area, date: document.getElementById('plan-date').value, desc: document.getElementById('plan-desc').value, priority: document.getElementById('plan-priority').value, reported: document.getElementById('plan-reported').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData); }
             else { localTerreinTasks.push({ id: Math.random().toString(), ...taskData }); window.renderTerreinTasks(localTerreinTasks); }
-            window.logEvent(`Beplan: ${area}`, 'Terrein');
-            document.getElementById('form-beplan').reset(); window.toggleModal('modal-terrein-beplan');
+            window.logEvent(`Beplan: ${area}`, 'Terrein'); document.getElementById('form-beplan').reset(); window.toggleModal('modal-terrein-beplan');
         }
 
         window.completeTerreinTask = async function(id) {
@@ -1688,17 +1446,14 @@
 
         window.verifyFacilityAuth = function(event) {
             event.preventDefault();
-            if (document.getElementById('facility-password-input').value === "1603") {
+            if (document.getElementById('facility-password-input').value === window.currentSchoolPassword) {
                 window.toggleModal('modal-facility-password'); window.toggleModal('modal-facility-edit');
             } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
         window.saveFacilityEdit = async function(event) {
             event.preventDefault();
-            const id = document.getElementById('edit-facility-id').value;
-            const status = document.getElementById('edit-facility-status').value;
-            const subtext = document.getElementById('edit-facility-subtext').value;
-
+            const id = document.getElementById('edit-facility-id').value; const status = document.getElementById('edit-facility-status').value; const subtext = document.getElementById('edit-facility-subtext').value;
             if (db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'facilities', id), { status, subtext }, { merge: true }); } 
             else { localFacilities[id] = { ...localFacilities[id], status, subtext }; window.renderFacilities(localFacilities); }
             window.logEvent(`Status opgedateer vir fasiliteit`, 'Terrein'); window.showToast("Sukses!", "Fasiliteit se status is opgedateer."); window.toggleModal('modal-facility-edit');
@@ -1708,112 +1463,59 @@
             const id = document.getElementById('edit-facility-id').value;
             if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'facilities', id)); } 
             else { delete localFacilities[id]; window.renderFacilities(localFacilities); }
-            window.logEvent(`Fasiliteit is uitgevee`, 'Terrein'); 
-            window.showToast("Uitgevee", "Die fasiliteit is permanent verwyder."); 
-            window.toggleModal('modal-facility-edit');
+            window.logEvent(`Fasiliteit is uitgevee`, 'Terrein'); window.showToast("Uitgevee", "Die fasiliteit is permanent verwyder."); window.toggleModal('modal-facility-edit');
         }
 
         // BUSVERVOER AKSIES
-        window.promptAddBusAuth = function() {
-            document.getElementById('add-bus-password-input').value = '';
-            window.toggleModal('modal-add-bus-password');
-        }
+        window.promptAddBusAuth = function() { document.getElementById('add-bus-password-input').value = ''; window.toggleModal('modal-add-bus-password'); }
         
         window.verifyAddBusAuth = function(event) {
             event.preventDefault();
-            if (document.getElementById('add-bus-password-input').value === "1603") {
-                window.toggleModal('modal-add-bus-password');
-                document.getElementById('form-add-bus').reset();
-                window.toggleModal('modal-add-bus');
-            } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
+            if (document.getElementById('add-bus-password-input').value === window.currentSchoolPassword) { window.toggleModal('modal-add-bus-password'); document.getElementById('form-add-bus').reset(); window.toggleModal('modal-add-bus'); } 
+            else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
         window.saveNewBus = async function(event) {
-            event.preventDefault();
-            const name = document.getElementById('new-bus-name').value;
-            const desc = document.getElementById('new-bus-desc').value;
-            const status = document.getElementById('new-bus-status').value;
-            
-            const newBus = { name, desc, status, icon: "fa-van-shuttle", iconBg: "bg-slate-100 text-slate-700" };
-            const id = 'bus_' + Date.now();
-
+            event.preventDefault(); const name = document.getElementById('new-bus-name').value; const desc = document.getElementById('new-bus-desc').value; const status = document.getElementById('new-bus-status').value;
+            const newBus = { name, desc, status, icon: "fa-van-shuttle", iconBg: "bg-slate-100 text-slate-700" }; const id = 'bus_' + Date.now();
             if(db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_status', id), newBus); } 
             else { localBusStatus[id] = newBus; window.renderBusStatus(localBusStatus); }
-            
-            window.logEvent(`Nuwe bus bygevoeg: ${name}`, 'Busvervoer');
-            window.showToast("Sukses", "Nuwe bus is geregistreer.");
-            window.toggleModal('modal-add-bus');
+            window.logEvent(`Nuwe bus bygevoeg: ${name}`, 'Busvervoer'); window.showToast("Sukses", "Nuwe bus is geregistreer."); window.toggleModal('modal-add-bus');
         }
 
         window.promptBusStatusAuth = function(id) {
-            const bus = localBusStatus[id];
-            if(!bus) return;
-            document.getElementById('auth-bus-id').value = id;
-            document.getElementById('bus-password-input').value = '';
-            document.getElementById('edit-bus-id').value = id;
-            document.getElementById('edit-bus-title').innerText = `Wysig: ${bus.name}`;
-            document.getElementById('edit-bus-name-val').value = bus.name;
-            document.getElementById('edit-bus-status-val').value = bus.status;
-            document.getElementById('edit-bus-img').value = ''; 
+            const bus = localBusStatus[id]; if(!bus) return;
+            document.getElementById('auth-bus-id').value = id; document.getElementById('bus-password-input').value = ''; document.getElementById('edit-bus-id').value = id;
+            document.getElementById('edit-bus-title').innerText = `Wysig: ${bus.name}`; document.getElementById('edit-bus-name-val').value = bus.name;
+            document.getElementById('edit-bus-status-val').value = bus.status; document.getElementById('edit-bus-img').value = ''; 
             window.toggleModal('modal-bus-status-password');
         }
 
         window.verifyBusAuth = function(event) {
             event.preventDefault();
-            if (document.getElementById('bus-password-input').value === "1603") {
-                window.toggleModal('modal-bus-status-password');
-                window.toggleModal('modal-bus-status-edit');
-            } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
+            if (document.getElementById('bus-password-input').value === window.currentSchoolPassword) { window.toggleModal('modal-bus-status-password'); window.toggleModal('modal-bus-status-edit'); } 
+            else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
         window.saveBusStatusEdit = async function(event) {
-            event.preventDefault();
-            const id = document.getElementById('edit-bus-id').value;
-            const name = document.getElementById('edit-bus-name-val').value;
-            const status = document.getElementById('edit-bus-status-val').value;
-            const imgFile = document.getElementById('edit-bus-img').files[0];
-
+            event.preventDefault(); const id = document.getElementById('edit-bus-id').value; const name = document.getElementById('edit-bus-name-val').value; const status = document.getElementById('edit-bus-status-val').value; const imgFile = document.getElementById('edit-bus-img').files[0];
             let imgBase64 = localBusStatus[id].imgBase64 || null; 
-            if(imgFile) {
-                imgBase64 = await new Promise((resolve) => {
-                    const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.readAsDataURL(imgFile);
-                });
-            }
-
-            const updates = { name, status };
-            if (imgBase64) updates.imgBase64 = imgBase64;
-
-            if (db && user) {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_status', id), updates, { merge: true });
-            } else {
-                localBusStatus[id] = { ...localBusStatus[id], ...updates };
-                window.renderBusStatus(localBusStatus);
-            }
-            window.logEvent(`Bus opgedateer: ${name}`, 'Busvervoer');
-            window.showToast("Sukses!", "Die bus inligting is gestoor.");
-            window.toggleModal('modal-bus-status-edit');
+            if(imgFile) { imgBase64 = await new Promise((resolve) => { const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.readAsDataURL(imgFile); }); }
+            const updates = { name, status }; if (imgBase64) updates.imgBase64 = imgBase64;
+            if (db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_status', id), updates, { merge: true }); } 
+            else { localBusStatus[id] = { ...localBusStatus[id], ...updates }; window.renderBusStatus(localBusStatus); }
+            window.logEvent(`Bus opgedateer: ${name}`, 'Busvervoer'); window.showToast("Sukses!", "Die bus inligting is gestoor."); window.toggleModal('modal-bus-status-edit');
         }
 
         window.openBusRitModal = function() {
-            document.getElementById('form-bus').reset();
-            const select = document.getElementById('bus-vehicle');
-            select.innerHTML = '';
-            Object.values(localBusStatus).forEach(bus => {
-                select.innerHTML += `<option value="${bus.name}">${bus.name} (${bus.desc})</option>`;
-            });
-            select.innerHTML += `<option value="Eksterne Toerbus">Eksterne Toerbus</option>`;
-            window.toggleModal('modal-bus-rit');
+            document.getElementById('form-bus').reset(); const select = document.getElementById('bus-vehicle'); select.innerHTML = '';
+            Object.values(localBusStatus).forEach(bus => { select.innerHTML += `<option value="${bus.name}">${bus.name} (${bus.desc})</option>`; });
+            select.innerHTML += `<option value="Eksterne Toerbus">Eksterne Toerbus</option>`; window.toggleModal('modal-bus-rit');
         }
 
         window.addBusTrip = async function(event) {
             event.preventDefault(); const dest = document.getElementById('bus-destination').value;
-            const tripData = { 
-                dest, 
-                time: document.getElementById('bus-time').value, 
-                pax: document.getElementById('bus-passengers').value,
-                vehicle: document.getElementById('bus-vehicle').value, 
-                driver: document.getElementById('bus-driver').value 
-            };
+            const tripData = { dest, time: document.getElementById('bus-time').value, pax: document.getElementById('bus-passengers').value, vehicle: document.getElementById('bus-vehicle').value, driver: document.getElementById('bus-driver').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData); }
             else { localBusTrips.push({ id: Math.random().toString(), ...tripData }); window.renderBusTrips(localBusTrips); }
             window.logEvent(`Rit na ${dest} (${tripData.pax} kinders)`, 'Busvervoer'); window.showToast("Rit Beplan!", `Geskeduleer vir ${tripData.pax} passasiers.`); window.toggleModal('modal-bus-rit');
@@ -1826,46 +1528,26 @@
 
         // IT WYSIG AKSIES
         window.promptItStatusAuth = function(id, name, currentStatus, currentLocation) {
-            document.getElementById('auth-it-id').value = id;
-            document.getElementById('it-password-input').value = '';
-            document.getElementById('edit-it-id').value = id;
-            document.getElementById('edit-it-title').innerText = `Wysig: ${name}`;
+            document.getElementById('auth-it-id').value = id; document.getElementById('it-password-input').value = '';
+            document.getElementById('edit-it-id').value = id; document.getElementById('edit-it-title').innerText = `Wysig: ${name}`;
             document.getElementById('edit-it-status-val').value = currentStatus;
-            
             const locInput = document.getElementById('edit-it-location-val');
-            if(locInput) {
-                locInput.value = currentLocation && currentLocation !== 'undefined' ? currentLocation : '';
-            }
-
+            if(locInput) { locInput.value = currentLocation && currentLocation !== 'undefined' ? currentLocation : ''; }
             window.toggleModal('modal-it-password');
         }
 
         window.verifyItAuth = function(event) {
             event.preventDefault();
-            if (document.getElementById('it-password-input').value === "1603") {
-                window.toggleModal('modal-it-password');
-                window.toggleModal('modal-it-status-edit');
-            } else {
-                window.showToast("Geweier", "Verkeerde wagwoord.");
-            }
+            if (document.getElementById('it-password-input').value === window.currentSchoolPassword) { window.toggleModal('modal-it-password'); window.toggleModal('modal-it-status-edit'); } 
+            else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
         window.saveItStatusEdit = async function(event) {
             event.preventDefault();
-            const id = document.getElementById('edit-it-id').value;
-            const status = document.getElementById('edit-it-status-val').value;
-            const location = document.getElementById('edit-it-location-val').value;
-
-            if (db && user) {
-                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_status', id), { status, location }, { merge: true });
-            } else {
-                localItStatus[id].status = status;
-                localItStatus[id].location = location;
-                window.renderItStatus(localItStatus);
-            }
-            window.logEvent(`Netwerk status opgedateer`, 'IT');
-            window.showToast("Sukses!", "Die IT-stelsel se status is aangepas.");
-            window.toggleModal('modal-it-status-edit');
+            const id = document.getElementById('edit-it-id').value; const status = document.getElementById('edit-it-status-val').value; const location = document.getElementById('edit-it-location-val').value;
+            if (db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_status', id), { status, location }, { merge: true }); } 
+            else { localItStatus[id].status = status; localItStatus[id].location = location; window.renderItStatus(localItStatus); }
+            window.logEvent(`Netwerk status opgedateer`, 'IT'); window.showToast("Sukses!", "Die IT-stelsel se status is aangepas."); window.toggleModal('modal-it-status-edit');
         }
 
         window.addITTicket = async function(event) {
@@ -1888,8 +1570,7 @@
             const itemData = { doel, pouse: document.getElementById('afkondiging-pouse').value, inhoud: document.getElementById('afkondiging-inhoud').value, persoon: document.getElementById('afkondiging-persoon').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), itemData); }
             else { localAfkondigings.push({ id: Math.random().toString(), ...itemData }); window.renderAfkondigings(localAfkondigings); }
-            window.logEvent(`Afkondiging: ${doel}`, 'Skakel');
-            document.getElementById('form-afkondiging').reset(); window.toggleModal('modal-afkondiging');
+            window.logEvent(`Afkondiging: ${doel}`, 'Skakel'); document.getElementById('form-afkondiging').reset(); window.toggleModal('modal-afkondiging');
         }
 
         window.deleteAfkondiging = async function(id, doel) {
@@ -1913,8 +1594,7 @@
         // BEMARKING
         window.addBemarkingTaak = async function(event) {
             event.preventDefault();
-            const taak = document.getElementById('bem-taak').value;
-            const bemData = { taak, datum: document.getElementById('bem-datum').value, status: document.getElementById('bem-status').value, verant: document.getElementById('bem-verant').value };
+            const taak = document.getElementById('bem-taak').value; const bemData = { taak, datum: document.getElementById('bem-datum').value, status: document.getElementById('bem-status').value, verant: document.getElementById('bem-verant').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), bemData); }
             else { localBemarkingTake.push({ id: Math.random().toString(), ...bemData }); window.renderBemarkingTake(localBemarkingTake); }
             window.logEvent(`Bemarkingstaak: ${taak}`, 'Bemarking'); document.getElementById('form-bemarking').reset(); window.toggleModal('modal-bemarking-taak');
@@ -1927,7 +1607,7 @@
 
         // SPORT & KALENDER
         window.promptCalendarAuth = function(dateStr = '') { document.getElementById('auth-calendar-date').value = dateStr; document.getElementById('calendar-password-input').value = ''; window.toggleModal('modal-calendar-password'); }
-        window.verifyCalendarAuth = function(e) { e.preventDefault(); if (document.getElementById('calendar-password-input').value === "1603") { window.toggleModal('modal-calendar-password'); document.getElementById('form-beplan').reset(); document.getElementById('plan-date').value = document.getElementById('auth-calendar-date').value; window.toggleModal('modal-terrein-beplan'); } else { window.showToast("Geweier", "Verkeerde wagwoord."); } }
+        window.verifyCalendarAuth = function(e) { e.preventDefault(); if (document.getElementById('calendar-password-input').value === window.currentSchoolPassword) { window.toggleModal('modal-calendar-password'); document.getElementById('form-beplan').reset(); document.getElementById('plan-date').value = document.getElementById('auth-calendar-date').value; window.toggleModal('modal-terrein-beplan'); } else { window.showToast("Geweier", "Verkeerde wagwoord."); } }
         
         window.openSportEventModal = function(deptId, deptName) { document.getElementById('form-sport-event').reset(); document.getElementById('sport-event-dept').value = deptId; document.getElementById('sport-event-title-display').innerText = `Skeduleer Geleentheid: ${deptName}`; window.toggleModal('modal-sport-event'); }
         window.saveSportEvent = async function(e) { 
