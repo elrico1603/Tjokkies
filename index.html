@@ -271,7 +271,7 @@
                     <button onclick="window.switchTab('voortrekkers')" id="btn-voortrekkers" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-campground text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Voortrekkers</span></button>
 
                     <div class="px-2 mt-4 pb-4">
-                        <button onclick="window.promptDevSettingsAuth('master_upgrade')" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl transition border border-dashed border-tjokkieGold-500/50 text-tjokkieGold-400 hover:bg-tjokkieBlue-800/50">
+                        <button onclick="window.promptDevSettingsAuth('module_step1')" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl transition border border-dashed border-tjokkieGold-500/50 text-tjokkieGold-400 hover:bg-tjokkieBlue-800/50">
                             <i class="fa-solid fa-plus text-sm"></i><span class="hidden md:inline text-xs font-bold">Nuwe Module</span>
                         </button>
                     </div>
@@ -684,17 +684,38 @@
         </div>
     </div>
 
-    <!-- MODULE UPGRADE MODAL -->
-    <div id="modal-upgrade" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80] hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center">
+    <!-- MODULE UPGRADE MODALS -->
+    <div id="modal-upgrade-info" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80] hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center animate-in fade-in zoom-in-95 duration-200">
             <div class="w-16 h-16 rounded-full bg-tjokkieGold-100 text-tjokkieGold-600 flex items-center justify-center text-3xl mx-auto mb-4"><i class="fa-solid fa-crown"></i></div>
-            <h3 class="font-black text-slate-900 text-lg mb-2">Premium Module Vereis</h3>
-            <p class="text-xs text-slate-500 leading-relaxed mb-6">Om addisionele sport- of kultuur-afdelings in die stelsel in te bou, behels 'n strukturele opgradering. Beraamde koste: <b>R350 eenmalig per nuwe module</b>.</p>
-            <input type="password" id="upgrade-password" placeholder="Ontwikkelaar Wagwoord" class="w-full border border-slate-200 p-2.5 rounded-lg text-xs mb-4 text-center focus:outline-none">
+            <h3 class="font-black text-slate-900 text-lg mb-2">Premium Module</h3>
+            <p class="text-xs text-slate-500 leading-relaxed mb-6">Om addisionele sport- of kultuur-afdelings in die stelsel in te bou, behels 'n strukturele opgradering. Beraamde koste: <b>R350 eenmalig per nuwe module</b>. Bevestig hieronder om die aansoek per e-pos te stuur.</p>
             <div class="flex space-x-2">
-                <button onclick="window.toggleModal('modal-upgrade')" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Maak Toe</button>
-                <button onclick="window.verifyUpgradeAuth()" class="flex-1 py-2 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl text-xs transition">Bevestig</button>
+                <button onclick="window.toggleModal('modal-upgrade-info')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Kanselleer</button>
+                <button onclick="window.requestModuleUpgrade()" class="flex-1 py-2.5 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl text-xs transition">Bevestig Aansoek</button>
             </div>
+        </div>
+    </div>
+
+    <div id="modal-upgrade-unlock" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80] hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Aktiveer Module</h3><button onclick="window.toggleModal('modal-upgrade-unlock')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <p class="text-xs text-slate-500 mb-4">Plak die spesiale aktiveringskode wat u ontvang het hier in.</p>
+            <form id="form-upgrade-unlock" onsubmit="window.verifyModuleUnlock(event)" class="space-y-4 text-xs">
+                <div><input type="text" id="upgrade-unlock-code" required placeholder="Ontsluitingskode" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none text-center font-mono tracking-widest text-lg"></div>
+                <button type="submit" class="w-full py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-create-module" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80] hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Skep Nuwe Module</h3><button onclick="window.toggleModal('modal-create-module')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-create-module" onsubmit="window.saveNewModule(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Module Naam</label><input type="text" id="new-mod-name" placeholder="Bv. Gholf" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">FontAwesome Ikoon (Opsioneel)</label><input type="text" id="new-mod-icon" placeholder="Bv. fa-golf-ball-tee" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <button type="submit" class="w-full py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition mt-2">Skep en Stoor</button>
+            </form>
         </div>
     </div>
 
@@ -1233,7 +1254,10 @@
                 window.toggleModal('modal-dev-auth'); 
                 if (isMaster) window.isMasterAdmin = true;
 
-                if (window.pendingDevTab === 'master_theme') {
+                if(window.pendingDevTab === 'module_step1') { 
+                    window.toggleModal('modal-upgrade-info'); 
+                } 
+                else if (window.pendingDevTab === 'master_theme') {
                     window.switchDevTab('theme');
                 }
                 else if (window.pendingDevTab === 'master_generator') {
@@ -1248,40 +1272,25 @@
             } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
-        // --- NUWE MODULE UPGRADE FUNKSIES ---
-        window.openUpgradeInfo = function() {
-            document.getElementById('upgrade-admin-pwd').value = '';
-            window.toggleModal('modal-upgrade-info');
-        }
-
-        window.requestModuleUpgrade = function(e) {
-            e.preventDefault();
-            const pwd = document.getElementById('upgrade-admin-pwd').value;
-            if(pwd === window.currentSchoolPassword || pwd === "Elrico1603!!") {
-                window.toggleModal('modal-upgrade-info');
-                
-                // Stuur die Epos!
-                const schoolName = document.querySelector('.school-name-display')?.innerText || "Onbekende Skool";
-                const email = "elrico@think-it.co.za";
-                const subject = encodeURIComponent(`Aansoek vir Ekstra Module - ${schoolName}`);
-                const body = encodeURIComponent(`Goeiedag Elrico,\n\nOns skool (${schoolName}) wil graag aansoek doen vir 'n bykomende Sport of Kultuur module op ons stelsel.\n\nOns het die R350 koste aanvaar en wag vir die aktiveringskode.\n\nGroete,\nBestuur: ${schoolName}`);
-                window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-                
-                // Maak die Tweede Skerm na 'n halwe sekonde oop
-                setTimeout(() => {
-                    document.getElementById('upgrade-unlock-code').value = '';
-                    window.toggleModal('modal-upgrade-unlock');
-                }, 800);
-                
-            } else {
-                window.showToast("Geweier", "Verkeerde Skool Admin wagwoord.");
-            }
+        window.requestModuleUpgrade = function() { 
+            window.toggleModal('modal-upgrade-info'); 
+            
+            const schoolName = document.querySelector('.school-name-display')?.innerText || "Onbekende Skool"; 
+            const email = "elrico@think-it.co.za";
+            const subject = encodeURIComponent(`Aansoek vir Ekstra Module - ${schoolName}`);
+            const body = encodeURIComponent(`Goeiedag Elrico,\n\nOns skool (${schoolName}) wil graag aansoek doen vir 'n bykomende Sport of Kultuur module op ons stelsel.\n\nOns het die R350 koste aanvaar en wag vir die aktiveringskode.\n\nGroete,\nBestuur: ${schoolName}`);
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`; 
+            
+            setTimeout(() => {
+                document.getElementById('upgrade-unlock-code').value = '';
+                window.toggleModal('modal-upgrade-unlock');
+            }, 1000);
         }
 
         window.verifyModuleUnlock = function(e) {
             e.preventDefault();
             const code = document.getElementById('upgrade-unlock-code').value;
-            // Die stelsel aanvaar Enige 10 Karakter (Generator) wagwoord, of die meester wagwoord.
+            // Dit vereis die skool tik enige 10-karakter wagwoord (wat jou generator gemaak het)
             if(code.length === 10 || code === "Elrico1603!!") {
                 window.toggleModal('modal-upgrade-unlock');
                 document.getElementById('form-create-module').reset();
@@ -1294,17 +1303,17 @@
         window.saveNewModule = async function(e) {
             e.preventDefault();
             const modName = document.getElementById('new-mod-name').value;
-            const modIcon = document.getElementById('new-mod-icon').value;
+            const modIcon = document.getElementById('new-mod-icon').value || 'fa-star';
             
             if (db && user) {
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'custom_modules'), {
                     name: modName,
                     icon: modIcon,
                     timestamp: Date.now()
-                });
+                }).catch(()=>{});
             }
             
-            window.showToast("Sukses", `Die module '${modName}' is geregistreer en sal met die volgende opdatering sigbaar wees.`);
+            window.showToast("Sukses", `Die module '${modName}' sal bygevoeg word.`);
             window.toggleModal('modal-create-module');
         }
 
