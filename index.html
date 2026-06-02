@@ -1233,10 +1233,7 @@
                 window.toggleModal('modal-dev-auth'); 
                 if (isMaster) window.isMasterAdmin = true;
 
-                if(window.pendingDevTab === 'master_upgrade') { 
-                    window.toggleModal('modal-upgrade'); 
-                } 
-                else if (window.pendingDevTab === 'master_theme') {
+                if (window.pendingDevTab === 'master_theme') {
                     window.switchDevTab('theme');
                 }
                 else if (window.pendingDevTab === 'master_generator') {
@@ -1251,15 +1248,64 @@
             } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
-        window.verifyUpgradeAuth = function() { 
-            const pwd = document.getElementById('upgrade-password').value; 
-            if(pwd === "Elrico1603!!") { 
-                window.toggleModal('modal-upgrade'); 
-                const schoolName = document.querySelector('.school-name-display')?.innerText || "Onbekende Skool"; const email = "elrico@think-it.co.za";
+        // --- NUWE MODULE UPGRADE FUNKSIES ---
+        window.openUpgradeInfo = function() {
+            document.getElementById('upgrade-admin-pwd').value = '';
+            window.toggleModal('modal-upgrade-info');
+        }
+
+        window.requestModuleUpgrade = function(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('upgrade-admin-pwd').value;
+            if(pwd === window.currentSchoolPassword || pwd === "Elrico1603!!") {
+                window.toggleModal('modal-upgrade-info');
+                
+                // Stuur die Epos!
+                const schoolName = document.querySelector('.school-name-display')?.innerText || "Onbekende Skool";
+                const email = "elrico@think-it.co.za";
                 const subject = encodeURIComponent(`Aansoek vir Ekstra Module - ${schoolName}`);
-                const body = encodeURIComponent(`Goeiedag Elrico,\n\nOns skool (${schoolName}) wil graag aansoek doen vir 'n bykomende Sport of Kultuur module op ons stelsel.\n\nOns verstaan die beraamde koste is R350 eenmalig.\n\nKontak ons asseblief om die reëlings te tref.\n\nGroete,\nBestuur: ${schoolName}`);
-                window.location.href = `mailto:${email}?subject=${subject}&body=${body}`; window.showToast("Epos Oopgemaak", "Jou epos-toepassing is oopgemaak om die versoek te stuur."); 
-            } else { window.showToast("Geweier", "Ongeldige wagwoord."); } 
+                const body = encodeURIComponent(`Goeiedag Elrico,\n\nOns skool (${schoolName}) wil graag aansoek doen vir 'n bykomende Sport of Kultuur module op ons stelsel.\n\nOns het die R350 koste aanvaar en wag vir die aktiveringskode.\n\nGroete,\nBestuur: ${schoolName}`);
+                window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+                
+                // Maak die Tweede Skerm na 'n halwe sekonde oop
+                setTimeout(() => {
+                    document.getElementById('upgrade-unlock-code').value = '';
+                    window.toggleModal('modal-upgrade-unlock');
+                }, 800);
+                
+            } else {
+                window.showToast("Geweier", "Verkeerde Skool Admin wagwoord.");
+            }
+        }
+
+        window.verifyModuleUnlock = function(e) {
+            e.preventDefault();
+            const code = document.getElementById('upgrade-unlock-code').value;
+            // Die stelsel aanvaar Enige 10 Karakter (Generator) wagwoord, of die meester wagwoord.
+            if(code.length === 10 || code === "Elrico1603!!") {
+                window.toggleModal('modal-upgrade-unlock');
+                document.getElementById('form-create-module').reset();
+                window.toggleModal('modal-create-module');
+            } else {
+                window.showToast("Fout", "Ongeldige aktiveringskode.");
+            }
+        }
+
+        window.saveNewModule = async function(e) {
+            e.preventDefault();
+            const modName = document.getElementById('new-mod-name').value;
+            const modIcon = document.getElementById('new-mod-icon').value;
+            
+            if (db && user) {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'custom_modules'), {
+                    name: modName,
+                    icon: modIcon,
+                    timestamp: Date.now()
+                });
+            }
+            
+            window.showToast("Sukses", `Die module '${modName}' is geregistreer en sal met die volgende opdatering sigbaar wees.`);
+            window.toggleModal('modal-create-module');
         }
 
         window.switchDevTab = function(tab) {
