@@ -34,7 +34,7 @@
     </style>
 
     <!-- ======================================================= -->
-    <!-- GLOBALE UI FUNKSIES & FAILSAFE (BO-AAN OM FOUTE TE KEER)-->
+    <!-- GLOBALE UI FUNKSIES & FAILSAFE                          -->
     <!-- ======================================================= -->
     <script>
         window.appInitialized = false;
@@ -42,6 +42,11 @@
         window.devAuthenticated = false;
         window.isMasterAdmin = false;
         window.pendingDevTab = '';
+
+        // WEERGAWE BEHEER (VERSIONING)
+        window.CURRENT_APP_VERSION = 1; 
+        window.updateAvailable = false;
+        window.cloudAppVersion = 1;
 
         window.hideLoadingScreen = function() {
             const loader = document.getElementById('loading-screen');
@@ -88,6 +93,19 @@
         };
 
         window.showNotificationAlert = function() { window.showToast("Kennisgewings", "Stelsel is gekoppel en aktief."); };
+
+        window.handleBellClick = function() {
+            if (window.updateAvailable) {
+                window.toggleModal('modal-update-prompt');
+            } else {
+                window.showToast("Inligting", "Die stelsel is tans op datum.");
+            }
+        };
+
+        window.forceReloadApp = function() {
+            const ts = new Date().getTime();
+            window.location.href = window.location.pathname + '?v=' + ts;
+        };
 
         window.updateLiveClock = function() {
             const now = new Date();
@@ -176,14 +194,12 @@
                 <h2 class="text-2xl font-black text-slate-900 school-name-display">Tjokkies Portaal</h2>
                 <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Stelsel Toegang</p>
             </div>
-            <!-- Login Form -->
             <form id="login-form" onsubmit="window.handleLogin(event)" class="space-y-5">
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Eposadres</label><input type="email" id="login-email" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Wagwoord</label><input type="password" id="login-password" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <button type="submit" class="w-full py-3 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-extrabold rounded-xl transition shadow-md">Teken In</button>
                 <div class="text-center pt-2"><button type="button" onclick="window.toggleAuthForms()" class="text-xs text-tjokkieBlue-600 hover:text-tjokkieBlue-800 font-bold">Nuwe Personeellid? Registreer Hier</button></div>
             </form>
-            <!-- Register Form -->
             <form id="register-form" onsubmit="window.handleRegister(event)" class="space-y-4 hidden">
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Voorletters & Van</label><input type="text" id="reg-name" required placeholder="bv. Mnr. P Nel" class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Skool Eposadres</label><input type="email" id="reg-email" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
@@ -221,8 +237,8 @@
                     </div>
                     <div class="flex items-center space-x-6">
                         <div class="hidden md:flex flex-col text-right"><span id="live-date" class="text-xs text-slate-300 font-medium whitespace-pre">Datum inlaai...</span></div>
-                        <div class="relative cursor-pointer hover:text-tjokkieGold-400 transition" onclick="window.showNotificationAlert()">
-                            <i class="fa-regular fa-bell text-xl"></i><span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">3</span>
+                        <div class="relative cursor-pointer hover:text-tjokkieGold-400 transition" onclick="window.handleBellClick()" title="Kennisgewings & Opdaterings">
+                            <i class="fa-regular fa-bell text-xl"></i><span id="update-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center hidden animate-pulse"><i class="fa-solid fa-exclamation text-[8px]"></i></span>
                         </div>
                         <div class="flex items-center space-x-3 border-l border-tjokkieBlue-800 pl-4 cursor-pointer" onclick="window.handleLogout()" title="Teken Uit">
                             <div class="w-8 h-8 rounded-full bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold flex items-center justify-center"><i class="fa-solid fa-user"></i></div>
@@ -501,6 +517,19 @@
     <!-- AFDELING 12: MODALS (OPSPRING VORMS VIR DEPARTEMENTE)   -->
     <!-- ======================================================= -->
 
+    <!-- OPDATERING MODAL -->
+    <div id="modal-update-prompt" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[100] hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center animate-in fade-in zoom-in-95 duration-200">
+            <div class="w-16 h-16 rounded-full bg-tjokkieBlue-100 text-tjokkieBlue-600 flex items-center justify-center text-3xl mx-auto mb-4"><i class="fa-solid fa-arrows-rotate"></i></div>
+            <h3 class="font-black text-slate-900 text-lg mb-2">Nuwe Opdatering!</h3>
+            <p class="text-xs text-slate-500 leading-relaxed mb-6">Daar is 'n nuwe stelsel-weergawe beskikbaar. Herlaai asseblief jou blaaier sodat die nuutste kode en funksies kan intrek.</p>
+            <div class="flex space-x-2">
+                <button onclick="window.toggleModal('modal-update-prompt')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Laat Staan</button>
+                <button onclick="window.forceReloadApp()" class="flex-1 py-2.5 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl text-xs transition shadow-sm">Herlaai Nou</button>
+            </div>
+        </div>
+    </div>
+
     <!-- TAAK AFHANDELING WAGWOORD MODAL -->
     <div id="modal-task-auth" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[95] hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
@@ -630,7 +659,15 @@
                     <input type="file" id="dev-logo-upload" accept="image/*" class="w-full text-xs border border-slate-300 rounded-lg p-2 focus:outline-none bg-white">
                     <p class="text-[10px] text-slate-400 mt-2">Laai 'n .PNG of .JPG op. As oopgelaat, gebruik die stelsel die standaard SVG.</p>
                 </div>
-                <button onclick="window.saveDeveloperSettings()" class="w-full py-3 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition shadow-md">Stoor Voorkoms Veranderinge</button>
+
+                <!-- NUWE WEERGAWE BEHEER (FORSEER OPDATERING) -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-3">
+                     <label class="block font-bold text-slate-700 mb-2">Stelsel Weergawebeheer</label>
+                     <p class="text-[10px] text-slate-500 mb-3">Dwing alle gebruikers se blaaiers om hul 'cache' skoon te maak en die nuutste web-weergawe af te laai.</p>
+                     <button type="button" onclick="window.pushSystemUpdate()" class="w-full py-2.5 bg-red-100 hover:bg-red-200 text-red-700 font-bold rounded-lg transition text-xs shadow-sm"><i class="fa-solid fa-cloud-arrow-down mr-2"></i>Forseer Stelsel Opdatering</button>
+                </div>
+
+                <button onclick="window.saveDeveloperSettings()" class="w-full py-3 mt-4 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition shadow-md">Stoor Voorkoms Veranderinge</button>
             </div>
 
             <!-- Tab: Password Generator -->
@@ -844,6 +881,29 @@
             </form>
         </div>
     </div>
+    <div id="modal-afkondiging" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Plaas Afkondiging</h3><button onclick="window.toggleModal('modal-afkondiging')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-afkondiging" onsubmit="window.addAfkondiging(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1">Geleentheid/Doel?</label><input type="text" id="afkondiging-doel" required class="w-full border p-2.5 rounded-lg"></div>
+                <div><label class="block font-bold mb-1">Kies Tyd/Pouse</label><select id="afkondiging-pouse" class="w-full border p-2.5 rounded-lg"><option>Eerste Pouse</option><option>Tweede Pouse</option><option>Aan die einde van die dag</option><option>Algemeen / Heeldag</option></select></div>
+                <div><label class="block font-bold mb-1">Inhoud</label><textarea id="afkondiging-inhoud" rows="4" required class="w-full border p-2.5 rounded-lg"></textarea></div>
+                <div><label class="block font-bold mb-1">Wie plaas afkondiging?</label><input type="text" id="afkondiging-persoon" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-afkondiging')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Voeg By</button></div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-bemarking-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Beplan Nuwe Bemarkingstaak</h3><button onclick="window.toggleModal('modal-bemarking-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-bemarking" onsubmit="window.addBemarkingTaak(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1">Veldtog</label><input type="text" id="bem-taak" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Sperdatum</label><input type="date" id="bem-datum" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Status</label><select id="bem-status" class="w-full border p-2.5 rounded-lg"><option>Beplan</option><option>Besig</option></select></div></div>
+                <div><label class="block font-bold mb-1">Verantwoordelike Persoon</label><input type="text" id="bem-verant" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bemarking-taak')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-rose-600 text-white rounded-xl font-bold">Stoor</button></div>
+            </form>
+        </div>
+    </div>
 
 
     <!-- ======================================================= -->
@@ -916,7 +976,7 @@
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_status'), (snap) => { let i = { ...localItStatus }; snap.forEach(doc => { i[doc.id] = { ...i[doc.id], ...doc.data() }; }); window.renderItStatus(i); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_status'), (snap) => { let b = { ...localBusStatus }; snap.forEach(doc => { b[doc.id] = { ...b[doc.id], ...doc.data() }; }); window.renderBusStatus(b); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), (snap) => { let t = []; snap.forEach(doc => { t.push({ id: doc.id, ...doc.data() }); }); window.currentTerreinTasks = t; window.renderTerreinTasks(t); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), (snap) => { let a = []; snap.forEach(doc => { a.push({ id: doc.id, ...doc.data() }); }); window.renderAfkondigings(a); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), (snap) => { let a = []; snap.forEach(doc => { a.push({ id: doc.id, ...doc.data() }); }); window.localAfkondigings = a; window.renderAfkondigings(a); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), (snap) => { let b = []; snap.forEach(doc => { b.push({ id: doc.id, ...doc.data() }); }); window.localBemarkingTake = b; window.renderBemarkingTake(b); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), (snap) => { let n = []; snap.forEach(doc => { n.push({ id: doc.id, ...doc.data() }); }); n.sort((a,b) => b.timestamp - a.timestamp); window.localNewsletters = n; window.renderNewsletters(n); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), (snap) => { let bt = []; snap.forEach(doc => { bt.push({ id: doc.id, ...doc.data() }); }); window.localBusTrips = bt; window.renderBusTrips(bt); });
@@ -1020,6 +1080,16 @@
             window.currentBusPassword = settings.busPassword || "1603";
             window.currentITPassword = settings.itPassword || "1603";
             
+            // VERSION CHECK (CACHE BUSTING)
+            if (settings.appVersion) {
+                window.cloudAppVersion = settings.appVersion;
+                if (settings.appVersion > window.CURRENT_APP_VERSION) {
+                    window.updateAvailable = true;
+                    const badge = document.getElementById('update-badge');
+                    if (badge) badge.classList.remove('hidden');
+                }
+            }
+
             const idsToClear = ['dev-pwd-admin-old','dev-pwd-admin-new','dev-pwd-terrein-old','dev-pwd-terrein-new','dev-pwd-skakel-old','dev-pwd-skakel-new','dev-pwd-bemarking-old','dev-pwd-bemarking-new','dev-pwd-bus-old','dev-pwd-bus-new','dev-pwd-it-old','dev-pwd-it-new'];
             idsToClear.forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
             
@@ -1035,6 +1105,16 @@
                 if(logoContainer) logoContainer.innerHTML = `<img src="${settings.logoBase64}" class="max-h-full object-contain filter drop-shadow-md" />`;
             }
         }
+
+        window.pushSystemUpdate = async function() {
+            if (db) {
+                const newVersion = window.cloudAppVersion + 1;
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'school_settings', 'main'), { appVersion: newVersion }, { merge: true });
+                window.showToast("Gestuur", "Gebruikers sal 'n kennisgewing kry om Weergawe " + newVersion + " te laai.");
+            } else {
+                window.showToast("Vanlyn", "Koppel eers aan die wolk om updates te forseer.");
+            }
+        };
 
         window.saveDeveloperSettings = async function() {
             const schoolName = document.getElementById('dev-school-name').value;
@@ -1383,7 +1463,7 @@
             }, 250);
         };
 
-        // ======================================================= //
+      // ======================================================= //
         // JS-AFDELING 6: DATA VERTREK (RENDERING ENGINE)          //
         // ======================================================= //
         window.renderFacilities = function(facilities) {
@@ -1923,24 +2003,24 @@
         window.saveSportEvent = async function(e) { 
             e.preventDefault(); const dept = document.getElementById('sport-event-dept').value; const title = document.getElementById('sport-event-title').value; const d = { dept: dept, title: title, date: document.getElementById('sport-event-date').value, location: document.getElementById('sport-event-location').value, desc: document.getElementById('sport-event-desc').value, timestamp: Date.now() }; 
             if(db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), d); }
-            else { localSportEvents.push({ id: Math.random().toString(), ...d }); window.renderSportEvents(localSportEvents); }
+            else { window.localSportEvents.push({ id: Math.random().toString(), ...d }); window.renderSportEvents(window.localSportEvents); }
             window.logEvent(`Geleentheid: ${title}`, dept.toUpperCase()); window.toggleModal('modal-sport-event'); 
         }
         window.deleteSportEvent = async function(id) { 
             if(db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_events', id)); }
-            else { localSportEvents = localSportEvents.filter(s => s.id !== id); window.renderSportEvents(localSportEvents); }
+            else { window.localSportEvents = window.localSportEvents.filter(s => s.id !== id); window.renderSportEvents(window.localSportEvents); }
         }
         
         window.openSportResultModal = function(deptId, deptName) { document.getElementById('form-sport-result').reset(); document.getElementById('sport-result-dept').value = deptId; document.getElementById('sport-result-title-display').innerText = `Laai Uitslag Op: ${deptName}`; window.toggleModal('modal-sport-result'); }
         window.saveSportResult = async function(e) { 
             e.preventDefault(); const dept = document.getElementById('sport-result-dept').value; const team = document.getElementById('sport-result-team').value; const d = { dept: dept, matchTitle: document.getElementById('sport-result-match').value, team: team, opponent: document.getElementById('sport-result-opponent').value, score: document.getElementById('sport-result-score').value, outcome: document.getElementById('sport-result-outcome').value, timestamp: Date.now() }; 
             if(db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), d); }
-            else { localSportResults.push({ id: Math.random().toString(), ...d }); window.renderSportResults(localSportResults); }
+            else { window.localSportResults.push({ id: Math.random().toString(), ...d }); window.renderSportResults(window.localSportResults); }
             window.logEvent(`Uitslag gelaai: ${team}`, dept.toUpperCase()); window.toggleModal('modal-sport-result'); 
         }
         window.deleteSportResult = async function(id) { 
             if(db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_results', id)); }
-            else { localSportResults = localSportResults.filter(s => s.id !== id); window.renderSportResults(localSportResults); }
+            else { window.localSportResults = window.localSportResults.filter(s => s.id !== id); window.renderSportResults(window.localSportResults); }
         }
 
         window.verifyAndClearLogs = async function(e) {
