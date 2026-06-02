@@ -335,7 +335,10 @@
                         </div>
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
                             <div>
-                                <h3 class="text-base font-bold text-slate-900 mb-4">Onlangse Log-Aktiwiteite</h3>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-base font-bold text-slate-900">Onlangse Log-Aktiwiteite</h3>
+                                    <button onclick="window.openReportModal()" class="text-[10px] bg-tjokkieBlue-50 hover:bg-tjokkieBlue-100 text-tjokkieBlue-800 px-3 py-1.5 rounded-lg font-bold transition shadow-sm uppercase tracking-wider">Sien meer</button>
+                                </div>
                                 <div class="space-y-4" id="recent-logs-list"><div class="text-slate-400 text-xs text-center py-4">Wag vir stelselaktiwiteit...</div></div>
                             </div>
                         </div>
@@ -497,6 +500,31 @@
     <!-- ======================================================= -->
     <!-- AFDELING 12: MODALS (OPSPRING VORMS VIR DEPARTEMENTE)   -->
     <!-- ======================================================= -->
+
+    <!-- STELSEL VERSLAG MODAL -->
+    <div id="modal-report" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[90] hidden">
+        <div class="bg-white rounded-2xl max-w-4xl w-full p-6 shadow-2xl border border-slate-100 flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4 shrink-0">
+                <h3 class="font-extrabold text-slate-900 text-lg"><i class="fa-solid fa-file-contract text-tjokkieGold-500 mr-2"></i>Stelsel Verslag & Logboek</h3>
+                <button onclick="window.toggleModal('modal-report')" class="text-slate-400 hover:text-red-500 transition text-xl"><i class="fa-solid fa-times"></i></button>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-200 mb-4 shrink-0 gap-3">
+                <div class="flex items-center space-x-2 w-full sm:w-auto">
+                    <label class="text-xs font-bold text-slate-500 uppercase">Vanaf:</label>
+                    <input type="date" id="report-date-start" onchange="window.generateReport()" class="border border-slate-300 p-2 rounded focus:outline-none text-xs">
+                    <label class="text-xs font-bold text-slate-500 uppercase">Tot:</label>
+                    <input type="date" id="report-date-end" onchange="window.generateReport()" class="border border-slate-300 p-2 rounded focus:outline-none text-xs">
+                    <button onclick="document.getElementById('report-date-start').value=''; document.getElementById('report-date-end').value=''; window.generateReport();" class="text-xs bg-slate-200 hover:bg-slate-300 px-2 py-2 rounded font-bold text-slate-600 transition">Alle Dae</button>
+                </div>
+                <button onclick="window.printReport()" class="w-full sm:w-auto bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white px-4 py-2 rounded-lg font-bold text-xs transition shadow-sm"><i class="fa-solid fa-print mr-2"></i>Druk Verslag</button>
+            </div>
+
+            <div id="report-content-container" class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-4">
+                <!-- Dynamically populated report -->
+            </div>
+        </div>
+    </div>
 
     <!-- ADMIN PANEEL WAGWOORD -->
     <div id="modal-dev-auth" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 z-[60] hidden">
@@ -750,6 +778,69 @@
         </div>
     </div>
 
+    <!-- TERREIN TAAK MODALS -->
+    <div id="modal-terrein-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Rapporteer Terreinprobleem</h3><button type="button" onclick="window.toggleModal('modal-terrein-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-terrein" onsubmit="window.addTerreinTask(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Fasiliteit / Area</label><input type="text" id="terrein-area" required class="w-full border border-slate-200 p-2.5 rounded-lg"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Datum (Opsioneel)</label><input type="date" id="terrein-date" class="w-full border border-slate-200 p-2.5 rounded-lg"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Probleem</label><textarea id="terrein-desc" rows="3" required class="w-full border border-slate-200 p-2.5 rounded-lg"></textarea></div>
+                <div class="grid grid-cols-2 gap-4"><div><label class="block text-slate-500 font-bold uppercase mb-1">Prioriteit</label><select id="terrein-priority" class="w-full border border-slate-200 p-2.5 rounded-lg"><option value="Normal">Normaal</option><option value="Urgent">Dringend</option></select></div><div><label class="block text-slate-500 font-bold uppercase mb-1">Aangemeld Deur</label><input type="text" id="terrein-reported" required class="w-full border border-slate-200 p-2.5 rounded-lg"></div></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-terrein-taak')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold rounded-xl transition">Stuur In</button></div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-terrein-beplan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-sm">Beplan Instandhouding</h3><button type="button" onclick="window.toggleModal('modal-terrein-beplan')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-beplan" onsubmit="window.addPlannedTask(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1">Fasiliteit / Area</label><input type="text" id="plan-area" required class="w-full border p-2.5 rounded-lg"></div>
+                <div><label class="block font-bold mb-1">Datum</label><input type="date" id="plan-date" required class="w-full border p-2.5 rounded-lg"></div>
+                <div><label class="block font-bold mb-1">Beskrywing</label><textarea id="plan-desc" rows="3" required class="w-full border p-2.5 rounded-lg"></textarea></div>
+                <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Prioriteit</label><select id="plan-priority" class="w-full border p-2.5 rounded-lg"><option>Normaal</option><option>Dringend</option></select></div><div><label class="block font-bold mb-1">Toegewys</label><input type="text" id="plan-reported" required class="w-full border p-2.5 rounded-lg"></div></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-terrein-beplan')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl">Stoor Skedule</button></div>
+            </form>
+        </div>
+    </div>
+    <div id="modal-calendar-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Wagwoord Vereis</h3><button type="button" onclick="window.toggleModal('modal-calendar-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-calendar-password" onsubmit="window.verifyCalendarAuth(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="auth-calendar-date">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="calendar-password-input" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-calendar-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SKAKELBEAMPTE MODALS -->
+    <div id="modal-afkondiging" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Plaas Afkondiging</h3><button type="button" onclick="window.toggleModal('modal-afkondiging')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-afkondiging" onsubmit="window.addAfkondiging(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1">Geleentheid/Doel?</label><input type="text" id="afkondiging-doel" required class="w-full border p-2.5 rounded-lg"></div>
+                <div><label class="block font-bold mb-1">Kies Tyd/Pouse</label><select id="afkondiging-pouse" class="w-full border p-2.5 rounded-lg"><option>Eerste Pouse</option><option>Tweede Pouse</option><option>Aan die einde van die dag</option><option>Algemeen / Heeldag</option></select></div>
+                <div><label class="block font-bold mb-1">Inhoud</label><textarea id="afkondiging-inhoud" rows="4" required class="w-full border p-2.5 rounded-lg"></textarea></div>
+                <div><label class="block font-bold mb-1">Wie plaas afkondiging?</label><input type="text" id="afkondiging-persoon" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-afkondiging')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Voeg By</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- BEMARKING MODALS -->
+    <div id="modal-bemarking-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Beplan Nuwe Bemarkingstaak</h3><button type="button" onclick="window.toggleModal('modal-bemarking-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-bemarking" onsubmit="window.addBemarkingTaak(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1">Veldtog</label><input type="text" id="bem-taak" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Sperdatum</label><input type="date" id="bem-datum" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Status</label><select id="bem-status" class="w-full border p-2.5 rounded-lg"><option>Beplan</option><option>Besig</option></select></div></div>
+                <div><label class="block font-bold mb-1">Verantwoordelike Persoon</label><input type="text" id="bem-verant" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bemarking-taak')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-rose-600 text-white rounded-xl font-bold">Stoor</button></div>
+            </form>
+        </div>
+    </div>
+
     <!-- SPORT GELEENTHEID & UITSLAG MODALS -->
     <div id="modal-sport-event" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden z-50">
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
@@ -819,19 +910,19 @@
             "bus_c": { name: "Bus C", desc: "Quantum 14 Sitplek", status: "Gereed", icon: "fa-van-shuttle", iconBg: "bg-sky-100 text-sky-700" },
             "bus_d": { name: "Bus D", desc: "Old Lady 14 Sitplek", status: "Instandhouding", icon: "fa-triangle-exclamation", iconBg: "bg-red-100 text-red-700" }
         };
-        let localTerreinTasks = []; let currentTerreinTasks = [];
-        let localAfkondigings = []; let localBemarkingTake = []; let localNewsletters = []; 
-        let localBusTrips = [ { id: "1", dest: "Pretoria", time: "Vrydag 06:00", pax: "20", vehicle: "Bus A", driver: "Oom Johan" } ]; 
-        let localITTickets = []; let localLogs = []; let localSportEvents = []; let localSportResults = [];
+        let localTerreinTasks = []; window.currentTerreinTasks = localTerreinTasks;
+        let localAfkondigings = []; window.localAfkondigings = localAfkondigings; window.localBemarkingTake = []; window.localNewsletters = []; 
+        window.localBusTrips = [ { id: "1", dest: "Pretoria", time: "Vrydag 06:00", pax: "20", vehicle: "Bus A", driver: "Oom Johan" } ]; 
+        window.localITTickets = []; window.localLogs = []; let localSportEvents = []; let localSportResults = [];
         let calDate = new Date();
 
         window.runLocalFallback = function() {
             document.getElementById('db-status-text').innerText = "Gekoppel aan plaaslike geheue.";
-            currentTerreinTasks = localTerreinTasks;
+            window.currentTerreinTasks = localTerreinTasks;
             window.renderFacilities(localFacilities); window.renderItStatus(localItStatus); window.renderBusStatus(localBusStatus);
-            window.renderTerreinTasks(localTerreinTasks); window.renderAfkondigings(localAfkondigings); window.renderBemarkingTake(localBemarkingTake);
-            window.renderNewsletters(localNewsletters); window.renderBusTrips(localBusTrips); window.renderITTickets(localITTickets);
-            window.renderActivityLogs(localLogs); window.renderSportEvents(localSportEvents); window.renderSportResults(localSportResults);
+            window.renderTerreinTasks(localTerreinTasks); window.renderAfkondigings(localAfkondigings); window.renderBemarkingTake(window.localBemarkingTake);
+            window.renderNewsletters(window.localNewsletters); window.renderBusTrips(window.localBusTrips); window.renderITTickets(window.localITTickets);
+            window.renderActivityLogs(window.localLogs); window.renderSportEvents(localSportEvents); window.renderSportResults(localSportResults);
         }
 
         function setupRealtimeListeners() {
@@ -839,13 +930,13 @@
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'facilities'), (snap) => { let f = { ...localFacilities }; snap.forEach(doc => { f[doc.id] = { ...f[doc.id], ...doc.data() }; }); window.renderFacilities(f); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_status'), (snap) => { let i = { ...localItStatus }; snap.forEach(doc => { i[doc.id] = { ...i[doc.id], ...doc.data() }; }); window.renderItStatus(i); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_status'), (snap) => { let b = { ...localBusStatus }; snap.forEach(doc => { b[doc.id] = { ...b[doc.id], ...doc.data() }; }); window.renderBusStatus(b); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), (snap) => { let t = []; snap.forEach(doc => { t.push({ id: doc.id, ...doc.data() }); }); currentTerreinTasks = t; window.renderTerreinTasks(t); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), (snap) => { let t = []; snap.forEach(doc => { t.push({ id: doc.id, ...doc.data() }); }); window.currentTerreinTasks = t; window.renderTerreinTasks(t); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), (snap) => { let a = []; snap.forEach(doc => { a.push({ id: doc.id, ...doc.data() }); }); window.renderAfkondigings(a); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), (snap) => { let b = []; snap.forEach(doc => { b.push({ id: doc.id, ...doc.data() }); }); window.renderBemarkingTake(b); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), (snap) => { let n = []; snap.forEach(doc => { n.push({ id: doc.id, ...doc.data() }); }); n.sort((a,b) => b.timestamp - a.timestamp); window.renderNewsletters(n); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), (snap) => { let bt = []; snap.forEach(doc => { bt.push({ id: doc.id, ...doc.data() }); }); window.renderBusTrips(bt); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), (snap) => { let it = []; snap.forEach(doc => { it.push({ id: doc.id, ...doc.data() }); }); window.renderITTickets(it); });
-            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), (snap) => { let logs = []; snap.forEach(doc => { logs.push({ id: doc.id, ...doc.data() }); }); logs.sort((a,b) => b.timestamp - a.timestamp); window.renderActivityLogs(logs); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), (snap) => { let b = []; snap.forEach(doc => { b.push({ id: doc.id, ...doc.data() }); }); window.localBemarkingTake = b; window.renderBemarkingTake(b); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), (snap) => { let n = []; snap.forEach(doc => { n.push({ id: doc.id, ...doc.data() }); }); n.sort((a,b) => b.timestamp - a.timestamp); window.localNewsletters = n; window.renderNewsletters(n); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), (snap) => { let bt = []; snap.forEach(doc => { bt.push({ id: doc.id, ...doc.data() }); }); window.localBusTrips = bt; window.renderBusTrips(bt); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), (snap) => { let it = []; snap.forEach(doc => { it.push({ id: doc.id, ...doc.data() }); }); window.localITTickets = it; window.renderITTickets(it); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), (snap) => { let logs = []; snap.forEach(doc => { logs.push({ id: doc.id, ...doc.data() }); }); logs.sort((a,b) => b.timestamp - a.timestamp); window.localLogs = logs; window.renderActivityLogs(logs); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), (snap) => { let se = []; snap.forEach(doc => { se.push({ id: doc.id, ...doc.data() }); }); window.renderSportEvents(se); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), (snap) => { let sr = []; snap.forEach(doc => { sr.push({ id: doc.id, ...doc.data() }); }); window.renderSportResults(sr); });
         }
@@ -1139,6 +1230,162 @@
         window.deleteUserProfile = async function(uid) { if(db) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', uid)); window.fetchAdminUsers(); window.showToast("Uitgevee", "Profiel toegang verwyder."); } }
 
         // ======================================================= //
+        // JS-AFDELING 5: VERSLAG / REPORT LOGICA                  //
+        // ======================================================= //
+        window.openReportModal = function() {
+            document.getElementById('report-date-start').value = '';
+            document.getElementById('report-date-end').value = '';
+            window.generateReport();
+            window.toggleModal('modal-report');
+        };
+
+        window.generateReport = function() {
+            const dateStartStr = document.getElementById('report-date-start').value;
+            const dateEndStr = document.getElementById('report-date-end').value;
+            const container = document.getElementById('report-content-container');
+            container.innerHTML = '';
+
+            const isWithinRange = (timestamp, startStr, endStr) => {
+                if (!startStr && !endStr) return true;
+                const targetDate = new Date(timestamp);
+                targetDate.setHours(0, 0, 0, 0);
+
+                const start = startStr ? new Date(startStr) : new Date(0);
+                start.setHours(0, 0, 0, 0);
+                
+                const end = endStr ? new Date(endStr) : new Date(8640000000000000);
+                end.setHours(23, 59, 59, 999);
+
+                return targetDate >= start && targetDate <= end;
+            };
+
+            const isDateStrWithinRange = (dateStr, startStr, endStr) => {
+                if (!startStr && !endStr) return true;
+                if (!dateStr) return false;
+                const targetDate = new Date(dateStr);
+                targetDate.setHours(0, 0, 0, 0);
+
+                const start = startStr ? new Date(startStr) : new Date(0);
+                start.setHours(0, 0, 0, 0);
+                
+                const end = endStr ? new Date(endStr) : new Date(8640000000000000);
+                end.setHours(23, 59, 59, 999);
+
+                return targetDate >= start && targetDate <= end;
+            };
+
+            const depts = [
+                { id: 'Terrein', name: 'Terreinbestuur' },
+                { id: 'IT', name: 'IT-Ondersteuning' },
+                { id: 'Busvervoer', name: 'Busvervoer' },
+                { id: 'Bemarking', name: 'Bemarking' },
+                { id: 'Skakel', name: 'Skakelbeampte' },
+                { id: 'RUGBY', name: 'Rugby' },
+                { id: 'NETBAL', name: 'Netbal' },
+                { id: 'TENNIS', name: 'Tennis' },
+                { id: 'SWEM', name: 'Swem' },
+                { id: 'HOKKIE', name: 'Hokkie' },
+                { id: 'SKAAK', name: 'Skaak' },
+                { id: 'VOORTREKKERS', name: 'Voortrekkers' }
+            ];
+
+            let html = '';
+
+            depts.forEach(dept => {
+                const deptLogs = window.localLogs.filter(log => log.dept === dept.id && isWithinRange(log.timestamp, dateStartStr, dateEndStr));
+                
+                let openTasks = [];
+                if(dept.id === 'Terrein') openTasks = window.currentTerreinTasks.filter(t => isDateStrWithinRange(t.date, dateStartStr, dateEndStr));
+                if(dept.id === 'IT') openTasks = window.localITTickets;
+                if(dept.id === 'Bemarking') openTasks = window.localBemarkingTake.filter(t => isDateStrWithinRange(t.datum, dateStartStr, dateEndStr));
+                if(dept.id === 'Busvervoer') openTasks = window.localBusTrips;
+
+                if(deptLogs.length === 0 && openTasks.length === 0) return; 
+
+                html += `<div class="mb-6 p-4 border border-slate-200 rounded-xl bg-white shadow-sm">
+                    <h4 class="font-black text-tjokkieBlue-900 text-sm mb-3 uppercase border-b border-slate-200 pb-2">${dept.name}</h4>`;
+                
+                if(openTasks.length > 0) {
+                    html += `<div class="mb-4">
+                        <h5 class="text-xs font-bold text-red-600 mb-2 uppercase tracking-wider">Oop Take (Moet nog reggemaak word)</h5>
+                        <ul class="space-y-2">`;
+                    openTasks.forEach(t => {
+                        let desc = t.desc || t.taak || t.dest || t.device;
+                        let extra = t.area || t.staff || t.verant || t.time || '';
+                        html += `<li class="text-xs bg-slate-50 p-2.5 rounded border border-red-100 border-l-2 border-l-red-500 shadow-sm flex justify-between">
+                            <span class="font-semibold text-slate-700">${desc}</span>
+                            <span class="text-[10px] text-slate-400">${extra}</span>
+                        </li>`;
+                    });
+                    html += `</ul></div>`;
+                }
+
+                if(deptLogs.length > 0) {
+                    html += `<div>
+                        <h5 class="text-xs font-bold text-emerald-600 mb-2 uppercase tracking-wider">Geskiedenis / Uitgesorteer</h5>
+                        <ul class="space-y-2">`;
+                    deptLogs.forEach(l => {
+                        const t = new Date(l.timestamp).toLocaleString('af-ZA');
+                        html += `<li class="text-xs bg-slate-50 p-2.5 rounded border border-emerald-100 border-l-2 border-l-emerald-500 shadow-sm flex justify-between">
+                            <span class="font-semibold text-slate-700">${l.desc}</span>
+                            <span class="text-[10px] text-slate-400">${t}</span>
+                        </li>`;
+                    });
+                    html += `</ul></div>`;
+                }
+
+                html += `</div>`;
+            });
+
+            if(!html) html = '<div class="text-center text-slate-500 text-sm py-8 font-bold">Geen aktiwiteit of take vir hierdie datum reeks gevind nie.</div>';
+            
+            container.innerHTML = html;
+        };
+
+        window.printReport = function() {
+            const printContents = document.getElementById('report-content-container').innerHTML;
+            const dateStart = document.getElementById('report-date-start').value;
+            const dateEnd = document.getElementById('report-date-end').value;
+            
+            let dateFilterText = 'Tot op Hede';
+            if (dateStart && dateEnd) {
+                dateFilterText = (dateStart === dateEnd) ? dateStart : `${dateStart} tot ${dateEnd}`;
+            } else if (dateStart) {
+                dateFilterText = `Vanaf ${dateStart}`;
+            } else if (dateEnd) {
+                dateFilterText = `Tot en met ${dateEnd}`;
+            }
+
+            const schoolName = document.querySelector('.school-name-display')?.innerText || "Skool";
+            
+            const printWindow = window.open('', '', 'height=700,width=900');
+            printWindow.document.write('<html><head><title>Stelsel Verslag</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: Arial, sans-serif; color: #333; padding: 20px; max-width: 800px; margin: auto; }');
+            printWindow.document.write('h2 { color: #172554; border-bottom: 2px solid #f59e0b; padding-bottom: 10px; margin-bottom: 20px;}');
+            printWindow.document.write('.mb-6 { margin-bottom: 24px; padding: 15px; border: 1px solid #ccc; background: #f9f9f9; border-radius: 8px; page-break-inside: avoid; }');
+            printWindow.document.write('h4 { font-size: 16px; font-weight: bold; margin-top: 0; color: #1e40af; border-bottom: 1px solid #ddd; padding-bottom: 5px; text-transform: uppercase; }');
+            printWindow.document.write('h5 { font-size: 12px; font-weight: bold; margin-bottom: 8px; margin-top: 15px; text-transform: uppercase;}');
+            printWindow.document.write('.text-red-600 { color: #dc2626; }');
+            printWindow.document.write('.text-emerald-600 { color: #059669; }');
+            printWindow.document.write('ul { list-style-type: none; padding: 0; margin: 0; }');
+            printWindow.document.write('li { background: #fff; padding: 10px; border: 1px solid #eee; margin-bottom: 6px; font-size: 12px; display: flex; justify-content: space-between; }');
+            printWindow.document.write('.border-l-red-500 { border-left: 3px solid #ef4444; }');
+            printWindow.document.write('.border-l-emerald-500 { border-left: 3px solid #10b981; }');
+            printWindow.document.write('.text-slate-400 { color: #888; font-size: 10px; }');
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<h2>' + schoolName + ' - Stelsel Verslag (' + dateFilterText + ')</h2>');
+            printWindow.document.write(printContents);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            
+            setTimeout(() => {
+                printWindow.print();
+            }, 250);
+        };
+
+        // ======================================================= //
         // JS-AFDELING 6: DATA VERTREK (RENDERING ENGINE)          //
         // ======================================================= //
         window.renderFacilities = function(facilities) {
@@ -1200,7 +1447,7 @@
             }
         }
 
-        window.changeMonth = function(offset) { calDate.setMonth(calDate.getMonth() + offset); window.renderCalendar(currentTerreinTasks || []); }
+        window.changeMonth = function(offset) { calDate.setMonth(calDate.getMonth() + offset); window.renderCalendar(window.currentTerreinTasks || []); }
 
         window.renderCalendar = function(tasks) {
             const grid = document.getElementById('calendar-grid'); const monthLabel = document.getElementById('calendar-month');
@@ -1376,7 +1623,7 @@
         window.logEvent = async function(desc, dept) {
             const logData = { desc, dept, timestamp: Date.now() };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), logData).catch(()=>{}); }
-            else { localLogs.unshift({ id: Math.random().toString(), ...logData }); window.renderActivityLogs(localLogs); }
+            else { window.localLogs.unshift({ id: Math.random().toString(), ...logData }); window.renderActivityLogs(window.localLogs); }
         }
 
         // TERREIN
@@ -1407,7 +1654,7 @@
             event.preventDefault(); const area = document.getElementById('terrein-area').value;
             const taskData = { area, date: document.getElementById('terrein-date').value, desc: document.getElementById('terrein-desc').value, priority: document.getElementById('terrein-priority').value, reported: document.getElementById('terrein-reported').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData); }
-            else { localTerreinTasks.push({ id: Math.random().toString(), ...taskData }); window.renderTerreinTasks(localTerreinTasks); }
+            else { window.currentTerreinTasks.push({ id: Math.random().toString(), ...taskData }); window.renderTerreinTasks(window.currentTerreinTasks); }
             window.logEvent(`Nuwe probleem: ${area}`, 'Terrein'); document.getElementById('form-terrein').reset(); window.toggleModal('modal-terrein-taak');
         }
 
@@ -1415,13 +1662,13 @@
             event.preventDefault(); const area = document.getElementById('plan-area').value;
             const taskData = { area, date: document.getElementById('plan-date').value, desc: document.getElementById('plan-desc').value, priority: document.getElementById('plan-priority').value, reported: document.getElementById('plan-reported').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks'), taskData); }
-            else { localTerreinTasks.push({ id: Math.random().toString(), ...taskData }); window.renderTerreinTasks(localTerreinTasks); }
+            else { window.currentTerreinTasks.push({ id: Math.random().toString(), ...taskData }); window.renderTerreinTasks(window.currentTerreinTasks); }
             window.logEvent(`Beplan: ${area}`, 'Terrein'); document.getElementById('form-beplan').reset(); window.toggleModal('modal-terrein-beplan');
         }
 
         window.completeTerreinTask = async function(id) {
             if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'terrein_tasks', id)); }
-            else { localTerreinTasks = localTerreinTasks.filter(t => t.id !== id); window.renderTerreinTasks(localTerreinTasks); }
+            else { window.currentTerreinTasks = window.currentTerreinTasks.filter(t => t.id !== id); window.renderTerreinTasks(window.currentTerreinTasks); }
             window.logEvent(`Herstelwerk afgehandel`, 'Terrein');
         }
         
@@ -1505,13 +1752,13 @@
             event.preventDefault(); const dest = document.getElementById('bus-destination').value;
             const tripData = { dest, time: document.getElementById('bus-time').value, pax: document.getElementById('bus-passengers').value, vehicle: document.getElementById('bus-vehicle').value, driver: document.getElementById('bus-driver').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData); }
-            else { localBusTrips.push({ id: Math.random().toString(), ...tripData }); window.renderBusTrips(localBusTrips); }
+            else { window.localBusTrips.push({ id: Math.random().toString(), ...tripData }); window.renderBusTrips(window.localBusTrips); }
             window.logEvent(`Rit na ${dest} (${tripData.pax} kinders)`, 'Busvervoer'); window.showToast("Rit Beplan!", `Geskeduleer vir ${tripData.pax} passasiers.`); window.toggleModal('modal-bus-rit');
         }
 
         window.cancelBusTrip = async function(id) { 
             if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bus_trips', id)); }
-            else { localBusTrips = localBusTrips.filter(t => t.id !== id); window.renderBusTrips(localBusTrips); }
+            else { window.localBusTrips = window.localBusTrips.filter(t => t.id !== id); window.renderBusTrips(window.localBusTrips); }
         }
 
         // IT WYSIG AKSIES
@@ -1542,13 +1789,13 @@
             event.preventDefault();
             const ticketData = { device: document.getElementById('it-device').value, desc: document.getElementById('it-desc').value, staff: document.getElementById('it-staff').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'it_tickets'), ticketData); }
-            else { localITTickets.push({ id: Math.random().toString(), ...ticketData }); window.renderITTickets(localITTickets); }
+            else { window.localITTickets.push({ id: Math.random().toString(), ...ticketData }); window.renderITTickets(window.localITTickets); }
             window.logEvent(`Nuwe IT kaartjie`, 'IT'); document.getElementById('form-it').reset(); window.toggleModal('modal-it-ticket');
         }
 
         window.resolveTicket = async function(id) { 
             if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'it_tickets', id)); }
-            else { localITTickets = localITTickets.filter(t => t.id !== id); window.renderITTickets(localITTickets); }
+            else { window.localITTickets = window.localITTickets.filter(t => t.id !== id); window.renderITTickets(window.localITTickets); }
         }
 
         // SKAKEL
@@ -1557,13 +1804,13 @@
             const doel = document.getElementById('afkondiging-doel').value;
             const itemData = { doel, pouse: document.getElementById('afkondiging-pouse').value, inhoud: document.getElementById('afkondiging-inhoud').value, persoon: document.getElementById('afkondiging-persoon').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'afkondigings'), itemData); }
-            else { localAfkondigings.push({ id: Math.random().toString(), ...itemData }); window.renderAfkondigings(localAfkondigings); }
+            else { window.localAfkondigings.push({ id: Math.random().toString(), ...itemData }); window.renderAfkondigings(window.localAfkondigings); }
             window.logEvent(`Afkondiging: ${doel}`, 'Skakel'); document.getElementById('form-afkondiging').reset(); window.toggleModal('modal-afkondiging');
         }
 
         window.deleteAfkondiging = async function(id, doel) {
             if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'afkondigings', id)); }
-            else { localAfkondigings = localAfkondigings.filter(a => a.id !== id); window.renderAfkondigings(localAfkondigings); }
+            else { window.localAfkondigings = window.localAfkondigings.filter(a => a.id !== id); window.renderAfkondigings(window.localAfkondigings); }
         }
         
         window.uploadNuusbrief = async function(event) {
@@ -1583,7 +1830,7 @@
                 const docToSave = { title, filename, fileType, fileData, timestamp: Date.now() };
 
                 if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), docToSave); } 
-                else { localNewsletters.push({ id: Math.random().toString(), ...docToSave }); window.renderNewsletters(localNewsletters); }
+                else { window.localNewsletters.push({ id: Math.random().toString(), ...docToSave }); window.renderNewsletters(window.localNewsletters); }
                 
                 window.logEvent(`Nuusbrief opgelaai: ${title}`, 'Skakel'); document.getElementById('form-nuusbrief').reset(); window.showToast("Sukses", "Dokument is gereed vir aflaai.");
             };
@@ -1595,7 +1842,7 @@
             if (db && user) {
                 const docSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'newsletters', id));
                 if (docSnap.exists()) docData = docSnap.data();
-            } else { docData = localNewsletters.find(n => n.id === id); }
+            } else { docData = window.localNewsletters.find(n => n.id === id); }
 
             if (docData && docData.fileData) {
                 const a = document.createElement("a"); a.href = docData.fileData; a.download = docData.filename;
@@ -1605,7 +1852,7 @@
 
         window.deleteNuusbrief = async function(id) { 
             if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'newsletters', id)); }
-            else { localNewsletters = localNewsletters.filter(n => n.id !== id); window.renderNewsletters(localNewsletters); }
+            else { window.localNewsletters = window.localNewsletters.filter(n => n.id !== id); window.renderNewsletters(window.localNewsletters); }
         }
 
         // BEMARKING
@@ -1613,13 +1860,13 @@
             event.preventDefault();
             const taak = document.getElementById('bem-taak').value; const bemData = { taak, datum: document.getElementById('bem-datum').value, status: document.getElementById('bem-status').value, verant: document.getElementById('bem-verant').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bemarking_take'), bemData); }
-            else { localBemarkingTake.push({ id: Math.random().toString(), ...bemData }); window.renderBemarkingTake(localBemarkingTake); }
+            else { window.localBemarkingTake.push({ id: Math.random().toString(), ...bemData }); window.renderBemarkingTake(window.localBemarkingTake); }
             window.logEvent(`Bemarkingstaak: ${taak}`, 'Bemarking'); document.getElementById('form-bemarking').reset(); window.toggleModal('modal-bemarking-taak');
         }
 
         window.completeBemarkingTaak = async function(id) { 
             if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'bemarking_take', id)); }
-            else { localBemarkingTake = localBemarkingTake.filter(b => b.id !== id); window.renderBemarkingTake(localBemarkingTake); }
+            else { window.localBemarkingTake = window.localBemarkingTake.filter(b => b.id !== id); window.renderBemarkingTake(window.localBemarkingTake); }
         }
 
         // SPORT & KALENDER
