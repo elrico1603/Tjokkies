@@ -89,6 +89,20 @@
 
         window.showNotificationAlert = function() { window.showToast("Kennisgewings", "Stelsel is gekoppel en aktief."); };
 
+        window.updateLiveClock = function() {
+            const now = new Date();
+            const dateOpts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const timeOpts = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const dateStr = now.toLocaleDateString('af-ZA', dateOpts);
+            const timeStr = now.toLocaleTimeString('af-ZA', timeOpts);
+            const displayStr = `${dateStr}  •  ${timeStr}`;
+            document.querySelectorAll('#live-date').forEach(el => {
+                el.innerText = displayStr;
+            });
+        };
+        setInterval(window.updateLiveClock, 1000);
+        window.addEventListener('DOMContentLoaded', window.updateLiveClock);
+
         window.updateDashboardCounters = function() {
             try {
                 if(document.getElementById('terrein-task-rows')) document.getElementById('stat-terrein-active').innerText = document.getElementById('terrein-task-rows').children.length;
@@ -123,7 +137,9 @@
             setTimeout(function() {
                 if (!window.appInitialized) {
                     console.warn("Netwerk timeout bereik. Forseer vanlyn-modus.");
-                    window.hideLoadingScreen();
+                    if (typeof window.hideLoadingScreen === 'function') window.hideLoadingScreen();
+                    else { const l = document.getElementById('loading-screen'); if(l) l.classList.add('hidden'); }
+                    
                     const appWrap = document.getElementById('app-wrapper');
                     if (appWrap) { appWrap.classList.remove('hidden'); appWrap.classList.add('flex'); }
                     const authWrap = document.getElementById('auth-wrapper');
@@ -204,7 +220,7 @@
                         </div>
                     </div>
                     <div class="flex items-center space-x-6">
-                        <div class="hidden md:flex flex-col text-right"><span id="live-date" class="text-xs text-slate-300 font-medium">Datum</span></div>
+                        <div class="hidden md:flex flex-col text-right"><span id="live-date" class="text-xs text-slate-300 font-medium whitespace-pre">Datum inlaai...</span></div>
                         <div class="relative cursor-pointer hover:text-tjokkieGold-400 transition" onclick="window.showNotificationAlert()">
                             <i class="fa-regular fa-bell text-xl"></i><span class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center">3</span>
                         </div>
@@ -260,7 +276,6 @@
                 
                 <!-- TUISSKREEM (DASHBOARD) -->
                 <section id="tab-dashboard" class="p-4 sm:p-6 lg:p-8 space-y-8">
-                    <!-- Welkoms Banner -->
                     <div class="bg-gradient-to-r from-tjokkieBlue-900 to-tjokkieBlue-800 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden shadow-lg border border-tjokkieBlue-800 transition-colors duration-300">
                         <div class="absolute right-6 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
                             <svg viewBox="0 0 200 240" class="w-[200px] h-[240px]"><path d="M 35,55 L 165,55 L 165,130 C 165,185 135,210 100,225 C 65,210 35,185 35,130 Z" fill="none" stroke="#ffffff" stroke-width="10" stroke-linejoin="round" /></svg>
@@ -272,7 +287,6 @@
                         </div>
                     </div>
 
-                    <!-- Departementele Seleksie Grid -->
                     <div>
                         <h3 class="text-base font-bold text-slate-500 uppercase tracking-widest mb-4">Administratiewe Hubs</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -319,7 +333,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Onlangse Aktiwiteite Feed -->
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
                             <div>
                                 <h3 class="text-base font-bold text-slate-900 mb-4">Onlangse Log-Aktiwiteite</h3>
@@ -464,77 +477,14 @@
                     </div>
                 </section>
 
-                <!-- SPORT & KULTUUR -->
-                <section id="tab-rugby" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-football"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Rugbyhoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('rugby', 'Rugby')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('rugby', 'Rugby')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-events-list"></div></div>
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-results-list"></div></div>
-                    </div>
-                </section>
-                <section id="tab-netbal" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-basketball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Netbalhoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('netbal', 'Netbal')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('netbal', 'Netbal')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-events-list"></div></div>
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-results-list"></div></div>
-                    </div>
-                </section>
-                <section id="tab-tennis" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-table-tennis-paddle-ball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Tennishoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('tennis', 'Tennis')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('tennis', 'Tennis')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-events-list"></div></div>
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-results-list"></div></div>
-                    </div>
-                </section>
-                <section id="tab-swem" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-person-swimming"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Swemhoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('swem', 'Swem')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('swem', 'Swem')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="swem-events-list"></div></div>
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="swem-results-list"></div></div>
-                    </div>
-                </section>
-                <section id="tab-hokkie" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-hockey-puck"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Hokkiehoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('hokkie', 'Hokkie')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('hokkie', 'Hokkie')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-events-list"></div></div>
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-results-list"></div></div>
-                    </div>
-                </section>
-                <section id="tab-skaak" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-chess-knight"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skaakhoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('skaak', 'Skaak')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('skaak', 'Skaak')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-events-list"></div></div>
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-results-list"></div></div>
-                    </div>
-                </section>
-                <section id="tab-voortrekkers" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
-                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-campground"></i><span>Kultuur & Jeug</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Voortrekkershoof</h2></div>
-                        <div class="flex space-x-2"><button onclick="window.openSportEventModal('voortrekkers', 'Voortrekkers')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('voortrekkers', 'Voortrekkers')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Prestasie Op</span></button></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Byeenkomste & Kampe</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-events-list"></div></div>
-                        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Prestasies & Toekennings</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-results-list"></div></div>
-                    </div>
-                </section>
+                <!-- SPORT DEPARTEMENTE (Saamgevoeg om spasie en vinnige verwerking te waarborg) -->
+                <section id="tab-rugby" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-football"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Rugbyhoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('rugby', 'Rugby')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('rugby', 'Rugby')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-results-list"></div></div></div></section>
+                <section id="tab-netbal" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-basketball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Netbalhoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('netbal', 'Netbal')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('netbal', 'Netbal')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-results-list"></div></div></div></section>
+                <section id="tab-tennis" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-table-tennis-paddle-ball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Tennishoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('tennis', 'Tennis')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('tennis', 'Tennis')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-results-list"></div></div></div></section>
+                <section id="tab-swem" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-person-swimming"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Swemhoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('swem', 'Swem')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('swem', 'Swem')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="swem-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="swem-results-list"></div></div></div></section>
+                <section id="tab-hokkie" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-hockey-puck"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Hokkiehoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('hokkie', 'Hokkie')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('hokkie', 'Hokkie')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-results-list"></div></div></div></section>
+                <section id="tab-skaak" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-chess-knight"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skaakhoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('skaak', 'Skaak')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('skaak', 'Skaak')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-results-list"></div></div></div></section>
+                <section id="tab-voortrekkers" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-campground"></i><span>Kultuur & Jeug</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Voortrekkershoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('voortrekkers', 'Voortrekkers')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('voortrekkers', 'Voortrekkers')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Prestasie Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Byeenkomste & Kampe</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Prestasies & Toekennings</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-results-list"></div></div></div></section>
             </main>
         </div>
         
@@ -900,6 +850,11 @@
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), (snap) => { let sr = []; snap.forEach(doc => { sr.push({ id: doc.id, ...doc.data() }); }); window.renderSportResults(sr); });
         }
 
+        const safeHideLoader = () => {
+            if(typeof window.hideLoadingScreen === 'function') window.hideLoadingScreen();
+            else { const l = document.getElementById('loading-screen'); if(l) l.classList.add('hidden'); }
+        };
+
         // JS-AFDELING 1.2: LAAI PROSES (INIT)
         window.initFirebaseAndApp = async function() {
             let configActive = false;
@@ -915,7 +870,7 @@
             if (configActive && auth && db) {
                 try {
                     onAuthStateChanged(auth, async (currentUser) => {
-                        user = currentUser; window.appInitialized = true; window.hideLoadingScreen();
+                        user = currentUser; window.appInitialized = true; safeHideLoader();
 
                         if (currentUser) {
                             if (window.isRegistering) return;
@@ -948,19 +903,19 @@
                             document.getElementById('auth-wrapper').classList.remove('hidden'); document.getElementById('auth-wrapper').classList.add('flex');
                         }
                     }, (error) => {
-                        window.appInitialized = true; window.hideLoadingScreen(); 
+                        window.appInitialized = true; safeHideLoader(); 
                         document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.add('hidden');
                         document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex');
                         window.runLocalFallback();
                     });
                 } catch(catchErr) {
-                    window.appInitialized = true; window.hideLoadingScreen(); 
+                    window.appInitialized = true; safeHideLoader(); 
                     document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.add('hidden');
                     document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex');
                     window.runLocalFallback();
                 }
             } else {
-                window.appInitialized = true; window.hideLoadingScreen(); 
+                window.appInitialized = true; safeHideLoader(); 
                 document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('pending-wrapper').classList.add('hidden');
                 document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex');
                 window.runLocalFallback();
@@ -1325,7 +1280,10 @@
                 list.innerHTML += `
                     <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 hover:border-tjokkieBlue-300 transition group">
                         <div class="flex items-center space-x-3"><div class="w-8 h-8 rounded bg-red-100 text-red-600 flex items-center justify-center shrink-0 shadow-sm"><i class="fa-solid fa-file-pdf"></i></div><div><p class="text-xs font-bold text-slate-900">${item.title}</p><p class="text-[9px] text-slate-500">${item.filename} • ${d}</p></div></div>
-                        <button onclick="window.deleteNuusbrief('${item.id}', '${item.title}')" class="text-slate-300 hover:text-red-500 transition px-2"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                        <div class="flex items-center space-x-1">
+                            <button onclick="window.downloadNuusbrief('${item.id}')" class="text-tjokkieBlue-500 hover:text-tjokkieBlue-700 transition px-2" title="Laai Af"><i class="fa-solid fa-download text-sm"></i></button>
+                            <button onclick="window.deleteNuusbrief('${item.id}', '${item.title}')" class="text-slate-300 hover:text-red-500 transition px-2" title="Vee Uit"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                        </div>
                     </div>`;
             });
         }
@@ -1610,10 +1568,39 @@
         
         window.uploadNuusbrief = async function(event) {
             event.preventDefault();
-            const title = document.getElementById('upload-nuusbrief-titel').value; const filename = document.getElementById('upload-nuusbrief-file').files[0]?.name || "Dokument";
-            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), { title, filename, timestamp: Date.now() }); }
-            else { localNewsletters.push({ id: Math.random().toString(), title, filename, timestamp: Date.now() }); window.renderNewsletters(localNewsletters); }
-            window.logEvent(`Nuusbrief opgelaai: ${title}`, 'Skakel'); document.getElementById('form-nuusbrief').reset();
+            const title = document.getElementById('upload-nuusbrief-titel').value; 
+            const fileInput = document.getElementById('upload-nuusbrief-file');
+            const file = fileInput.files[0];
+            
+            if (!file) { window.showToast("Fout", "Kies asseblief 'n dokument om op te laai."); return; }
+            
+            const filename = file.name;
+            const fileType = file.type;
+            
+            const reader = new FileReader();
+            reader.onloadend = async () => {
+                const fileData = reader.result;
+                const docToSave = { title, filename, fileType, fileData, timestamp: Date.now() };
+
+                if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'newsletters'), docToSave); } 
+                else { localNewsletters.push({ id: Math.random().toString(), ...docToSave }); window.renderNewsletters(localNewsletters); }
+                
+                window.logEvent(`Nuusbrief opgelaai: ${title}`, 'Skakel'); document.getElementById('form-nuusbrief').reset(); window.showToast("Sukses", "Dokument is gereed vir aflaai.");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        window.downloadNuusbrief = async function(id) {
+            let docData = null;
+            if (db && user) {
+                const docSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'newsletters', id));
+                if (docSnap.exists()) docData = docSnap.data();
+            } else { docData = localNewsletters.find(n => n.id === id); }
+
+            if (docData && docData.fileData) {
+                const a = document.createElement("a"); a.href = docData.fileData; a.download = docData.filename;
+                document.body.appendChild(a); a.click(); document.body.removeChild(a); window.showToast("Aflaai Begin", "Besig om dokument af te laai...");
+            } else { window.showToast("Fout", "Dokument kon nie in die databasis gevind word nie."); }
         }
 
         window.deleteNuusbrief = async function(id) { 
