@@ -31,6 +31,7 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        .hidden-dept { display: none; } /* Vir nuwe dinamiese modules */
     </style>
 
     <!-- ======================================================= -->
@@ -54,11 +55,10 @@
         };
 
         window.switchTab = function(tabId) {
-            const tabs = ['dashboard', 'terrein', 'skakel', 'bemarking', 'bus', 'it', 'rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
-            tabs.forEach(t => { 
-                const el = document.getElementById(`tab-${t}`); 
-                if(el) el.classList.add('hidden'); 
-            });
+            // Maak alle afdelings toe in plaas van net vasgesteldes, want ons het dalk nuwes bygesit
+            const allSections = document.querySelectorAll('main > section');
+            allSections.forEach(el => el.classList.add('hidden'));
+
             const activeTab = document.getElementById(`tab-${tabId}`);
             if(activeTab) activeTab.classList.remove('hidden');
 
@@ -91,8 +91,6 @@
                 }, 3500);
             }
         };
-
-        window.showNotificationAlert = function() { window.showToast("Kennisgewings", "Stelsel is gekoppel en aktief."); };
 
         window.handleBellClick = function() {
             if (window.updateAvailable) {
@@ -151,6 +149,16 @@
             }
         };
 
+        window.toggleFacilityInput = function() {
+            const inputDiv = document.getElementById('new-mod-facility-input-div');
+            const checkbox = document.getElementById('new-mod-wants-facility');
+            if(checkbox.checked) {
+                inputDiv.classList.remove('hidden');
+            } else {
+                inputDiv.classList.add('hidden');
+            }
+        };
+
         window.addEventListener('load', function() {
             setTimeout(function() {
                 if (!window.appInitialized) {
@@ -194,12 +202,14 @@
                 <h2 class="text-2xl font-black text-slate-900 school-name-display">Tjokkies Portaal</h2>
                 <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Stelsel Toegang</p>
             </div>
+            <!-- Login Form -->
             <form id="login-form" onsubmit="window.handleLogin(event)" class="space-y-5">
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Eposadres</label><input type="email" id="login-email" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Wagwoord</label><input type="password" id="login-password" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <button type="submit" class="w-full py-3 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-extrabold rounded-xl transition shadow-md">Teken In</button>
                 <div class="text-center pt-2"><button type="button" onclick="window.toggleAuthForms()" class="text-xs text-tjokkieBlue-600 hover:text-tjokkieBlue-800 font-bold">Nuwe Personeellid? Registreer Hier</button></div>
             </form>
+            <!-- Register Form -->
             <form id="register-form" onsubmit="window.handleRegister(event)" class="space-y-4 hidden">
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Voorletters & Van</label><input type="text" id="reg-name" required placeholder="bv. Mnr. P Nel" class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
                 <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Skool Eposadres</label><input type="email" id="reg-email" required class="w-full border border-slate-200 p-3 rounded-xl focus:ring-2 focus:ring-tjokkieBlue-500 focus:outline-none bg-slate-50"></div>
@@ -252,7 +262,7 @@
         <div class="flex flex-1 overflow-hidden">
             <!-- SYBALK -->
             <aside class="w-20 md:w-64 bg-tjokkieBlue-900 text-slate-300 flex flex-col shrink-0 shadow-lg border-r border-tjokkieBlue-800 z-10 relative transition-colors duration-300">
-                <nav class="flex-1 px-2 py-4 space-y-1 overflow-y-auto custom-scrollbar">
+                <nav id="sidebar-nav" class="flex-1 px-2 py-4 space-y-1 overflow-y-auto custom-scrollbar">
                     <button onclick="window.switchTab('dashboard')" id="btn-dashboard" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group bg-tjokkieBlue-800 text-white font-semibold"><i class="fa-solid fa-chart-line text-lg w-6 text-center group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm">Dashboard Tuis</span></button>
                     <div class="pt-4 pb-2"><span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Departemente</span></div>
                     <button onclick="window.switchTab('terrein')" id="btn-terrein" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-hard-hat text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Terreinbestuur</span></button>
@@ -261,7 +271,7 @@
                     <button onclick="window.switchTab('bus')" id="btn-bus" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-bus text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Busvervoer</span></button>
                     <button onclick="window.switchTab('it')" id="btn-it" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-laptop-code text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">IT-Ondersteuning</span></button>
 
-                    <div class="pt-4 pb-2"><span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Sport & Kultuur</span></div>
+                    <div id="dynamic-modules-marker" class="pt-4 pb-2"><span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Sport & Kultuur</span></div>
                     <button onclick="window.switchTab('rugby')" id="btn-rugby" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-football text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Rugbyhoof</span></button>
                     <button onclick="window.switchTab('netbal')" id="btn-netbal" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-basketball text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Netbalhoof</span></button>
                     <button onclick="window.switchTab('tennis')" id="btn-tennis" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-table-tennis-paddle-ball text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Tennishoof</span></button>
@@ -270,9 +280,12 @@
                     <button onclick="window.switchTab('skaak')" id="btn-skaak" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-chess-knight text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Skaakhoof</span></button>
                     <button onclick="window.switchTab('voortrekkers')" id="btn-voortrekkers" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-campground text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Voortrekkers</span></button>
 
+                    <!-- Add Dynamic Items Here -->
+                    <div id="dynamic-nav-container"></div>
+
                     <div class="px-2 mt-4 pb-4">
-                        <button onclick="window.promptDevSettingsAuth('module_step1')" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl transition border border-dashed border-tjokkieGold-500/50 text-tjokkieGold-400 hover:bg-tjokkieBlue-800/50">
-                            <i class="fa-solid fa-plus text-sm"></i><span class="hidden md:inline text-xs font-bold">Nuwe Module</span>
+                        <button onclick="window.module_step1()" class="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl transition border border-dashed border-tjokkieGold-500/50 text-tjokkieGold-400 hover:bg-tjokkieBlue-800/50">
+                            <i class="fa-solid fa-plus text-sm"></i><span class="hidden md:inline text-xs font-bold">Nuwe Sport Module</span>
                         </button>
                     </div>
                 </nav>
@@ -288,7 +301,7 @@
             </aside>
 
             <!-- MAIN CONTENT -->
-            <main class="flex-1 flex flex-col overflow-y-auto custom-scrollbar relative">
+            <main id="main-content-area" class="flex-1 flex flex-col overflow-y-auto custom-scrollbar relative">
                 
                 <!-- TUISSKREEM (DASHBOARD) -->
                 <section id="tab-dashboard" class="p-4 sm:p-6 lg:p-8 space-y-8">
@@ -305,7 +318,7 @@
 
                     <div>
                         <h3 class="text-base font-bold text-slate-500 uppercase tracking-widest mb-4">Administratiewe Hubs</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <div id="dashboard-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                             <div onclick="window.switchTab('terrein')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-tjokkieGold-500"></div><div><div class="w-10 h-10 rounded-xl bg-amber-50 text-tjokkieGold-500 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieGold-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-hard-hat"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Terreinbestuur</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Fokus op instandhouding van sportvelde en skoolgeboue.</p></div></div>
                             <div onclick="window.switchTab('skakel')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-tjokkieBlue-800"></div><div><div class="w-10 h-10 rounded-xl bg-sky-50 text-tjokkieBlue-800 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieBlue-800 group-hover:text-white transition duration-300"><i class="fa-solid fa-bullhorn"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skakelbeampte</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Hanteer daaglikse skool-afkondigings en d6-nuusbriewe.</p></div></div>
                             <div onclick="window.switchTab('bemarking')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-rose-500"></div><div><div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg mb-3 group-hover:bg-rose-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-lightbulb"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Bemarking</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Beplan bemarkingsveldtogte, opedae en toekomsbeplanning.</p></div></div>
@@ -496,7 +509,7 @@
                     </div>
                 </section>
 
-                <!-- SPORT DEPARTEMENTE (Saamgevoeg om spasie en vinnige verwerking te waarborg) -->
+                <!-- SPORT DEPARTEMENTE (Huidiges) -->
                 <section id="tab-rugby" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-football"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Rugbyhoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('rugby', 'Rugby')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('rugby', 'Rugby')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="rugby-results-list"></div></div></div></section>
                 <section id="tab-netbal" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-basketball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Netbalhoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('netbal', 'Netbal')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('netbal', 'Netbal')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="netbal-results-list"></div></div></div></section>
                 <section id="tab-tennis" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-table-tennis-paddle-ball"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Tennishoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('tennis', 'Tennis')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('tennis', 'Tennis')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="tennis-results-list"></div></div></div></section>
@@ -504,6 +517,9 @@
                 <section id="tab-hokkie" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-hockey-puck"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Hokkiehoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('hokkie', 'Hokkie')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('hokkie', 'Hokkie')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="hokkie-results-list"></div></div></div></section>
                 <section id="tab-skaak" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-chess-knight"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Skaakhoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('skaak', 'Skaak')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('skaak', 'Skaak')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="skaak-results-list"></div></div></div></section>
                 <section id="tab-voortrekkers" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden"><div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5"><div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-campground"></i><span>Kultuur & Jeug</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Voortrekkershoof</h2></div><div class="flex space-x-2"><button onclick="window.openSportEventModal('voortrekkers', 'Voortrekkers')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('voortrekkers', 'Voortrekkers')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Prestasie Op</span></button></div></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Byeenkomste & Kampe</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-events-list"></div></div><div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Prestasies & Toekennings</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="voortrekkers-results-list"></div></div></div></section>
+                
+                <!-- DYNAMIC MODULE CONTAINER (Where new modules will be appended) -->
+                <div id="dynamic-sections-container"></div>
             </main>
         </div>
         
@@ -684,26 +700,26 @@
         </div>
     </div>
 
-    <!-- MODULE UPGRADE MODALS -->
-    <div id="modal-upgrade-info" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80] hidden">
+    <!-- MODULE 3-STAP SKEPPING MODALS -->
+    <div id="modal-upgrade-step1" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80] hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center animate-in fade-in zoom-in-95 duration-200">
             <div class="w-16 h-16 rounded-full bg-tjokkieGold-100 text-tjokkieGold-600 flex items-center justify-center text-3xl mx-auto mb-4"><i class="fa-solid fa-crown"></i></div>
-            <h3 class="font-black text-slate-900 text-lg mb-2">Premium Module</h3>
-            <p class="text-xs text-slate-500 leading-relaxed mb-6">Om addisionele sport- of kultuur-afdelings in die stelsel in te bou, behels 'n strukturele opgradering. Beraamde koste: <b>R350 eenmalig per nuwe module</b>. Bevestig hieronder om die aansoek per e-pos te stuur.</p>
+            <h3 class="font-black text-slate-900 text-lg mb-2">Nuwe Sport Module</h3>
+            <p class="text-xs text-slate-500 leading-relaxed mb-6">Om addisionele sport- of kultuur-afdelings in die stelsel in te bou, behels 'n strukturele opgradering. Beraamde koste: <b>R350 eenmalig per nuwe module</b>.</p>
             <div class="flex space-x-2">
-                <button onclick="window.toggleModal('modal-upgrade-info')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Kanselleer</button>
-                <button onclick="window.requestModuleUpgrade()" class="flex-1 py-2.5 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl text-xs transition">Bevestig Aansoek</button>
+                <button onclick="window.toggleModal('modal-upgrade-step1')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-xs transition">Kanselleer</button>
+                <button onclick="window.module_step2()" class="flex-1 py-2.5 bg-tjokkieGold-500 hover:bg-tjokkieGold-600 text-tjokkieBlue-900 font-bold rounded-xl text-xs transition">Bevestig Aansoek</button>
             </div>
         </div>
     </div>
 
-    <div id="modal-upgrade-unlock" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80] hidden">
+    <div id="modal-upgrade-step2" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[80] hidden">
         <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Aktiveer Module</h3><button onclick="window.toggleModal('modal-upgrade-unlock')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <p class="text-xs text-slate-500 mb-4">Plak die spesiale aktiveringskode wat u ontvang het hier in.</p>
-            <form id="form-upgrade-unlock" onsubmit="window.verifyModuleUnlock(event)" class="space-y-4 text-xs">
-                <div><input type="text" id="upgrade-unlock-code" required placeholder="Ontsluitingskode" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none text-center font-mono tracking-widest text-lg"></div>
-                <button type="submit" class="w-full py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button>
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Aktiveringskode Vereis</h3><button onclick="window.toggleModal('modal-upgrade-step2')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <p class="text-xs text-slate-500 mb-4">Jou e-pos program behoort oop te gemaak het. Sodra jy die spesiale wagwoord van die ontwikkelaar af gekry het, tik dit hier in om voort te gaan.</p>
+            <form onsubmit="window.module_step3(event)" class="space-y-4 text-xs">
+                <input type="password" id="module-special-password" placeholder="Kode (bv. e5!Xp9k@L)" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none">
+                <button type="submit" class="w-full py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Verifieer en Gaan Voort</button>
             </form>
         </div>
     </div>
@@ -714,7 +730,63 @@
             <form id="form-create-module" onsubmit="window.saveNewModule(event)" class="space-y-4 text-xs">
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">Module Naam</label><input type="text" id="new-mod-name" placeholder="Bv. Gholf" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
                 <div><label class="block text-slate-500 font-bold uppercase mb-1">FontAwesome Ikoon (Opsioneel)</label><input type="text" id="new-mod-icon" placeholder="Bv. fa-golf-ball-tee" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                
+                <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 mt-2">
+                    <label class="flex items-center space-x-2 cursor-pointer mb-2">
+                        <input type="checkbox" id="new-mod-wants-facility" onchange="window.toggleFacilityInput()" class="rounded text-tjokkieBlue-600 focus:ring-tjokkieBlue-500">
+                        <span class="font-bold text-slate-700">Voeg Terrein By?</span>
+                    </label>
+                    <div id="new-mod-facility-input-div" class="hidden pl-5 border-l-2 border-tjokkieGold-500 space-y-2">
+                        <label class="block text-[10px] text-slate-500 uppercase mb-1">Terrein Naam vir Instandhouding</label>
+                        <input type="text" id="new-mod-facility-name" placeholder="Bv. Gholfbaan / Oefennette" class="w-full border border-slate-200 p-2 rounded-lg focus:outline-none text-xs">
+                    </div>
+                </div>
+
                 <button type="submit" class="w-full py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition mt-2">Skep en Stoor</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- BEPLAN INSTANDHOUDING & RAPPORTEER PROBLEEM MODALS -->
+    <div id="modal-calendar-password" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[55] hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Terrein Wagwoord Vereis</h3><button onclick="window.toggleModal('modal-calendar-password')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-calendar-password" onsubmit="window.verifyCalendarAuth(event)" class="space-y-4 text-xs">
+                <input type="hidden" id="auth-calendar-date">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Voer Wagwoord In</label><input type="password" id="calendar-password-input" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-calendar-password')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white font-bold rounded-xl transition">Ontsluit</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-terrein-beplan" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Beplan Instandhouding</h3><button onclick="window.toggleModal('modal-terrein-beplan')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-beplan" onsubmit="window.addPlannedTask(event)" class="space-y-4 text-xs">
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Area / Fasiliteit</label><input type="text" id="plan-area" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-slate-500 font-bold uppercase mb-1">Datum</label><input type="date" id="plan-date" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                    <div><label class="block text-slate-500 font-bold uppercase mb-1">Prioriteit</label><select id="plan-priority" class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"><option>Normaal</option><option>Dringend</option></select></div>
+                </div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Beskrywing</label><input type="text" id="plan-desc" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div><label class="block text-slate-500 font-bold uppercase mb-1">Gerapporteer deur (Naam)</label><input type="text" id="plan-reported" required class="w-full border border-slate-200 p-2.5 rounded-lg focus:outline-none"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-terrein-beplan')" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieGold-500 text-tjokkieBlue-900 font-bold rounded-xl transition">Beplan Taak</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-terrein-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[60] hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Rapporteer Terrein Probleem</h3><button onclick="window.toggleModal('modal-terrein-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-terrein" onsubmit="window.addTerreinTask(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1">Area / Klas</label><input type="text" id="terrein-area" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block font-bold mb-1">Datum</label><input type="date" id="terrein-date" required class="w-full border p-2.5 rounded-lg"></div>
+                    <div><label class="block font-bold mb-1">Prioriteit</label><select id="terrein-priority" class="w-full border p-2.5 rounded-lg"><option>Normaal</option><option>Dringend</option></select></div>
+                </div>
+                <div><label class="block font-bold mb-1">Beskrywing</label><textarea id="terrein-desc" rows="3" required class="w-full border p-2.5 rounded-lg"></textarea></div>
+                <div><label class="block font-bold mb-1">Gerapporteer deur</label><input type="text" id="terrein-reported" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-terrein-taak')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-red-600 text-white rounded-xl font-bold">Rapporteer</button></div>
             </form>
         </div>
     </div>
@@ -902,29 +974,6 @@
             </form>
         </div>
     </div>
-    <div id="modal-afkondiging" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Plaas Afkondiging</h3><button onclick="window.toggleModal('modal-afkondiging')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-afkondiging" onsubmit="window.addAfkondiging(event)" class="space-y-4 text-xs">
-                <div><label class="block font-bold mb-1">Geleentheid/Doel?</label><input type="text" id="afkondiging-doel" required class="w-full border p-2.5 rounded-lg"></div>
-                <div><label class="block font-bold mb-1">Kies Tyd/Pouse</label><select id="afkondiging-pouse" class="w-full border p-2.5 rounded-lg"><option>Eerste Pouse</option><option>Tweede Pouse</option><option>Aan die einde van die dag</option><option>Algemeen / Heeldag</option></select></div>
-                <div><label class="block font-bold mb-1">Inhoud</label><textarea id="afkondiging-inhoud" rows="4" required class="w-full border p-2.5 rounded-lg"></textarea></div>
-                <div><label class="block font-bold mb-1">Wie plaas afkondiging?</label><input type="text" id="afkondiging-persoon" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-afkondiging')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Voeg By</button></div>
-            </form>
-        </div>
-    </div>
-    <div id="modal-bemarking-taak" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
-            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Beplan Nuwe Bemarkingstaak</h3><button onclick="window.toggleModal('modal-bemarking-taak')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
-            <form id="form-bemarking" onsubmit="window.addBemarkingTaak(event)" class="space-y-4 text-xs">
-                <div><label class="block font-bold mb-1">Veldtog</label><input type="text" id="bem-taak" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="grid grid-cols-2 gap-4"><div><label class="block font-bold mb-1">Sperdatum</label><input type="date" id="bem-datum" required class="w-full border p-2.5 rounded-lg"></div><div><label class="block font-bold mb-1">Status</label><select id="bem-status" class="w-full border p-2.5 rounded-lg"><option>Beplan</option><option>Besig</option></select></div></div>
-                <div><label class="block font-bold mb-1">Verantwoordelike Persoon</label><input type="text" id="bem-verant" required class="w-full border p-2.5 rounded-lg"></div>
-                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bemarking-taak')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-rose-600 text-white rounded-xl font-bold">Stoor</button></div>
-            </form>
-        </div>
-    </div>
 
 
     <!-- ======================================================= -->
@@ -980,6 +1029,7 @@
         let localAfkondigings = []; window.localAfkondigings = localAfkondigings; window.localBemarkingTake = []; window.localNewsletters = []; 
         window.localBusTrips = [ { id: "1", dest: "Pretoria", time: "Vrydag 06:00", pax: "20", vehicle: "Bus A", driver: "Oom Johan" } ]; 
         window.localITTickets = []; window.localLogs = []; let localSportEvents = []; let localSportResults = [];
+        let localCustomModules = {}; 
         let calDate = new Date();
 
         window.runLocalFallback = function() {
@@ -989,6 +1039,7 @@
             window.renderTerreinTasks(localTerreinTasks); window.renderAfkondigings(localAfkondigings); window.renderBemarkingTake(window.localBemarkingTake);
             window.renderNewsletters(window.localNewsletters); window.renderBusTrips(window.localBusTrips); window.renderITTickets(window.localITTickets);
             window.renderActivityLogs(window.localLogs); window.renderSportEvents(localSportEvents); window.renderSportResults(localSportResults);
+            window.renderCustomModules(localCustomModules);
         }
 
         function setupRealtimeListeners() {
@@ -1005,6 +1056,7 @@
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), (snap) => { let logs = []; snap.forEach(doc => { logs.push({ id: doc.id, ...doc.data() }); }); logs.sort((a,b) => b.timestamp - a.timestamp); window.localLogs = logs; window.renderActivityLogs(logs); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), (snap) => { let se = []; snap.forEach(doc => { se.push({ id: doc.id, ...doc.data() }); }); window.renderSportEvents(se); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), (snap) => { let sr = []; snap.forEach(doc => { sr.push({ id: doc.id, ...doc.data() }); }); window.renderSportResults(sr); });
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'custom_modules'), (snap) => { let cm = {}; snap.forEach(doc => { cm[doc.id] = { ...doc.data() }; }); window.renderCustomModules(cm); });
         }
 
         const safeHideLoader = () => {
@@ -1012,7 +1064,6 @@
             else { const l = document.getElementById('loading-screen'); if(l) l.classList.add('hidden'); }
         };
 
-        // JS-AFDELING 1.2: LAAI PROSES (INIT)
         window.initFirebaseAndApp = async function() {
             let configActive = false;
             if (firebaseConfig && firebaseConfig.apiKey !== "" && firebaseConfig.apiKey !== "YOUR_API_KEY_HERE") {
@@ -1042,7 +1093,7 @@
                                 const profileSnap = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'user_profiles', currentUser.uid));
                                 if (profileSnap.exists()) {
                                     if (profileSnap.data().status === 'approved') isApproved = true;
-                                } else { isApproved = true; } // Fallback vir admins
+                                } else { isApproved = true; } 
                             } catch(err) { isApproved = true; }
 
                             if(isApproved) {
@@ -1192,9 +1243,6 @@
             }
         }
 
-        // ======================================================= //
-        // JS-AFDELING 3: TEKEN-IN (AUTH LOGIC)                    //
-        // ======================================================= //
         window.handleLogin = async function(e) {
             e.preventDefault(); const email = document.getElementById('login-email').value; const pwd = document.getElementById('login-password').value;
             if(auth) {
@@ -1228,9 +1276,6 @@
 
         window.handleLogout = async function() { if(auth) await signOut(auth); location.reload(); }
 
-        // ======================================================= //
-        // JS-AFDELING 4: GEBRUIKER BESTUUR (ADMIN)                //
-        // ======================================================= //
         window.promptDevSettingsAuth = function(intent = 'settings') { 
             window.pendingDevTab = intent; 
             document.getElementById('dev-password-input').value = ''; 
@@ -1254,8 +1299,8 @@
                 window.toggleModal('modal-dev-auth'); 
                 if (isMaster) window.isMasterAdmin = true;
 
-                if(window.pendingDevTab === 'module_step1') { 
-                    window.toggleModal('modal-upgrade-info'); 
+                if(window.pendingDevTab === 'master_upgrade') { 
+                    window.toggleModal('modal-upgrade'); 
                 } 
                 else if (window.pendingDevTab === 'master_theme') {
                     window.switchDevTab('theme');
@@ -1272,50 +1317,105 @@
             } else { window.showToast("Geweier", "Verkeerde wagwoord."); }
         }
 
-        window.requestModuleUpgrade = function() { 
-            window.toggleModal('modal-upgrade-info'); 
-            
-            const schoolName = document.querySelector('.school-name-display')?.innerText || "Onbekende Skool"; 
+        // ======================================================= //
+        // 3-STAP MODULE SKEPPING                                  //
+        // ======================================================= //
+        window.module_step1 = function() {
+            document.getElementById('dev-password-input').value = ''; 
+            document.getElementById('dev-auth-title').innerText = "Skool Admin Wagwoord";
+            window.pendingDevTab = "module_step2"; 
+            window.toggleModal('modal-dev-auth'); 
+        };
+
+        window.module_step2 = function() {
+            window.toggleModal('modal-upgrade-step1');
+            const schoolName = document.querySelector('.school-name-display')?.innerText || "Skool"; 
             const email = "elrico@think-it.co.za";
             const subject = encodeURIComponent(`Aansoek vir Ekstra Module - ${schoolName}`);
-            const body = encodeURIComponent(`Goeiedag Elrico,\n\nOns skool (${schoolName}) wil graag aansoek doen vir 'n bykomende Sport of Kultuur module op ons stelsel.\n\nOns het die R350 koste aanvaar en wag vir die aktiveringskode.\n\nGroete,\nBestuur: ${schoolName}`);
+            const body = encodeURIComponent(`Goeiedag Elrico,\n\nOns skool (${schoolName}) wil graag aansoek doen vir 'n bykomende Sport of Kultuur module op ons stelsel.\n\nOns verstaan die koste is R350.\n\nStuur asb die Aktiveringskode sodat ons kan voortgaan.\n\nGroete,\nBestuur`);
             window.location.href = `mailto:${email}?subject=${subject}&body=${body}`; 
             
             setTimeout(() => {
-                document.getElementById('upgrade-unlock-code').value = '';
-                window.toggleModal('modal-upgrade-unlock');
-            }, 1000);
-        }
+                document.getElementById('module-special-password').value = '';
+                window.toggleModal('modal-upgrade-step2');
+            }, 1500);
+        };
 
-        window.verifyModuleUnlock = function(e) {
+        window.module_step3 = function(e) {
             e.preventDefault();
-            const code = document.getElementById('upgrade-unlock-code').value;
-            // Dit vereis die skool tik enige 10-karakter wagwoord (wat jou generator gemaak het)
-            if(code.length === 10 || code === "Elrico1603!!") {
-                window.toggleModal('modal-upgrade-unlock');
+            const inputPwd = document.getElementById('module-special-password').value;
+            if (inputPwd === "Elrico1603!!" || inputPwd.length >= 10) { 
+                window.toggleModal('modal-upgrade-step2');
                 document.getElementById('form-create-module').reset();
+                document.getElementById('new-mod-facility-input-div').classList.add('hidden');
                 window.toggleModal('modal-create-module');
             } else {
-                window.showToast("Fout", "Ongeldige aktiveringskode.");
+                window.showToast("Fout", "Aktiveringskode is onbekend of te kort. Dit moet 'n geldige 10+ karakter kode wees.");
             }
-        }
+        };
 
         window.saveNewModule = async function(e) {
             e.preventDefault();
-            const modName = document.getElementById('new-mod-name').value;
-            const modIcon = document.getElementById('new-mod-icon').value || 'fa-star';
+            const name = document.getElementById('new-mod-name').value;
+            const icon = document.getElementById('new-mod-icon').value || "fa-trophy";
+            const wantsFacility = document.getElementById('new-mod-wants-facility').checked;
+            const facName = document.getElementById('new-mod-facility-name').value;
             
-            if (db && user) {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'custom_modules'), {
-                    name: modName,
-                    icon: modIcon,
-                    timestamp: Date.now()
-                }).catch(()=>{});
+            const modId = "mod_" + name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const newModule = { id: modId, name: name, icon: icon };
+
+            if(wantsFacility && facName) {
+                const facId = 'fac_' + Date.now();
+                const newFac = { name: facName, status: "Nuut", subtext: `Gekoppel aan ${name}`, icon: icon, color: "blue" };
+                if(db && user) { await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'facilities', facId), newFac); } 
+                else { localFacilities[facId] = newFac; window.renderFacilities(localFacilities); }
+                window.logEvent(`Nuwe terrein outomaties geskep vir ${name}`, 'Terrein');
+            }
+
+            if(db && user) {
+                await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'custom_modules', modId), newModule);
+            } else {
+                localCustomModules[modId] = newModule;
+                window.renderCustomModules(localCustomModules);
             }
             
-            window.showToast("Sukses", `Die module '${modName}' sal bygevoeg word.`);
+            window.logEvent(`Nuwe stelsel module geregistreer: ${name}`, 'Stelsel');
+            window.showToast("Sukses", `${name} is bygevoeg in die sybalk!`);
             window.toggleModal('modal-create-module');
-        }
+        };
+
+        window.renderCustomModules = function(modules) {
+            const navContainer = document.getElementById('dynamic-nav-container');
+            const sectionsContainer = document.getElementById('dynamic-sections-container');
+            if(!navContainer || !sectionsContainer) return;
+            
+            navContainer.innerHTML = '';
+            sectionsContainer.innerHTML = '';
+
+            for (const [id, mod] of Object.entries(modules)) {
+                navContainer.innerHTML += `
+                    <button onclick="window.switchTab('${mod.id}')" id="btn-${mod.id}" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                        <i class="fa-solid ${mod.icon} text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">${mod.name}</span>
+                    </button>`;
+
+                sectionsContainer.innerHTML += `
+                    <section id="tab-${mod.id}" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden hidden-dept">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                            <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid ${mod.icon}"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">${mod.name} Bestuur</h2></div>
+                            <div class="flex space-x-2"><button onclick="window.openSportEventModal('${mod.id}', '${mod.name}')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('${mod.id}', '${mod.name}')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="${mod.id}-events-list">Geen inligting nie.</div></div>
+                            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="${mod.id}-results-list">Geen inligting nie.</div></div>
+                        </div>
+                    </section>`;
+            }
+            
+            // Re-render the events and results into the newly created DOM elements
+            if(window.localSportEvents) window.renderSportEvents(window.localSportEvents);
+            if(window.localSportResults) window.renderSportResults(window.localSportResults);
+        };
+
 
         window.switchDevTab = function(tab) {
             if ((tab === 'theme' || tab === 'generator') && !window.isMasterAdmin) { 
@@ -1518,7 +1618,7 @@
             }, 250);
         };
 
-      // ======================================================= //
+        // ======================================================= //
         // JS-AFDELING 6: DATA VERTREK (RENDERING ENGINE)          //
         // ======================================================= //
         window.renderFacilities = function(facilities) {
@@ -1716,8 +1816,8 @@
         }
 
         window.renderSportEvents = function(events) {
-            const depts = ['rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
-            depts.forEach(d => { const list = document.getElementById(`${d}-events-list`); if(list) list.innerHTML = ''; });
+            // Maak almal skoon eers
+            document.querySelectorAll('[id$="-events-list"]').forEach(list => list.innerHTML = '');
             events.sort((a, b) => new Date(a.date) - new Date(b.date));
             events.forEach(ev => {
                 const list = document.getElementById(`${ev.dept}-events-list`);
@@ -1733,8 +1833,8 @@
         }
 
         window.renderSportResults = function(results) {
-            const depts = ['rugby', 'netbal', 'tennis', 'swem', 'hokkie', 'skaak', 'voortrekkers'];
-            depts.forEach(d => { const list = document.getElementById(`${d}-results-list`); if(list) list.innerHTML = ''; });
+            // Maak almal skoon eers
+            document.querySelectorAll('[id$="-results-list"]').forEach(list => list.innerHTML = '');
             results.sort((a, b) => b.timestamp - a.timestamp);
             results.forEach(res => {
                 const list = document.getElementById(`${res.dept}-results-list`);
@@ -2047,35 +2147,51 @@
         }
 
         // SPORT & KALENDER
-        window.promptCalendarAuth = function(dateStr = '') { document.getElementById('auth-calendar-date').value = dateStr; document.getElementById('calendar-password-input').value = ''; window.toggleModal('modal-calendar-password'); }
+        window.promptCalendarAuth = function(dateStr = '') { 
+            document.getElementById('auth-calendar-date').value = dateStr; 
+            document.getElementById('calendar-password-input').value = ''; 
+            window.toggleModal('modal-calendar-password'); 
+        }
+
         window.verifyCalendarAuth = function(e) { 
             e.preventDefault(); 
             const inputPwd = document.getElementById('calendar-password-input').value;
-            if (inputPwd === window.currentTerreinPassword || inputPwd === window.currentSchoolPassword || inputPwd === "Elrico1603!!") { window.toggleModal('modal-calendar-password'); document.getElementById('form-beplan').reset(); document.getElementById('plan-date').value = document.getElementById('auth-calendar-date').value; window.toggleModal('modal-terrein-beplan'); } else { window.showToast("Geweier", "Verkeerde wagwoord."); } 
+            if (inputPwd === window.currentTerreinPassword || inputPwd === window.currentSchoolPassword || inputPwd === "Elrico1603!!") { 
+                window.toggleModal('modal-calendar-password'); 
+                document.getElementById('form-beplan').reset(); 
+                document.getElementById('plan-date').value = document.getElementById('auth-calendar-date').value; 
+                window.toggleModal('modal-terrein-beplan'); 
+            } else { 
+                window.showToast("Geweier", "Verkeerde wagwoord."); 
+            } 
         }
         
         window.openSportEventModal = function(deptId, deptName) { document.getElementById('form-sport-event').reset(); document.getElementById('sport-event-dept').value = deptId; document.getElementById('sport-event-title-display').innerText = `Skeduleer Geleentheid: ${deptName}`; window.toggleModal('modal-sport-event'); }
+        
         window.saveSportEvent = async function(e) { 
             e.preventDefault(); const dept = document.getElementById('sport-event-dept').value; const title = document.getElementById('sport-event-title').value; const d = { dept: dept, title: title, date: document.getElementById('sport-event-date').value, location: document.getElementById('sport-event-location').value, desc: document.getElementById('sport-event-desc').value, timestamp: Date.now() }; 
             if(db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_events'), d); }
-            else { window.localSportEvents.push({ id: Math.random().toString(), ...d }); window.renderSportEvents(window.localSportEvents); }
+            else { localSportEvents.push({ id: Math.random().toString(), ...d }); window.renderSportEvents(localSportEvents); }
             window.logEvent(`Geleentheid: ${title}`, dept.toUpperCase()); window.toggleModal('modal-sport-event'); 
         }
+
         window.deleteSportEvent = async function(id) { 
             if(db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_events', id)); }
-            else { window.localSportEvents = window.localSportEvents.filter(s => s.id !== id); window.renderSportEvents(window.localSportEvents); }
+            else { localSportEvents = localSportEvents.filter(s => s.id !== id); window.renderSportEvents(localSportEvents); }
         }
         
         window.openSportResultModal = function(deptId, deptName) { document.getElementById('form-sport-result').reset(); document.getElementById('sport-result-dept').value = deptId; document.getElementById('sport-result-title-display').innerText = `Laai Uitslag Op: ${deptName}`; window.toggleModal('modal-sport-result'); }
+        
         window.saveSportResult = async function(e) { 
             e.preventDefault(); const dept = document.getElementById('sport-result-dept').value; const team = document.getElementById('sport-result-team').value; const d = { dept: dept, matchTitle: document.getElementById('sport-result-match').value, team: team, opponent: document.getElementById('sport-result-opponent').value, score: document.getElementById('sport-result-score').value, outcome: document.getElementById('sport-result-outcome').value, timestamp: Date.now() }; 
             if(db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'sport_results'), d); }
-            else { window.localSportResults.push({ id: Math.random().toString(), ...d }); window.renderSportResults(window.localSportResults); }
+            else { localSportResults.push({ id: Math.random().toString(), ...d }); window.renderSportResults(localSportResults); }
             window.logEvent(`Uitslag gelaai: ${team}`, dept.toUpperCase()); window.toggleModal('modal-sport-result'); 
         }
+
         window.deleteSportResult = async function(id) { 
             if(db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'sport_results', id)); }
-            else { window.localSportResults = window.localSportResults.filter(s => s.id !== id); window.renderSportResults(window.localSportResults); }
+            else { localSportResults = localSportResults.filter(s => s.id !== id); window.renderSportResults(localSportResults); }
         }
 
         window.verifyAndClearLogs = async function(e) {
