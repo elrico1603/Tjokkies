@@ -92,6 +92,8 @@
             }
         };
 
+        window.showNotificationAlert = function() { window.showToast("Kennisgewings", "Stelsel is gekoppel en aktief."); };
+
         window.handleBellClick = function() {
             if (window.updateAvailable) {
                 window.toggleModal('modal-update-prompt');
@@ -1307,6 +1309,9 @@
                 }
                 else if (window.pendingDevTab === 'master_generator') {
                     window.switchDevTab('generator');
+                }
+                else if (window.pendingDevTab === 'module_step2') {
+                    window.toggleModal('modal-upgrade-step1');
                 }
                 else { 
                     window.devAuthenticated = true; 
