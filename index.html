@@ -54,7 +54,7 @@
             if(loader) loader.classList.add('hidden');
         };
 
-        window.switchTab = function(tabId) {
+           window.switchTab = function(tabId) {
             // Maak alle afdelings toe in plaas van net vasgesteldes, want ons het dalk nuwes bygesit
             const allSections = document.querySelectorAll('main > section');
             allSections.forEach(el => el.classList.add('hidden'));
@@ -1859,49 +1859,55 @@
         // JS-AFDELING 7: AKSIES (FIREBASE ADD/DELETE MODULES)     //
         // ======================================================= //
         
-        window.promptTaskAuth = function(dept, action, id, extra = '') {
-            document.getElementById('auth-task-dept').value = dept;
-            document.getElementById('auth-task-action').value = action;
-            document.getElementById('auth-task-id').value = id;
-            document.getElementById('auth-task-extra').value = extra;
-            document.getElementById('task-password-input').value = '';
-            window.toggleModal('modal-task-auth');
-        }
+window.renderCustomModules = function(modules) {
+            const navContainer = document.getElementById('dynamic-nav-container');
+            const sectionsContainer = document.getElementById('dynamic-sections-container');
+            const dashContainer = document.getElementById('dynamic-dashboard-container');
+            
+            if(!navContainer || !sectionsContainer) return;
+            
+            navContainer.innerHTML = '';
+            sectionsContainer.innerHTML = '';
+            if(dashContainer) dashContainer.innerHTML = '';
 
-        window.verifyTaskAuth = function(event) {
-            event.preventDefault();
-            const dept = document.getElementById('auth-task-dept').value;
-            const action = document.getElementById('auth-task-action').value;
-            const id = document.getElementById('auth-task-id').value;
-            const extra = document.getElementById('auth-task-extra').value;
-            const pwd = document.getElementById('task-password-input').value;
+            for (const [id, mod] of Object.entries(modules)) {
+                // Sit hom in die Sybalk
+                navContainer.innerHTML += `
+                    <button onclick="window.switchTab('${mod.id}')" id="btn-${mod.id}" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white">
+                        <i class="fa-solid ${mod.icon} text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">${mod.name}</span>
+                    </button>`;
 
-            let requiredPwd = "1603";
-            if (dept === 'terrein') requiredPwd = window.currentTerreinPassword;
-            else if (dept === 'skakel') requiredPwd = window.currentSkakelPassword;
-            else if (dept === 'bemarking') requiredPwd = window.currentBemarkingPassword;
-            else if (dept === 'bus') requiredPwd = window.currentBusPassword;
-            else if (dept === 'it') requiredPwd = window.currentITPassword;
+                // Sit hom op die Dashboard
+                if(dashContainer) {
+                    dashContainer.innerHTML += `
+                        <div onclick="window.switchTab('${mod.id}')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-2 h-full bg-purple-500"></div>
+                            <div>
+                                <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-500 flex items-center justify-center text-lg mb-3 group-hover:bg-purple-500 group-hover:text-white transition duration-300">
+                                    <i class="fa-solid ${mod.icon}"></i>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">${mod.name}hoof</h4>
+                                <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur wedstryde, oefeninge en spanlyste vir ${mod.name}.</p>
+                            </div>
+                        </div>`;
+                }
 
-            if (pwd === requiredPwd || pwd === window.currentSchoolPassword || pwd === "Elrico1603!!") {
-                window.toggleModal('modal-task-auth');
-                
-                if (action === 'completeTerrein') window.completeTerreinTask(id);
-                else if (action === 'deleteAfkondiging') window.deleteAfkondiging(id, extra);
-                else if (action === 'deleteNuusbrief') window.deleteNuusbrief(id);
-                else if (action === 'completeBemarking') window.completeBemarkingTaak(id);
-                else if (action === 'cancelBus') window.cancelBusTrip(id);
-                else if (action === 'resolveIt') window.resolveTicket(id);
-            } else {
-                window.showToast("Geweier", "Verkeerde afdeling wagwoord.");
+                // Skep sy eie bladsy
+                sectionsContainer.innerHTML += `
+                    <section id="tab-${mod.id}" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden hidden-dept">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                            <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid ${mod.icon}"></i><span>Sportbestuur</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">${mod.name} Bestuur</h2></div>
+                            <div class="flex space-x-2"><button onclick="window.openSportEventModal('${mod.id}', '${mod.name}')" class="bg-white border text-slate-600 hover:bg-slate-100 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-calendar-plus text-tjokkieBlue-500"></i><span class="hidden sm:inline">Skeduleer</span></button><button onclick="window.openSportResultModal('${mod.id}', '${mod.name}')" class="bg-tjokkieBlue-900 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center space-x-2"><i class="fa-solid fa-trophy text-tjokkieGold-400"></i><span>Laai Uitslag Op</span></button></div>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Komende Geleenthede</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="${mod.id}-events-list">Geen inligting nie.</div></div>
+                            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4"><h3 class="font-bold text-slate-900 text-sm border-b pb-3">Uitslae & Prestasies</h3><div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[400px] pr-1" id="${mod.id}-results-list">Geen inligting nie.</div></div>
+                        </div>
+                    </section>`;
             }
-        }
-
-        window.logEvent = async function(desc, dept) {
-            const logData = { desc, dept, timestamp: Date.now() };
-            if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'activity_logs'), logData).catch(()=>{}); }
-            else { window.localLogs.unshift({ id: Math.random().toString(), ...logData }); window.renderActivityLogs(window.localLogs); }
-        }
+            
+            if(window.localSportEvents) window.renderSportEvents(window.localSportEvents);
+            if(window.localSportResults) window.renderSportResults(window.localSportResults);
 
         // TERREIN
         window.promptAddFacilityAuth = function() {
