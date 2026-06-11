@@ -27,7 +27,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-user-select: none; /* Keer dat mense teks highlight en copy op Chrome/Safari */
+            user-select: none; /* Keer dat mense teks highlight */
+        }
+        input, textarea, select { 
+            -webkit-user-select: auto; 
+            user-select: auto; /* Maak seker input velde werk nog normaal */
+        }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
@@ -38,44 +46,79 @@
     <!-- GLOBALE UI FUNKSIES & FAILSAFE                          -->
     <!-- ======================================================= -->
     <script>
-        window.appInitialized = false;
-        window.isRegistering = false;
-        window.devAuthenticated = false;
-        window.isMasterAdmin = false;
-        window.pendingDevTab = '';
-
-        window.CURRENT_APP_VERSION = 1; 
-        window.updateAvailable = false;
-        window.cloudAppVersion = 1;
-
-        window.hideLoadingScreen = function() {
-            const loader = document.getElementById('loading-screen');
-            if(loader) loader.classList.add('hidden');
-        };
-
-        window.switchTab = function(tabId) {
-            const allSections = document.querySelectorAll('main > section');
-            allSections.forEach(el => el.classList.add('hidden'));
-
-            const activeTab = document.getElementById(`tab-${tabId}`);
-            if(activeTab) activeTab.classList.remove('hidden');
-
-            document.querySelectorAll('.sidebar-btn').forEach(btn => {
-                btn.classList.remove('bg-tjokkieBlue-800', 'text-white', 'font-semibold');
-                btn.classList.add('text-slate-300');
-            });
-            const activeBtn = document.getElementById(`btn-${tabId}`);
-            if(activeBtn) { 
-                activeBtn.classList.add('bg-tjokkieBlue-800', 'text-white', 'font-semibold'); 
-                activeBtn.classList.remove('text-slate-300'); 
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        tjokkieBlue: { 500: 'var(--school-pri-500)', 800: 'var(--school-pri-800)', 900: 'var(--school-pri-900)', 950: 'var(--school-pri-950)' },
+                        tjokkieGold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KERN UI FUNKSIES WAT DIE KOPPELvLAK LAAT WERK -->
+    <script>
+        window.toggleModal = function(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                if(modal.classList.contains('hidden')) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                } else {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
             }
         };
 
-        window.toggleModal = function(id) {
-            const modal = document.getElementById(id);
-            if(modal) { modal.classList.toggle('hidden'); }
+        window.switchTab = function(tabId) {
+            // Steek alle afdelings weg
+            document.querySelectorAll('main > section').forEach(sec => sec.classList.add('hidden'));
+            
+            // Wys die spesifieke afdeling
+            const target = document.getElementById('tab-' + tabId);
+            if(target) target.classList.remove('hidden');
+            
+            // Verander die kleur van die aktiewe knoppie in die kantlyn
+            document.querySelectorAll('.sidebar-btn').forEach(btn => {
+                btn.classList.remove('bg-tjokkieBlue-800', 'text-white');
+            });
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-tjokkieBlue-800', 'text-white');
+            }
         };
+    </script>
 
+    <!-- ======================================================= -->
+    <!-- ANTI-KOPIEER & SEKURITEIT SKRIP                         -->
+    <!-- ======================================================= -->
+    <script>
+        // Verhoed regskliek (Right-Click) op die webblad
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            if(window.showToast) window.showToast("Kopiereg", "Regskliek is gedeaktiveer weens intellektuele eiendomsregte.");
+        });
+
+        // Verhoed sleutelbord kortpaaie (F12, Ctrl+Shift+I, Ctrl+U, Ctrl+C, Ctrl+S)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+               (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) || 
+               (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))) {
+                e.preventDefault();
+                if(window.showToast) window.showToast("Sekuriteit Waarskuwing", "Ontwikkelaar-opsies is streng verbode op hierdie stelsel.");
+                return false;
+            }
+        });
+
+        // Plaas 'n massiewe waarskuwing in die blaaier se konsole
+        console.log("%cSTOP!", "color: red; font-family: sans-serif; font-size: 4.5em; font-weight: bolder; text-shadow: #000 1px 1px;");
+        console.log("%cHierdie stelsel is privaat eiendom en word beskerm deur streng intellektuele eiendomsregte en kopieregwette. Enige poging om die bronkode te kopieer, na te maak of te 'reverse-engineer' is 'n kriminele oortreding.", "color: white; background: red; font-size: 16px; padding: 5px; font-weight: bold; border-radius: 5px;");
+
+        // Herstel die foutiewe Toast funksie wat gebreek het
         window.showToast = function(title, msg) {
             const toast = document.getElementById('toast-notification');
             if(toast) {
@@ -256,6 +299,7 @@
                     <button onclick="window.switchTab('skakel')" id="btn-skakel" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-bullhorn text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Skakelbeampte</span></button>
                     <button onclick="window.switchTab('bemarking')" id="btn-bemarking" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-lightbulb text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Bemarking</span></button>
                     <button onclick="window.switchTab('bus')" id="btn-bus" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-bus text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Busvervoer</span></button>
+                    <button onclick="window.switchTab('verlore')" id="btn-verlore" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-shirt text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">Verlore Goedere</span></button>
                     <button onclick="window.switchTab('it')" id="btn-it" class="sidebar-btn w-full flex items-center space-x-3 px-3 py-3 rounded-xl transition duration-150 group hover:bg-tjokkieBlue-800 hover:text-white"><i class="fa-solid fa-laptop-code text-lg w-6 text-center text-tjokkieGold-400 group-hover:scale-110 transition"></i><span class="hidden md:inline text-sm font-medium">IT-Ondersteuning</span></button>
 
                     <div id="dynamic-modules-marker" class="pt-4 pb-2"><span class="hidden md:inline px-3 text-[10px] font-bold tracking-wider uppercase text-tjokkieGold-400">Sport & Kultuur</span></div>
@@ -310,6 +354,7 @@
                             <div onclick="window.switchTab('skakel')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-tjokkieBlue-800"></div><div><div class="w-10 h-10 rounded-xl bg-sky-50 text-tjokkieBlue-800 flex items-center justify-center text-lg mb-3 group-hover:bg-tjokkieBlue-800 group-hover:text-white transition duration-300"><i class="fa-solid fa-bullhorn"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Skakelbeampte</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Hanteer daaglikse skool-afkondigings en d6-nuusbriewe.</p></div></div>
                             <div onclick="window.switchTab('bemarking')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-rose-500"></div><div><div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center text-lg mb-3 group-hover:bg-rose-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-lightbulb"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Bemarking</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Beplan bemarkingsveldtogte, opedae en toekomsbeplanning.</p></div></div>
                             <div onclick="window.switchTab('bus')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div><div><div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg mb-3 group-hover:bg-amber-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-bus"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Busvervoer</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Koördineer skoolbusse, sportritte en bestuurder roetes.</p></div></div>
+                            <div onclick="window.switchTab('verlore')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-teal-500"></div><div><div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-lg mb-3 group-hover:bg-teal-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-shirt"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Verlore Goedere</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Plaas fotos van items wat gevind is sodat eienaars dit kan terugeis.</p></div></div>
                             <div onclick="window.switchTab('it')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-sky-500"></div><div><div class="w-10 h-10 rounded-xl bg-blue-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-laptop-code"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">IT-Ondersteuning</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Moniteer skool-WiFi, bedieners en hanteer IT-kaartjies.</p></div></div>
                             <div onclick="window.switchTab('rugby')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div><div><div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-3 group-hover:bg-blue-600 group-hover:text-white transition duration-300"><i class="fa-solid fa-football"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Rugbyhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur rugby-oefeninge, wedstryde, spanlyste en toerusting.</p></div></div>
                             <div onclick="window.switchTab('netbal')" class="group bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-xl hover:border-tjokkieBlue-800 transition duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden"><div class="absolute top-0 left-0 w-2 h-full bg-sky-400"></div><div><div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-500 flex items-center justify-center text-lg mb-3 group-hover:bg-sky-500 group-hover:text-white transition duration-300"><i class="fa-solid fa-basketball"></i></div><h4 class="text-sm font-bold text-slate-900 group-hover:text-tjokkieBlue-900">Netbalhoof</h4><p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Bestuur netbal-oefeninge, toernooie, spanlyste en reëlings.</p></div></div>
@@ -429,7 +474,10 @@
                             </div>
                         </div>
                         <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-4">
-                            <div class="flex justify-between items-center border-b border-slate-100 pb-3"><h3 class="font-bold text-slate-900 text-sm">Afkondigings vir die Dag</h3></div>
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                                <h3 class="font-bold text-slate-900 text-sm">Afkondigings vir die Dag</h3>
+                                <button onclick="window.printAfkondigings()" class="text-[10px] bg-tjokkieBlue-50 hover:bg-tjokkieBlue-100 text-tjokkieBlue-800 px-3 py-1.5 rounded-lg font-bold transition shadow-sm uppercase tracking-wider flex items-center"><i class="fa-solid fa-print mr-1"></i> Druk</button>
+                            </div>
                             <p class="text-[10px] text-slate-500 leading-relaxed">Pouse-afkondigings of belangrike daaglikse inligting.</p>
                             <div class="space-y-3 custom-scrollbar overflow-y-auto max-h-[300px] pr-1" id="afkondigings-list"></div>
                         </div>
@@ -478,6 +526,21 @@
                     </div>
                 </section>
 
+                <!-- VERLORE GOEDERE -->
+                <section id="tab-verlore" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
+                        <div><div class="flex items-center space-x-2 text-tjokkieGold-500 text-sm font-extrabold uppercase tracking-widest"><i class="fa-solid fa-shirt"></i><span>Kleredrag & Besittings</span></div><h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Verlore Goedere</h2></div>
+                        <button onclick="window.toggleModal('modal-add-verlore')" class="bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm shadow-sm transition flex items-center space-x-2"><i class="fa-solid fa-camera text-tjokkieGold-400"></i><span>Laai Gevonde Item Op</span></button>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start space-x-3">
+                        <div class="text-blue-500 text-xl"><i class="fa-solid fa-circle-info"></i></div>
+                        <div><p class="text-xs font-bold text-blue-900">Hoe dit werk:</p><p class="text-[11px] text-blue-700 leading-relaxed mt-1">Klik op enige foto om dit groot te maak vir ekstra detail. As 'n leerder of ouer die item kom afhaal het, klik doodeenvoudig op die groen "Eienaar Gevind" knoppie om die item van die stelsel te verwyder.</p></div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="verlore-container">
+                        <!-- Items get rendered here dynamically -->
+                    </div>
+                </section>
+
                 <!-- IT-ONDERSTEUNING -->
                 <section id="tab-it" class="p-4 sm:p-6 lg:p-8 space-y-8 hidden">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
@@ -512,8 +575,9 @@
             </main>
         </div>
         
-        <footer class="bg-tjokkieBlue-950 text-slate-400 text-[11px] text-center py-2.5 border-t border-slate-800 shrink-0 relative z-20">
-            &copy; 2026 Skool Bestuurstelsel.
+        <footer class="bg-tjokkieBlue-950 text-slate-400 text-center py-4 border-t border-slate-800 shrink-0 relative z-20 px-4">
+            <p class="font-extrabold text-slate-300 text-xs tracking-wider uppercase mb-1">© 2026 Tjokkies Portaal. Alle Regte Voorbehou.</p>
+            <p class="text-[9px] text-slate-500 leading-relaxed max-w-3xl mx-auto">Geen deel van hierdie stelsel, die visuele uitleg, bronkode, of operasionele metodiek mag gekopieer, gereproduseer, of in enige ander formaat nagemaak word sonder die uitdruklike skriftelike toestemming van die ontwikkelaar nie. Oortreders sal wetlik vervolg word.</p>
         </footer>
     </div>
 
@@ -521,6 +585,44 @@
     <!-- ======================================================= -->
     <!-- AFDELING 12: MODALS (OPSPRING VORMS VIR DEPARTEMENTE)   -->
     <!-- ======================================================= -->
+
+    <!-- LIGHBOX MODAL VIR FOTOS (VERLORE GOEDERE) -->
+    <div id="modal-lightbox" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 z-[200] hidden cursor-pointer" onclick="window.toggleModal('modal-lightbox')">
+        <div class="max-w-4xl max-h-full p-2 relative pointer-events-none">
+            <button class="absolute -top-10 right-0 text-white text-3xl hover:text-tjokkieGold-500 transition pointer-events-auto"><i class="fa-solid fa-times"></i></button>
+            <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] object-contain rounded-xl shadow-2xl border-4 border-white/10 mx-auto">
+        </div>
+    </div>
+
+    <!-- VERLORE GOEDERE VOEG BY MODAL -->
+    <div id="modal-add-verlore" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Plaas Verlore Item</h3><button type="button" onclick="window.toggleModal('modal-add-verlore')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-add-verlore" onsubmit="window.saveVerloreItem(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1 uppercase text-slate-500">Beskrywing</label><input type="text" id="verlore-desc" placeholder="bv. Blou skoolbaadjie, grootte 10" required class="w-full border p-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-tjokkieBlue-500"></div>
+                <div><label class="block font-bold mb-1 uppercase text-slate-500">Waar is dit gevind?</label><input type="text" id="verlore-location" placeholder="bv. Langs die krieketnette" required class="w-full border p-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-tjokkieBlue-500"></div>
+                <div><label class="block font-bold mb-1 uppercase text-slate-500">Datum Gevind</label><input type="date" id="verlore-date" required class="w-full border p-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-tjokkieBlue-500"></div>
+                <div><label class="block font-bold mb-1 uppercase text-slate-500">Neem / Laai Foto Op</label><input type="file" id="verlore-img" accept="image/*" capture="environment" required class="w-full border p-2 rounded-lg bg-slate-50 focus:outline-none focus:ring-1 focus:ring-tjokkieBlue-500 text-slate-500"></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-add-verlore')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold hover:bg-slate-200 transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white rounded-xl font-bold transition">Plaas Item</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- AFKONDIGING MODAL (TERUGGEBRING) -->
+    <div id="modal-afkondiging" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4"><h3 class="font-extrabold text-slate-900 text-sm">Plaas Nuwe Afkondiging</h3><button onclick="window.toggleModal('modal-afkondiging')" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-times"></i></button></div>
+            <form id="form-afkondiging" onsubmit="window.addAfkondiging(event)" class="space-y-4 text-xs">
+                <div><label class="block font-bold mb-1 uppercase text-slate-500">Onderwerp / Doel</label><input type="text" id="afkondiging-doel" required class="w-full border p-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-tjokkieBlue-500"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block font-bold mb-1 uppercase text-slate-500">Watter Pouse?</label><select id="afkondiging-pouse" class="w-full border p-2.5 rounded-lg focus:outline-none"><option>Eerste Pouse</option><option>Tweede Pouse</option><option>Na Skool</option><option>Enige Tyd</option></select></div>
+                    <div><label class="block font-bold mb-1 uppercase text-slate-500">Van Wie Af?</label><input type="text" id="afkondiging-persoon" required placeholder="Bv. Mnr Nel" class="w-full border p-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-tjokkieBlue-500"></div>
+                </div>
+                <div><label class="block font-bold mb-1 uppercase text-slate-500">Boodskap / Inhoud</label><textarea id="afkondiging-inhoud" rows="4" required class="w-full border p-2.5 rounded-lg focus:outline-none focus:ring-1 focus:ring-tjokkieBlue-500"></textarea></div>
+                <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-afkondiging')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold hover:bg-slate-200 transition">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 hover:bg-tjokkieBlue-950 text-white rounded-xl font-bold transition">Plaas Boodskap</button></div>
+            </form>
+        </div>
+    </div>
 
     <!-- OPDATERING MODAL -->
     <div id="modal-update-prompt" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-[100] hidden">
@@ -880,13 +982,14 @@
             <form id="form-bus" onsubmit="window.addBusTrip(event)" class="space-y-4 text-xs">
                 <div><label class="block font-bold mb-1">Bestemming / Doel</label><input type="text" id="bus-destination" required class="w-full border p-2.5 rounded-lg"></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block font-bold mb-1">Vertrek Tyd</label><input type="text" id="bus-time" required class="w-full border p-2.5 rounded-lg"></div>
-                    <div><label class="block font-bold mb-1">Aantal Kinders</label><input type="number" id="bus-passengers" required class="w-full border p-2.5 rounded-lg"></div>
+                    <div><label class="block font-bold mb-1">Vertrek Datum</label><input type="date" id="bus-date" required class="w-full border p-2.5 rounded-lg"></div>
+                    <div><label class="block font-bold mb-1">Vertrek Tyd</label><input type="time" id="bus-time" required class="w-full border p-2.5 rounded-lg"></div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div><label class="block font-bold mb-1">Bus Toegewys</label><select id="bus-vehicle" class="w-full border p-2.5 rounded-lg"></select></div>
-                    <div><label class="block font-bold mb-1">Bestuurder</label><input type="text" id="bus-driver" required class="w-full border p-2.5 rounded-lg"></div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div><label class="block font-bold mb-1">Kinders</label><input type="number" id="bus-passengers" required class="w-full border p-2.5 rounded-lg"></div>
+                    <div class="col-span-2"><label class="block font-bold mb-1">Bus Toegewys</label><select id="bus-vehicle" class="w-full border p-2.5 rounded-lg"></select></div>
                 </div>
+                <div><label class="block font-bold mb-1">Bestuurder</label><input type="text" id="bus-driver" required class="w-full border p-2.5 rounded-lg"></div>
                 <div class="flex space-x-2 pt-2"><button type="button" onclick="window.toggleModal('modal-bus-rit')" class="flex-1 py-2.5 bg-slate-100 rounded-xl font-bold">Kanselleer</button><button type="submit" class="flex-1 py-2.5 bg-tjokkieBlue-900 text-white rounded-xl font-bold">Beplan</button></div>
             </form>
         </div>
@@ -994,6 +1097,7 @@
         window.currentITPassword = "1603";
 
         // JS-AFDELING 1.1: VANLYN DATA
+        let localVerloreGoedere = []; window.localVerloreGoedere = localVerloreGoedere;
         let localFacilities = { 
             "rugby_a": { name: "A-Rugbyveld", status: "Uitstekend", subtext: "Sny en lyne geskeduleer", icon: "fa-football", color: "blue" }, 
             "rugby_b": { name: "B-Rugbyveld", status: "Goeie Kondisie", subtext: "Gereed vir oefening", icon: "fa-football", color: "blue" },
@@ -1024,6 +1128,7 @@
         window.runLocalFallback = function() {
             document.getElementById('db-status-text').innerText = "Gekoppel aan plaaslike geheue.";
             window.currentTerreinTasks = localTerreinTasks;
+            window.renderVerloreGoedere(localVerloreGoedere);
             window.renderFacilities(localFacilities); window.renderItStatus(localItStatus); window.renderBusStatus(localBusStatus);
             window.renderTerreinTasks(localTerreinTasks); window.renderAfkondigings(localAfkondigings); window.renderBemarkingTake(window.localBemarkingTake);
             window.renderNewsletters(window.localNewsletters); window.renderBusTrips(window.localBusTrips); window.renderITTickets(window.localITTickets);
@@ -1033,6 +1138,7 @@
 
         function setupRealtimeListeners() {
             if (!db || !user) return;
+            onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'verlore_goedere'), (snap) => { let vg = []; snap.forEach(doc => { vg.push({ id: doc.id, ...doc.data() }); }); window.localVerloreGoedere = vg; window.renderVerloreGoedere(vg); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'facilities'), (snap) => { let f = { ...localFacilities }; snap.forEach(doc => { f[doc.id] = { ...f[doc.id], ...doc.data() }; }); window.renderFacilities(f); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'it_status'), (snap) => { let i = { ...localItStatus }; snap.forEach(doc => { i[doc.id] = { ...i[doc.id], ...doc.data() }; }); window.renderItStatus(i); });
             onSnapshot(collection(db, 'artifacts', appId, 'public', 'data', 'bus_status'), (snap) => { let b = { ...localBusStatus }; snap.forEach(doc => { b[doc.id] = { ...b[doc.id], ...doc.data() }; }); window.renderBusStatus(b); });
@@ -1237,6 +1343,16 @@
         // ======================================================= //
         window.handleLogin = async function(e) {
             e.preventDefault(); const email = document.getElementById('login-email').value; const pwd = document.getElementById('login-password').value;
+            
+            // MEESTER NOODINGANG (Bypass as wolk / profiel nie werk nie)
+            if(email === "admin" && pwd === "1603") {
+                window.showToast("Welkom Terug", "Meester toegang verleen.");
+                document.getElementById('auth-wrapper').classList.add('hidden'); document.getElementById('auth-wrapper').classList.remove('flex');
+                document.getElementById('app-wrapper').classList.remove('hidden'); document.getElementById('app-wrapper').classList.add('flex');
+                window.runLocalFallback();
+                return;
+            }
+
             if(auth) {
                 try { window.showToast("Inligting", "Besig om in te teken..."); await signInWithEmailAndPassword(auth, email, pwd); } 
                 catch(error) { window.showToast("Fout", "Teken in het gefaal. Verkeerde wagwoord of epos."); }
@@ -1867,6 +1983,82 @@
         // ======================================================= //
         // JS-AFDELING 7: AKSIES (FIREBASE ADD/DELETE MODULES)     //
         // ======================================================= //
+
+        // VERLORE GOEDERE
+        window.saveVerloreItem = async function(e) {
+            e.preventDefault();
+            const desc = document.getElementById('verlore-desc').value;
+            const location = document.getElementById('verlore-location').value;
+            const date = document.getElementById('verlore-date').value;
+            const imgFile = document.getElementById('verlore-img').files[0];
+
+            let imgBase64 = null;
+            if(imgFile) {
+                imgBase64 = await new Promise((resolve) => {
+                    const reader = new FileReader(); reader.onloadend = () => resolve(reader.result); reader.readAsDataURL(imgFile);
+                });
+            }
+
+            const itemData = { desc, location, date, imgBase64, timestamp: Date.now() };
+
+            if(db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'verlore_goedere'), itemData); } 
+            else { window.localVerloreGoedere.unshift({ id: Math.random().toString(), ...itemData }); window.renderVerloreGoedere(window.localVerloreGoedere); }
+            
+            window.logEvent(`Verlore item gelaai: ${desc}`, 'Terrein');
+            document.getElementById('form-add-verlore').reset();
+            window.toggleModal('modal-add-verlore');
+            window.showToast("Gestoor", "Verlore item is bygevoeg.");
+        }
+
+        window.renderVerloreGoedere = function(items) {
+            const container = document.getElementById('verlore-container');
+            if(!container) return; container.innerHTML = '';
+            
+            if(items.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-12 text-slate-400 font-bold border-2 border-dashed border-slate-200 rounded-2xl"><div class="text-4xl mb-3"><i class="fa-regular fa-face-smile"></i></div>Mooi so! Daar is tans geen verlore goedere nie.</div>';
+                return;
+            }
+            
+            items.sort((a,b) => b.timestamp - a.timestamp); // Nuutste bo
+
+            items.forEach(item => {
+                const imgHtml = item.imgBase64 ? `<img src="${item.imgBase64}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">` : `<div class="w-full h-full flex items-center justify-center text-slate-300 bg-slate-100"><i class="fa-solid fa-shirt text-4xl"></i></div>`;
+                
+                container.innerHTML += `
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden group flex flex-col hover:border-tjokkieGold-400 transition-colors duration-300">
+                        <div class="h-48 w-full relative cursor-pointer overflow-hidden bg-slate-100" onclick="window.openLightbox('${item.imgBase64 || ''}')" title="Klik om groot te maak">
+                            ${imgHtml}
+                            <div class="absolute inset-0 bg-tjokkieBlue-900/0 group-hover:bg-tjokkieBlue-900/20 transition duration-300 flex items-center justify-center">
+                                <div class="w-12 h-12 rounded-full bg-white/90 text-tjokkieBlue-900 flex items-center justify-center transform scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition duration-300 shadow-lg"><i class="fa-solid fa-magnifying-glass-plus text-xl"></i></div>
+                            </div>
+                        </div>
+                        <div class="p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm mb-2 line-clamp-2 leading-tight" title="${item.desc}">${item.desc}</h4>
+                                <div class="space-y-1 mb-4">
+                                    <p class="text-[10px] font-semibold text-slate-500 flex items-center"><i class="fa-solid fa-location-dot w-4 text-tjokkieGold-500"></i> ${item.location}</p>
+                                    <p class="text-[10px] font-semibold text-slate-500 flex items-center"><i class="fa-regular fa-calendar w-4 text-tjokkieBlue-500"></i> ${item.date}</p>
+                                </div>
+                            </div>
+                            <button onclick="window.deleteVerloreItem('${item.id}')" class="w-full py-2 bg-emerald-50 hover:bg-emerald-500 hover:text-white text-emerald-700 font-extrabold rounded-xl transition duration-300 text-xs flex items-center justify-center shadow-sm"><i class="fa-solid fa-check-circle mr-2"></i> Eienaar Gevind</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.openLightbox = function(imgBase64) {
+            if(!imgBase64) return;
+            document.getElementById('lightbox-img').src = imgBase64;
+            window.toggleModal('modal-lightbox');
+        }
+
+        window.deleteVerloreItem = async function(id) {
+            if(db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'verlore_goedere', id)); } 
+            else { window.localVerloreGoedere = window.localVerloreGoedere.filter(i => i.id !== id); window.renderVerloreGoedere(window.localVerloreGoedere); }
+            window.showToast("Gevind!", "Die item is afgehandel en verwyder.");
+            window.logEvent("Verlore item eienaar gevind", "Terrein");
+        }
         
         window.promptTaskAuth = function(dept, action, id, extra = '') {
             document.getElementById('auth-task-dept').value = dept;
@@ -2039,8 +2231,19 @@
         }
 
         window.addBusTrip = async function(event) {
-            event.preventDefault(); const dest = document.getElementById('bus-destination').value;
-            const tripData = { dest, time: document.getElementById('bus-time').value, pax: document.getElementById('bus-passengers').value, vehicle: document.getElementById('bus-vehicle').value, driver: document.getElementById('bus-driver').value };
+            event.preventDefault(); 
+            const dest = document.getElementById('bus-destination').value;
+            const dateVal = document.getElementById('bus-date').value;
+            const timeVal = document.getElementById('bus-time').value;
+            
+            let displayTime = "";
+            if (dateVal && timeVal) {
+                const dateObj = new Date(dateVal);
+                const shortDate = dateObj.toLocaleDateString('af-ZA', { day: 'numeric', month: 'short', year: 'numeric' });
+                displayTime = `${shortDate} @ ${timeVal}`;
+            }
+
+            const tripData = { dest, time: displayTime, pax: document.getElementById('bus-passengers').value, vehicle: document.getElementById('bus-vehicle').value, driver: document.getElementById('bus-driver').value };
             if (db && user) { await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bus_trips'), tripData); }
             else { window.localBusTrips.push({ id: Math.random().toString(), ...tripData }); window.renderBusTrips(window.localBusTrips); }
             window.logEvent(`Rit na ${dest} (${tripData.pax} kinders)`, 'Busvervoer'); window.showToast("Rit Beplan!", `Geskeduleer vir ${tripData.pax} passasiers.`); window.toggleModal('modal-bus-rit');
@@ -2103,6 +2306,45 @@
             if (db && user) { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'afkondigings', id)); }
             else { window.localAfkondigings = window.localAfkondigings.filter(a => a.id !== id); window.renderAfkondigings(window.localAfkondigings); }
         }
+
+        window.printAfkondigings = function() {
+            if (!window.localAfkondigings || window.localAfkondigings.length === 0) {
+                window.showToast("Leeg", "Daar is geen afkondigings om te druk nie.");
+                return;
+            }
+            const schoolName = document.querySelector('.school-name-display')?.innerText || "Skool";
+            const dateStr = new Date().toLocaleDateString('af-ZA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+            const printWindow = window.open('', '', 'height=700,width=900');
+            printWindow.document.write('<html><head><title>Afkondigings - ' + dateStr + '</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: Arial, sans-serif; color: #333; padding: 30px; max-width: 800px; margin: auto; }');
+            printWindow.document.write('h2 { color: #172554; border-bottom: 2px solid #f59e0b; padding-bottom: 10px; margin-bottom: 5px;}');
+            printWindow.document.write('h4 { color: #666; margin-top: 0; margin-bottom: 30px; font-weight: normal; }');
+            printWindow.document.write('.item { border-bottom: 1px dashed #ccc; padding: 15px 0; page-break-inside: avoid;}');
+            printWindow.document.write('.doel { font-size: 16px; font-weight: bold; color: #1e40af; margin-bottom: 5px; }');
+            printWindow.document.write('.pouse { font-size: 12px; font-weight: bold; background: #eee; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-left: 10px; color: #555;}');
+            printWindow.document.write('.inhoud { font-size: 14px; line-height: 1.6; margin: 10px 0; }');
+            printWindow.document.write('.persoon { font-size: 12px; color: #888; font-style: italic; }');
+            printWindow.document.write('@media print { body { padding: 0; } .item { border-bottom: 1px solid #ccc; } }');
+            printWindow.document.write('</style></head><body>');
+
+            printWindow.document.write('<h2>' + schoolName + ' - Daaglikse Afkondigings</h2>');
+            printWindow.document.write('<h4>' + dateStr + '</h4>');
+
+            window.localAfkondigings.forEach(item => {
+                printWindow.document.write('<div class="item">');
+                printWindow.document.write('<div class="doel">' + item.doel + '<span class="pouse">' + item.pouse + '</span></div>');
+                printWindow.document.write('<div class="inhoud">' + item.inhoud + '</div>');
+                printWindow.document.write('<div class="persoon">Aangevra deur: ' + item.persoon + '</div>');
+                printWindow.document.write('</div>');
+            });
+
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+
+            setTimeout(() => { printWindow.print(); }, 250);
+        };
         
         window.uploadNuusbrief = async function(event) {
             event.preventDefault();
